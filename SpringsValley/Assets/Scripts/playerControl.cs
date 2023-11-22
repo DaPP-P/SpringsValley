@@ -30,20 +30,24 @@ public class playerControl : MonoBehaviour
         movementDir = Mathf.Sign(horizontal);
         transform.GetComponent<SpriteRenderer>().flipX = movementDir < 0;
 
-        faceMouse();
+        weaponDirection();
         
         if (Input.GetKey(KeyCode.Mouse0))        
         {
             StartCoroutine(hit());
         }
-    
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            sprint();
+        }
     }
 
     private void FixedUpdate() {
         body.velocity = new Vector2(horizontal * speed, vertical * speed);
     }
 
-void faceMouse()
+void weaponDirection()
 {
     Vector3 mousePosition = Input.mousePosition;
     mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
@@ -54,8 +58,8 @@ void faceMouse()
     // Calculate the angle of the direction vector
     float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-    // Snap the angle to the nearest 45-degree interval
-    float snappedAngle = Mathf.Round(angle / 45f) * 45f;
+    // Snap the angle to the nearest 22.5-degree interval
+    float snappedAngle = Mathf.Round(angle / 22.5f) * 22.5f;
 
     // Convert the snapped angle back to radians
     float snappedAngleRad = snappedAngle * Mathf.Deg2Rad;
@@ -70,12 +74,12 @@ void faceMouse()
     if (Vector2.Angle(Vector2.right, direction) > 90f)
     {
         // If true, set the player's rotation to the left
-        transform.right = -direction;
-        transform.localScale = new Vector3(-1, 1, 1);
+        weapon.transform.right = -direction;
+        //transform.localScale = new Vector3(-1, 1, 1);
     } else {
         // If false, set the player's rotation to the right
-        transform.right = direction;
-        transform.localScale = new Vector3(1, 1, 1);
+        weapon.transform.right = direction;
+        //transform.localScale = new Vector3(1, 1, 1);
     }
 }
 
@@ -93,6 +97,8 @@ IEnumerator hit()
     weapon.SetActive(false);
 }
 
-
+void sprint(){
+    speed = speed * 1.5f;
+}
 
 }
