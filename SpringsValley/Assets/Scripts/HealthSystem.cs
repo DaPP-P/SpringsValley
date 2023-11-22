@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public class HealthSystem
@@ -11,8 +12,8 @@ public class HealthSystem
 
     public HealthSystem(int healthMax)
     {
-        this.health = health;
-        health = healthMax;
+        this.healthMax = healthMax;
+        this.health = healthMax;
     }
 
     public int GetHealth()
@@ -28,16 +29,18 @@ public class HealthSystem
     public void Damage(int damageAmount)
     {
         health -= damageAmount;
-        if (health < 0 ) health = 0;
-        if (OnHealthChanged != null) OnHealthChanged(this, EventArgs.Empty);
+        if (health < 0) health = 0;
+
+        // Notify subscribers (if any) about the health change
+        OnHealthChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public void Heal(int healAmount)
     {
         health += healAmount;
         if (health > healthMax) health = healthMax;
-        if (OnHealthChanged != null) OnHealthChanged(this, EventArgs.Empty);
- 
-    }
 
+        // Notify subscribers (if any) about the health change
+        OnHealthChanged?.Invoke(this, EventArgs.Empty);
+    }
 }
