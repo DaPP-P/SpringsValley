@@ -8,7 +8,9 @@ public class HealthSystem
 {
     private int health;
     private int healthMax;
-    public event EventHandler OnHealthChanged;
+    public event EventHandler<DamageEventArgs> OnTakeDamage;
+    public event EventHandler<HealEventArgs> OnHeal;
+
 
     public HealthSystem(int healthMax)
     {
@@ -31,8 +33,7 @@ public class HealthSystem
         health -= damageAmount;
         if (health < 0) health = 0;
 
-        // Notify subscribers (if any) about the health change
-        OnHealthChanged?.Invoke(this, EventArgs.Empty);
+        OnTakeDamage?.Invoke(this, new DamageEventArgs(damageAmount));
     }
 
     public void Heal(int healAmount)
@@ -40,7 +41,27 @@ public class HealthSystem
         health += healAmount;
         if (health > healthMax) health = healthMax;
 
-        // Notify subscribers (if any) about the health change
-        OnHealthChanged?.Invoke(this, EventArgs.Empty);
+        OnHeal?.Invoke(this, new HealEventArgs(healAmount));
+    }
+
+}
+
+public class DamageEventArgs : EventArgs
+{
+    public int DamageAmount { get; private set; }
+
+    public DamageEventArgs(int damageAmount)
+    {
+        DamageAmount = damageAmount;
+    }
+}
+
+public class HealEventArgs : EventArgs
+{
+    public int HealAmount { get; private set; }
+
+    public HealEventArgs(int healAmount)
+    {
+        HealAmount = healAmount;
     }
 }

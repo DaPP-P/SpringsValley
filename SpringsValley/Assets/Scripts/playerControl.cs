@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class playerControl : MonoBehaviour
 {
-    // Start is called before the first frame update
 
     Rigidbody2D body;
     float horizontal;
@@ -13,9 +12,13 @@ public class playerControl : MonoBehaviour
     public float speed = 10.0f;
     public Vector2 mouseDirection = new Vector2();
     public GameObject weapon;
+    public static int weaponDamage = 15;
     public float offset;
+    public Animator animator;
 
+    public bool canHit = true;
 
+    // Start is called before the first frame update
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
@@ -30,17 +33,10 @@ public class playerControl : MonoBehaviour
         movementDir = Mathf.Sign(horizontal);
         transform.GetComponent<SpriteRenderer>().flipX = movementDir < 0;
 
-        weaponDirection();
-        
-        if (Input.GetKey(KeyCode.Mouse0))        
-        {
-            StartCoroutine(hit());
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            sprint();
-        }
+        //if (canHit) weaponDirection();
+        if (Input.GetKey(KeyCode.Mouse0) && canHit) StartCoroutine(hit()); weaponDirection();
+        if (Input.GetKey(KeyCode.Mouse1) && canHit) StartCoroutine(rightHit()); weaponDirection();
+        if (Input.GetKeyDown(KeyCode.LeftShift)) sprint();
     }
 
     private void FixedUpdate() {
@@ -81,20 +77,40 @@ void weaponDirection()
         weapon.transform.right = direction;
         //transform.localScale = new Vector3(1, 1, 1);
     }
+    
+    Physics.SyncTransforms();
 }
 
 IEnumerator hit()
 {
-    print("hit");
+    canHit = false;
+
+    animator.SetTrigger("Attack");
+
+    // Calculate the weapon position based on the player's position and mouse direction
+    Vector3 weaponPosition = transform.position + offset * new Vector3(mouseDirection.x, mouseDirection.y, 0f);
+    weapon.transform.position = weaponPosition;
+
+    yield return new WaitForSeconds(0.3f);
+
+    canHit = true;
+}
+
+IEnumerator rightHit()
+{
+    weaponDamage = weaponDamage * 2;
+    canHit = false;
     weapon.SetActive(true);
 
     // Calculate the weapon position based on the player's position and mouse direction
     Vector3 weaponPosition = transform.position + offset * new Vector3(mouseDirection.x, mouseDirection.y, 0f);
     weapon.transform.position = weaponPosition;
 
-    yield return new WaitForSeconds(0.2f);
+    yield return new WaitForSeconds(0.1f);
 
     weapon.SetActive(false);
+    weaponDamage = weaponDamage / 2;
+    canHit = true;
 }
 
 void sprint(){
