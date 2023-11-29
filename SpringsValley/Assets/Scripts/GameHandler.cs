@@ -48,10 +48,12 @@ public class GameHandler : MonoBehaviour
     void HandleTakeDamage(object sender, DamageEventArgs e)
     {
         int damageAmount = e.DamageAmount;
-        
+
+
+        UpdateHealthBar();
         StartCoroutine(showDamageText("-" + damageAmount, Color.red));
         StartCoroutine(FlashSpriteColor(Color.red, 0.2f));
-        UpdateHealthBar();
+
     }
 
     void HandleHeal(object sender, HealEventArgs e)

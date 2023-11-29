@@ -31,8 +31,8 @@ public class EnemyHealthSystem : MonoBehaviour
         if (other.CompareTag("weapon") && !isTakingDamage)
         {
             // Assuming that the weapon deals a fixed amount of damage, adjust this as needed
-            int damageAmount = playerControl.weaponDamage;
-            Damage(damageAmount);
+            //int damageAmount = playerControl.weaponDamage;
+            //Damage(damageAmount);
         }
     }
 
