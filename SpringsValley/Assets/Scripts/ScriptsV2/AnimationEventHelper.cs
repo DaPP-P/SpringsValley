@@ -5,15 +5,15 @@ using UnityEngine.Events;
 
 public class AnimationEventHelper : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public UnityEvent OnAnimationEventTriggered, OnAttackPreformed;
+
+    public void TriggerEvent()
     {
-        
+        OnAnimationEventTriggered?.Invoke();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TriggerAttack()
     {
-        
+        OnAttackPreformed.Invoke();
     }
 }

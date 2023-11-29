@@ -47,6 +47,8 @@ public class PlayerControls2 : MonoBehaviour
 
     void weaponDirection()
     {
+        if(swordParent2.IsAttacking)
+            return;
         Vector3 mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
         

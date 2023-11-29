@@ -14,6 +14,13 @@ public class SwordParent2 : MonoBehaviour
     public Transform circleOrigin;
     public float radius;
 
+    public bool IsAttacking { get; private set; }
+
+    public void ResetIsAttacking()
+    {
+        IsAttacking = false;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,6 +64,7 @@ public class SwordParent2 : MonoBehaviour
         if (attackBlocked)
             return;
         animator.SetTrigger("Attack");
+        IsAttacking = true;
         attackBlocked = true;
         StartCoroutine(DelayAttack());
     }
