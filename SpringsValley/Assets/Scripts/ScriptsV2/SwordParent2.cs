@@ -86,7 +86,11 @@ public class SwordParent2 : MonoBehaviour
     {
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(circleOrigin.position, radius))
         {
-            Debug.Log(collider.name);
+            HealthSystem2 healthSystem;
+            if (healthSystem = collider.GetComponent<HealthSystem2>())
+            {
+                healthSystem.GetHit(1, transform.parent.gameObject);
+            }
         }
     }
 }

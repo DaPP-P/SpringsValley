@@ -9,7 +9,10 @@ public class PlayerControls2 : MonoBehaviour
     float horizontal;
     float vertical;
     float movementDir;
-    public float speed = 10.0f;
+
+    public float defaultSpeed = 10.0f;
+    private float speed;
+
     public static Vector2 mouseDirection = new Vector2();
     public SpriteRenderer playerSprite, weaponSprite;
     public static Vector2 weaponDirectionCoords = new Vector2();
@@ -20,7 +23,8 @@ public class PlayerControls2 : MonoBehaviour
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
-        swordParent2 = GetComponentInChildren<SwordParent2>(); // Assuming SwordParent2 is a child of PlayerControls2
+        swordParent2 = GetComponentInChildren<SwordParent2>();
+        speed = defaultSpeed;
     }
 
     // Update is called once per frame
@@ -36,6 +40,15 @@ public class PlayerControls2 : MonoBehaviour
         {
             leftHit();
         }
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            sprint();
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            ResetSpeed();
+        }
+
     }
 
     // Used to update the direction of the player
@@ -61,8 +74,17 @@ public class PlayerControls2 : MonoBehaviour
 
     public void leftHit()
     {
-        print("hit");
         swordParent2.Attack();
+    }
+
+    void sprint()
+    {
+        speed = speed * 1.5f;
+    }
+
+    void ResetSpeed()
+    {
+        speed = defaultSpeed;
     }
 
 }
