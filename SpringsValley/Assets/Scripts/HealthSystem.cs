@@ -1,67 +1,106 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using System;
+using UnityEngine.Events;
+using TMPro;
 
-public class HealthSystem
+public class HealthSystem : MonoBehaviour
 {
-    private int health;
-    private int healthMax;
-    public event EventHandler<DamageEventArgs> OnTakeDamage;
-    public event EventHandler<HealEventArgs> OnHeal;
+    [SerializeField]
+    private int currentHealth, maxHealth;
+    
+    [SerializeField]
+    private bool isDead = false;
+    public GameObject damageTextObject;
+    private TextMeshPro damageText;
+    private SpriteRenderer characterSpriteRenderer;
+    private Color spriteOriginalColor;
+    public GameObject mainSprite;
 
+    public bool indicationTimeDone = false;
+    
+    //public event EventHandler<DamageEventArgs> OnTakeDamage;
+    //public event EventHandler<HealEventArgs> OnHeal;
 
-    public HealthSystem(int healthMax)
+    public UnityEvent<GameObject> OnHitWithReference, OnDeathWithReference;
+
+    void Start()
     {
-        this.healthMax = healthMax;
-        this.health = healthMax;
+        currentHealth = maxHealth;
+        damageText = damageTextObject.GetComponent<TextMeshPro>();
+        characterSpriteRenderer = mainSprite.GetComponent<SpriteRenderer>();
+        spriteOriginalColor = characterSpriteRenderer.color;
     }
 
-    public int GetHealth()
+    public void InitializeHealthSystem(int healthValue)
     {
-        return health;
+        currentHealth = healthValue;
+        maxHealth = healthValue;
+        isDead = false;
+    }
+
+    public void Damage (int amount, GameObject sender) 
+    {
+        if (isDead)
+            return;
+        if (sender.layer == gameObject.layer)
+            return;
+        
+        currentHealth -= amount;
+
+        StartCoroutine(DamageIndication("-"+amount, Color.red));   
+
+        if (currentHealth > 0)
+        {
+            OnHitWithReference?.Invoke(sender);
+        }
+        else
+        {
+            OnDeathWithReference.Invoke(sender);
+            isDead = true;
+            Destroy(gameObject);
+        }
+    }
+
+    public void Heal (int amount)
+    {
+        currentHealth += amount;
+
+        StartCoroutine(DamageIndication("+"+amount, Color.blue));
+        
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
     }
 
     public float GetHealthPercentage()
     {
-        return (float)health / healthMax;
+        return (float)currentHealth / maxHealth;
     }
 
-    public void Damage(int damageAmount)
+    public IEnumerator DamageIndication(string damageTextAmount, Color colorType)
     {
-        health -= damageAmount;
-        if (health < 0) health = 0;
+        characterSpriteRenderer.color = colorType;
+        damageText.text = damageTextAmount;
+        damageText.color = colorType;
+        damageTextObject.SetActive(true);
+        StartCoroutine(Wait(0.2f));
 
-        OnTakeDamage?.Invoke(this, new DamageEventArgs(damageAmount));
+        while (!indicationTimeDone)
+        {
+            yield return null;
+        }
+        
+        damageTextObject.SetActive(false);
+        characterSpriteRenderer.color = spriteOriginalColor;
+        indicationTimeDone = false;
     }
 
-    public void Heal(int healAmount)
+    private IEnumerator Wait(float duration)
     {
-        health += healAmount;
-        if (health > healthMax) health = healthMax;
-
-        OnHeal?.Invoke(this, new HealEventArgs(healAmount));
+        yield return new WaitForSeconds(duration);
+        indicationTimeDone = true;
     }
 
-}
-
-public class DamageEventArgs : EventArgs
-{
-    public int DamageAmount { get; private set; }
-
-    public DamageEventArgs(int damageAmount)
-    {
-        DamageAmount = damageAmount;
-    }
-}
-
-public class HealEventArgs : EventArgs
-{
-    public int HealAmount { get; private set; }
-
-    public HealEventArgs(int healAmount)
-    {
-        HealAmount = healAmount;
-    }
 }

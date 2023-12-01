@@ -31,13 +31,13 @@ public class TeethParent : MonoBehaviour
     {
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(circleOrigin.position, radius))
         {
-            HealthSystem2 healthSystem;
+            HealthSystem healthSystem;
 
             if (attackBlocked == false)
             {
-                if (healthSystem = collider.GetComponent<HealthSystem2>())
+                if (healthSystem = collider.GetComponent<HealthSystem>())
                 {
-                healthSystem.GetHit(20, transform.parent.gameObject);
+                healthSystem.Damage(20, transform.parent.gameObject);
                 }
                 attackBlocked = true;
                 StartCoroutine(DelayAttack());

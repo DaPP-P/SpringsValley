@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControls2 : MonoBehaviour
+public class PlayerControls : MonoBehaviour
 {
 
     Rigidbody2D body;
@@ -17,13 +17,13 @@ public class PlayerControls2 : MonoBehaviour
     public SpriteRenderer playerSprite, weaponSprite;
     public static Vector2 weaponDirectionCoords = new Vector2();
 
-    private SwordParent2 swordParent2;
+    private SwordParent swordParent;
 
     // Start is called before the first frame update
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
-        swordParent2 = GetComponentInChildren<SwordParent2>();
+        swordParent = GetComponentInChildren<SwordParent>();
         speed = defaultSpeed;
     }
 
@@ -34,7 +34,7 @@ public class PlayerControls2 : MonoBehaviour
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
         movementDir = Mathf.Sign(horizontal);
-        playerSprite.flipX = movementDir < 0;
+        playerSprite.flipX = weaponDirectionCoords.x < 0;
 
         if (Input.GetKey(KeyCode.Mouse0)) 
         {
@@ -60,7 +60,7 @@ public class PlayerControls2 : MonoBehaviour
 
     void weaponDirection()
     {
-        if(swordParent2.IsAttacking)
+        if(swordParent.IsAttacking)
             return;
         Vector3 mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
@@ -74,7 +74,7 @@ public class PlayerControls2 : MonoBehaviour
 
     public void leftHit()
     {
-        swordParent2.Attack();
+        swordParent.Attack();
     }
 
     void sprint()

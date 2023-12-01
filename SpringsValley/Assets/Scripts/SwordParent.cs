@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwordParent2 : MonoBehaviour
+public class SwordParent : MonoBehaviour
 {
 
     public int leftClickDamageAmount = 10;
@@ -88,10 +88,10 @@ public class SwordParent2 : MonoBehaviour
     {
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(circleOrigin.position, radius))
         {
-            HealthSystem2 healthSystem;
-            if (healthSystem = collider.GetComponent<HealthSystem2>())
+            HealthSystem healthSystem;
+            if (healthSystem = collider.GetComponent<HealthSystem>())
             {
-                healthSystem.GetHit(leftClickDamageAmount, transform.parent.gameObject);
+                healthSystem.Damage(leftClickDamageAmount, transform.parent.gameObject);
             }
         }
     }
