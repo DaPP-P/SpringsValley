@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SwordParent2 : MonoBehaviour
 {
+
+    public int leftClickDamageAmount = 10;
     public Vector2 pointerPosition;
     public SpriteRenderer characterRenderer, weaponRenderer;
     public int offset = 0;
@@ -89,7 +91,7 @@ public class SwordParent2 : MonoBehaviour
             HealthSystem2 healthSystem;
             if (healthSystem = collider.GetComponent<HealthSystem2>())
             {
-                healthSystem.GetHit(1, transform.parent.gameObject);
+                healthSystem.GetHit(leftClickDamageAmount, transform.parent.gameObject);
             }
         }
     }

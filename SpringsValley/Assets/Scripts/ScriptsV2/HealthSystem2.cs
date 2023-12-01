@@ -26,6 +26,7 @@ public class HealthSystem2 : MonoBehaviour
 
     void Start()
     {
+        currentHealth = maxHealth;
         damageText = damageTextObject.GetComponent<TextMeshPro>();
         characterSpriteRenderer = mainSprite.GetComponent<SpriteRenderer>();
         spriteOriginalColor = characterSpriteRenderer.color;
@@ -59,6 +60,11 @@ public class HealthSystem2 : MonoBehaviour
             isDead = true;
             Destroy(gameObject);
         }
+    }
+
+    public float GetHealthPercentage()
+    {
+        return (float)currentHealth / maxHealth;
     }
 
     public IEnumerator DamageIndication(string damageTextAmount, Color colorType)
