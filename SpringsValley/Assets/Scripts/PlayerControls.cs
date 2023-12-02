@@ -22,6 +22,7 @@ public class PlayerControls : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // On start set up rigidbody2D, my default speed, and my swordParent.
         body = GetComponent<Rigidbody2D>();
         swordParent = GetComponentInChildren<SwordParent>();
         speed = defaultSpeed;
@@ -30,12 +31,13 @@ public class PlayerControls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Updates the direction of the player and direction facing
+        // Updates the direction of the player and the player direction facing.
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
         movementDir = Mathf.Sign(horizontal);
         playerSprite.flipX = weaponDirectionCoords.x < 0;
 
+        // Input controls
         if (Input.GetKey(KeyCode.Mouse0)) 
         {
             leftHit();
@@ -54,21 +56,23 @@ public class PlayerControls : MonoBehaviour
     // Used to update the direction of the player
     private void FixedUpdate() 
     {
+        // Changes direction and checks which way the weapon should be facing.
         body.velocity = new Vector2(horizontal * speed, vertical * speed);
         weaponDirection();
     }
 
     void weaponDirection()
     {
+        // Do not change weapon position while attacking.
         if(swordParent.IsAttacking)
             return;
+
+        // Finds the weapon direction.
         Vector3 mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
-        
         weaponDirectionCoords = new Vector2(
         mousePosition.x - transform.position.x,
         mousePosition.y - transform.position.y );  
-
         weaponDirectionCoords.Normalize();
     }
 

@@ -26,7 +26,8 @@ public class HealthSystem : MonoBehaviour
 
     void Start()
     {
-        currentHealth = maxHealth;
+        // Initialize the health system and find components needed for damage indications.
+        InitializeHealthSystem(maxHealth);
         damageText = damageTextObject.GetComponent<TextMeshPro>();
         characterSpriteRenderer = mainSprite.GetComponent<SpriteRenderer>();
         spriteOriginalColor = characterSpriteRenderer.color;
@@ -43,6 +44,7 @@ public class HealthSystem : MonoBehaviour
     {
         if (isDead)
             return;
+        // So the sender can't find itself.
         if (sender.layer == gameObject.layer)
             return;
         

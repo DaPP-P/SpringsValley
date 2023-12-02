@@ -23,15 +23,15 @@ public class SwordParent : MonoBehaviour
         IsAttacking = false;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
+
+        // This is messy but i cant be bothered fixing might need to at some point.
         Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         difference.Normalize();
         float rotation_z = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
