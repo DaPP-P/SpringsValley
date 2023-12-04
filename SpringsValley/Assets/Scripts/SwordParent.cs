@@ -30,7 +30,6 @@ public class SwordParent : MonoBehaviour
 
     void Update()
     {
-
         // This is messy but i cant be bothered fixing might need to at some point.
         Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         difference.Normalize();

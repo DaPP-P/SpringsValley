@@ -7,7 +7,7 @@ public class EnemyAI : MonoBehaviour
     public float detectRadius = 10f;
     public float moveSpeed = 2f;
     public bool canMove = true;
-    private Vector3 targetPosition;
+    public Vector3 targetPosition;
     public Transform radiusOrigin;
     public Transform detectOrigin;
 
@@ -18,6 +18,8 @@ public class EnemyAI : MonoBehaviour
     public bool attackMode = false;
     public float attackRange = 0.5f;
     public bool canAttack = false;
+
+    public SpriteRenderer characterRenderer;
 
     private EnemySwordParent enemySwordParent;
 
@@ -36,7 +38,7 @@ public class EnemyAI : MonoBehaviour
             rb2d.isKinematic = true;
         }
 
-        CircleCollider2D circleCollider = GetComponent<CircleCollider2D>();
+        CircleCollider2D circleCollider = GetComponentInChildren<CircleCollider2D>();
         circleCollider.radius = detectRadius;
 
         enemySwordParent = GetComponentInChildren<EnemySwordParent>();
@@ -51,10 +53,21 @@ public class EnemyAI : MonoBehaviour
                 // Set a new random target position within the moveRadius
                 SetRandomTargetPosition();
             }
-        } 
+        }
+
+    Vector3 direction = targetPosition - transform.position;
+
+    if (Vector3.Dot(direction, transform.right) < 0)
+    {
+        characterRenderer.flipX = true;
+    }
+    else
+    {
+        characterRenderer.flipX = false;
+    }
+
 
         if (canAttack){
-            print("SWING");
             enemySwordParent.Attack();
         }
 
@@ -108,6 +121,7 @@ public class EnemyAI : MonoBehaviour
         attackMode = false;
         detectRadius = 10f;
         ExclamationPoint.SetActive(false);
+        canAttack = false;
     }
 
     private void OnDrawGizmosSelected()

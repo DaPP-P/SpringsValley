@@ -122,7 +122,7 @@ MonoBehaviour:
   OnAnimationEventTriggered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7364999974781594593}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SwordParent2, Assembly-CSharp
         m_MethodName: ResetIsAttacking
         m_Mode: 1
@@ -137,7 +137,7 @@ MonoBehaviour:
   OnAttackPreformed:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7364999974781594593}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SwordParent2, Assembly-CSharp
         m_MethodName: DetectColliders
         m_Mode: 1
@@ -158,7 +158,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7364999974781594592}
-  - component: {fileID: 7364999974781594593}
   m_Layer: 6
   m_Name: FlamingSwordParent
   m_TagString: weapon
@@ -182,27 +181,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7364999974781594593
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7364999974781594594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ead5b61a81ef04c0ea116d5fab436268, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftClickDamageAmount: 10
-  pointerPosition: {x: 0, y: 0}
-  characterRenderer: {fileID: 0}
-  weaponRenderer: {fileID: 5318344892429002089}
-  offset: 0
-  animator: {fileID: 6555809142294018235}
-  delay: 0.3
-  circleOrigin: {fileID: 7364999975925673377}
-  radius: 1.8
 --- !u!1 &7364999975925673376
 GameObject:
   m_ObjectHideFlags: 0
