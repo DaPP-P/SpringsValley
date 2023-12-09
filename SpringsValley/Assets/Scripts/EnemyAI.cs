@@ -98,7 +98,6 @@ public class EnemyAI : MonoBehaviour
         if (other.tag =="Player")
         {
             attackMode = true;
-            //Debug.Log("Player entered detection area." + other.transform.position);
             ExclamationPoint.SetActive(true);
             detectRadius = 20f;
         }
@@ -108,16 +107,23 @@ public class EnemyAI : MonoBehaviour
     {
         if (other.tag =="Player")
         {
-            targetPosition = other.transform.position;
-            if (Vector3.Distance(transform.position, targetPosition) <= 3f)
+            Vector3 playerPosition = other.transform.position;
+            Vector3 offset = (transform.position - playerPosition).normalized * 4.0f;
+            targetPosition = playerPosition + offset;
+
+            if (Vector3.Distance(transform.position, targetPosition) <= 4.0f)
             {
                 canAttack = true;
+            } else
+            {
+                canAttack = false;
             }
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        SetRandomTargetPosition();
         attackMode = false;
         detectRadius = 10f;
         ExclamationPoint.SetActive(false);

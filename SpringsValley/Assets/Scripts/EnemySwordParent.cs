@@ -34,52 +34,51 @@ public class EnemySwordParent : MonoBehaviour
 
     void Update()
     {
-    // Make sure you have a reference to the EnemyAI script
-    if (enemyAI == null)
-    {
-        enemyAI = GetComponentInParent<EnemyAI>();
+        // Make sure you have a reference to the EnemyAI script
         if (enemyAI == null)
         {
-            Debug.LogError("EnemyAI script not found.");
+            enemyAI = GetComponentInParent<EnemyAI>();
+            if (enemyAI == null)
+            {
+                Debug.LogError("EnemyAI script not found.");
+                return;
+            }
+        }
+
+        if (IsAttacking)
             return;
+
+
+        if (enemyAI.attackMode)
+        {
+            Vector3 difference = enemyAI.targetPosition - transform.position;
+            difference.Normalize();
+            rotation_z = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, rotation_z + offset);
+            Vector2 scale = transform.localScale;
+
+            if(Mathf.Abs(rotation_z) > 90)
+            {
+                scale.y = -1;
+            }else if(Mathf.Abs(rotation_z) < 90)
+            {
+                scale.y = 1;
+            }
+
+            transform.localScale = scale;
+            if (transform.eulerAngles.z > 0 && transform.eulerAngles.z < 180)
+            {
+                weaponRenderer.sortingOrder = characterRenderer.sortingOrder - 1;
+            } 
+            else 
+            {
+                weaponRenderer.sortingOrder = characterRenderer.sortingOrder + 1;
+            }
         }
-    }
-
-    if (IsAttacking)
-        return;
-
-
-    if (enemyAI.attackMode)
-    {
-        Vector3 difference = enemyAI.targetPosition - transform.position;
-        difference.Normalize();
-        rotation_z = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, rotation_z + offset);
-        Vector2 scale = transform.localScale;
-
-        if(Mathf.Abs(rotation_z) > 90)
-        {
-            scale.y = -1;
-        }else if(Mathf.Abs(rotation_z) < 90)
-        {
-            scale.y = 1;
-        }
-
-        transform.localScale = scale;
-        if (transform.eulerAngles.z > 0 && transform.eulerAngles.z < 180)
-        {
-            weaponRenderer.sortingOrder = characterRenderer.sortingOrder - 1;
-        } 
         else 
         {
-            weaponRenderer.sortingOrder = characterRenderer.sortingOrder + 1;
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         }
-    }
-    else 
-    {
-        transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-    }
-
     }
 
     public void Attack() 
