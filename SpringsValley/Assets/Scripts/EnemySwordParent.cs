@@ -5,6 +5,8 @@ using UnityEngine;
 public class EnemySwordParent : MonoBehaviour
 {
 
+    public SkeletonStateManager SkeletonStateManager;
+
     public int leftClickDamageAmount = 10;
     public Vector2 pointerPosition;
     public SpriteRenderer characterRenderer, weaponRenderer;
@@ -16,7 +18,6 @@ public class EnemySwordParent : MonoBehaviour
     public Transform circleOrigin;
     public float radius;
 
-    private EnemyAI enemyAI;
     public float rotation_z;
     public Vector2 scale;
 
@@ -34,50 +35,54 @@ public class EnemySwordParent : MonoBehaviour
 
     void Update()
     {
-        // Make sure you have a reference to the EnemyAI script
-        if (enemyAI == null)
-        {
-            enemyAI = GetComponentInParent<EnemyAI>();
-            if (enemyAI == null)
-            {
-                Debug.LogError("EnemyAI script not found.");
-                return;
-            }
-        }
 
         if (IsAttacking)
             return;
 
-
-        if (enemyAI.attackMode)
+        if (!SkeletonStateManager)
         {
-            Vector3 difference = enemyAI.targetPosition - transform.position;
+            DisplayWeapon();
+        }
+
+        
+    }
+
+    public void DisplayWeapon()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        if (player != null)
+        {
+            Vector3 difference = player.transform.position - transform.position;
             difference.Normalize();
             rotation_z = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, rotation_z + offset);
+
             Vector2 scale = transform.localScale;
 
-            if(Mathf.Abs(rotation_z) > 90)
+            if (Mathf.Abs(rotation_z) > 90)
             {
                 scale.y = -1;
-            }else if(Mathf.Abs(rotation_z) < 90)
+            }
+            else if (Mathf.Abs(rotation_z) < 90)
             {
                 scale.y = 1;
             }
 
             transform.localScale = scale;
+
             if (transform.eulerAngles.z > 0 && transform.eulerAngles.z < 180)
             {
                 weaponRenderer.sortingOrder = characterRenderer.sortingOrder - 1;
-            } 
-            else 
+            }
+            else
             {
                 weaponRenderer.sortingOrder = characterRenderer.sortingOrder + 1;
             }
         }
-        else 
+        else
         {
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            Debug.LogWarning("Player not found in the scene!");
         }
     }
 
