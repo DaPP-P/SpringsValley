@@ -13,7 +13,6 @@ public class PlayerControls : MonoBehaviour
     public float defaultSpeed = 10.0f;
     private float speed;
 
-    public static Vector2 mouseDirection = new Vector2();
     public SpriteRenderer playerSprite, weaponSprite;
     public static Vector2 weaponDirectionCoords = new Vector2();
 
