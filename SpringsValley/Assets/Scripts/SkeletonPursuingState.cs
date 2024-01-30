@@ -27,6 +27,17 @@ public class SkeletonPursuingState : SkeletonBaseState
         {
             skeleton.SwitchState(skeleton.attackingState);
         }
+
+        Vector3 direction = targetPosition - skeleton.transform.position;
+
+        if (Vector3.Dot(direction, skeleton.transform.right) < 0)
+        {
+            skeleton.characterRenderer.flipX = true;
+        }
+        else
+        {
+            skeleton.characterRenderer.flipX = false;
+        }
     }
 
     public override void OnCollisionEnter(SkeletonStateManager skeleton, Collision collision)

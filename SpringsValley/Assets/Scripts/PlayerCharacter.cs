@@ -7,25 +7,69 @@ public class PlayerCharacter : MonoBehaviour
 
     private SwordParent swordParent;
     private Vector3 lastMoveDir;
+    private Vector3 slideDir;
+    private float slideSpeed;
+    public float originalSpeed;
+    private float currentSpeed;
+
+    public GameObject weapon;
+
+    private State state;
+    private enum State {
+        Normal,
+        Combat,
+        DodgeRollSliding,
+    }
 
     void Awake()
-    {
+    {   
+        currentSpeed = originalSpeed;
         swordParent = GetComponentInChildren<SwordParent>();
+        state = State.Normal;
+        weapon.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        HandleMovement();
-        HandleDash();
+        switch (state) {
+        case State.Normal:
+            HandleMovement();
+            HandleSprint();
+            HandleState();
+            break;
+        case State.Combat:
+            HandleMovement();
+            HandleDodgeRoll();
+            HandleState();
+            HandleAttack();
+            break;
+        case State.DodgeRollSliding:
+            HandleDodgeRollSliding();
+            break;
+        }
+    }
+
+    private void HandleState() {
+        if (Input.GetKeyDown(KeyCode.Q)) {
+            if (state == State.Normal) {
+                state = State.Combat;
+                weapon.SetActive(true);
+            } else if (state == State.Combat) {
+                state = State.Normal;
+                weapon.SetActive(false);
+            }
+        }
+    }
+
+    private void HandleAttack() {
         if (Input.GetKey(KeyCode.Mouse0)){
             swordParent.Attack();
         }
     }
 
-    private void HandleMovement()
-    {
-        float speed = 20f;
+    private void HandleMovement() {
+        float speed = currentSpeed;
         float moveX = 0f;
         float moveY = 0f;
 
@@ -46,49 +90,76 @@ public class PlayerCharacter : MonoBehaviour
         }
 
         Vector3 moveDir = new Vector3(moveX, moveY).normalized;
-        
-        Vector3 targetMovePosition = transform.position + moveDir * speed * Time.deltaTime;
-        RaycastHit2D raycastHit = Physics2D.Raycast(transform.position, moveDir, speed * Time.deltaTime);
-        if (raycastHit.collider == null || raycastHit.collider.CompareTag("detectArea")) {
-            // Can move, nothing in the way.
-            lastMoveDir = moveDir;
-            transform.position = targetMovePosition;
-        } else {
-            // Can not move, something in the way.
-            Vector3 testMoveDir = new Vector3(moveDir.x, 0f).normalized;
-            targetMovePosition = transform.position + testMoveDir * speed * Time.deltaTime;
-            raycastHit = Physics2D.Raycast(transform.position, testMoveDir, speed * Time.deltaTime);
-            if (raycastHit.collider == null || raycastHit.collider.CompareTag("detectArea")) {
-                // Can move horizontally.
-                lastMoveDir = moveDir;
-                transform.position = targetMovePosition;
-            } else {
-                // Can not move horizontally.
 
-                // Check if can move vertically.
-                testMoveDir = new Vector3(0f,moveDir.y).normalized;
-                targetMovePosition = transform.position + testMoveDir * speed * Time.deltaTime;
-                raycastHit = Physics2D.Raycast(transform.position, testMoveDir, speed * Time.deltaTime);
-                if (raycastHit.collider == null || raycastHit.collider.CompareTag("detectArea")) {
-                    // Can move vertically.
-                    lastMoveDir = moveDir;
-                    transform.position = targetMovePosition;
-                } else {
-                    // Can not move vertically.
-                }
+        if (TryMove(moveDir, speed * Time.deltaTime)) {
+            // player is moving.
+        } else {
+            // player is not moving.
+        }
+  
+    }
+
+    private bool TryMove(Vector3 baesMoveDir, float distance) {
+        Vector3 moveDir = baesMoveDir;
+
+        bool canMove = CanMove(moveDir, distance);
+        if (!canMove) {
+            // Cannot move diagonally.
+            moveDir = new Vector3(baesMoveDir.x, 0f).normalized;
+            canMove = moveDir.x != 0f && CanMove(moveDir, distance);
+            if (!canMove) {
+                // Cannot move vertically.
+                moveDir = new Vector3(0f, baesMoveDir.y).normalized;
+                canMove = moveDir.y != 0f && CanMove(moveDir, distance);
             }
+        }
+
+        if (canMove) {
+            lastMoveDir = moveDir;
+            transform.position += moveDir * distance;
+            return true;
+        } else {
+            return false;
         }
     }
 
     private bool CanMove(Vector3 dir, float distance) {
-        return (Physics2D.Raycast(transform.position, dir, distance).collider == null || Physics2D.Raycast(transform.position, dir, distance).collider.CompareTag("detectArea"));
+        return (Physics2D.Raycast(transform.position, dir, distance).collider == null || Physics2D.Raycast(transform.position, dir, distance).collider.CompareTag("detectArea") || Physics2D.Raycast(transform.position, dir, distance).collider.CompareTag("Player"));
     }
 
     private void HandleDash() {
-        if (Input.GetKeyDown(KeyCode.LeftShift)){
-            float dashDistance = 20f;
-            transform.position += lastMoveDir * dashDistance;
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            
+            // Need to do, make it so it does a ray cast so it can dash up to the wall if in the dash distance.
 
+            float dashDistance = 40f;
+            TryMove(lastMoveDir, dashDistance);
+        }
+    }
+
+    private void HandleSprint() {
+        if (Input.GetKey(KeyCode.Space)) {
+            currentSpeed = originalSpeed * 1.5f;
+        } else {
+            currentSpeed = originalSpeed;
+        }
+    }
+
+    private void HandleDodgeRoll() {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            state = State.DodgeRollSliding;
+            slideDir = lastMoveDir;
+            slideSpeed = 40f;
+        }
+    }
+
+    private void HandleDodgeRollSliding() {
+        TryMove(slideDir, slideSpeed * Time.deltaTime);
+        transform.position += slideDir * slideSpeed * Time.deltaTime;
+
+        slideSpeed -= slideSpeed * 5f * Time.deltaTime;
+        if (slideSpeed < 5f) {
+            state = State.Combat;
         }
     }
 }

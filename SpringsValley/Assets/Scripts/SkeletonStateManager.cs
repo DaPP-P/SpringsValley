@@ -5,7 +5,7 @@ using UnityEngine;
 public class SkeletonStateManager : MonoBehaviour
 {
 
-    SkeletonBaseState currentState;
+    public SkeletonBaseState currentState;
     public SkeletonIdleState idleState = new SkeletonIdleState();
     public SkeletonPursuingState pursuingState = new SkeletonPursuingState();
     public SkeletonAttackingState attackingState = new SkeletonAttackingState();
@@ -33,6 +33,7 @@ public class SkeletonStateManager : MonoBehaviour
     void Update()
     {
         currentState.UpdateState(this);
+
     }
 
     public void SwitchState(SkeletonBaseState state)
@@ -40,4 +41,5 @@ public class SkeletonStateManager : MonoBehaviour
         currentState = state;
         state.EnterState(this);
     }
+
 }

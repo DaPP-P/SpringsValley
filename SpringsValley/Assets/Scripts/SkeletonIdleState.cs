@@ -18,6 +18,9 @@ public class SkeletonIdleState : SkeletonBaseState
         SetRandomTargetPosition();
         MoveTowardsTarget();
 
+        // NEED TO:
+        // reset sword position.
+
     }
 
     public override void UpdateState(SkeletonStateManager skeleton)
@@ -85,7 +88,6 @@ public class SkeletonIdleState : SkeletonBaseState
                 // Check if the detected object has the "Player" tag
                 if (collider.CompareTag("Player"))
                 {
-                    // You can add more specific conditions here if needed
                     return true;
                 }
             }

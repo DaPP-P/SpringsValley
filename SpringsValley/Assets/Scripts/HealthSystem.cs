@@ -17,6 +17,9 @@ public class HealthSystem : MonoBehaviour
     private Color spriteOriginalColor;
     public GameObject mainSprite;
 
+    public float knockbackForce = 0.1f;
+    public Rigidbody2D rb;
+
     public bool indicationTimeDone = false;
     
     //public event EventHandler<DamageEventArgs> OnTakeDamage;
@@ -31,6 +34,8 @@ public class HealthSystem : MonoBehaviour
         damageText = damageTextObject.GetComponent<TextMeshPro>();
         characterSpriteRenderer = mainSprite.GetComponent<SpriteRenderer>();
         spriteOriginalColor = characterSpriteRenderer.color;
+        
+        rb = GetComponent<Rigidbody2D>();
     }
 
     public void InitializeHealthSystem(int healthValue)
@@ -47,6 +52,7 @@ public class HealthSystem : MonoBehaviour
         // So the sender can't find itself.
         if (sender.layer == gameObject.layer)
             return;
+
         
         currentHealth -= amount;
 
@@ -54,14 +60,32 @@ public class HealthSystem : MonoBehaviour
 
         if (currentHealth > 0)
         {
-            OnHitWithReference?.Invoke(sender);
+             Debug.Log("Sender position: " + sender.transform.position);
+             Knockback(knockbackForce, sender.transform.position);
         }
         else
         {
-            OnDeathWithReference.Invoke(sender);
             isDead = true;
             Destroy(gameObject);
         }
+    }
+
+    public void Knockback(float knockbackForce, Vector3 senderPosition) {
+            // Calculate knockback direction
+            Vector3 knockbackDirection = transform.position - senderPosition;
+            knockbackDirection.Normalize();
+
+            // Apply knockback force to the Rigidbody
+            rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+            StartCoroutine(StopKnockbackAfterDuration(0.5f));
+    }
+
+    private IEnumerator StopKnockbackAfterDuration(float duration) {
+        // Wait for the specified duration
+        yield return new WaitForSeconds(duration);
+
+        // Stop the knockback force
+        rb.velocity = Vector2.zero;
     }
 
     public void Heal (int amount)
