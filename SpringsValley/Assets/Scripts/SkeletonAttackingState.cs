@@ -20,7 +20,7 @@ public class SkeletonAttackingState : SkeletonBaseState
     {
         //enemySwordParent.Attack();
         GameObject player = GameObject.FindGameObjectWithTag("Player");        
-        if (Vector3.Distance(skeleton.transform.position, player.transform.position) > 6.0f)
+        if (Vector3.Distance(skeleton.transform.position, player.transform.position) > 2.0f)
         {
             skeleton.SwitchState(skeleton.pursuingState);
             attackDelayed = false;

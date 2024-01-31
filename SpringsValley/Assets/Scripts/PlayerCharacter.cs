@@ -132,7 +132,7 @@ public class PlayerCharacter : MonoBehaviour
             
             // Need to do, make it so it does a ray cast so it can dash up to the wall if in the dash distance.
 
-            float dashDistance = 40f;
+            float dashDistance = 15f;
             TryMove(lastMoveDir, dashDistance);
         }
     }
@@ -149,7 +149,7 @@ public class PlayerCharacter : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) {
             state = State.DodgeRollSliding;
             slideDir = lastMoveDir;
-            slideSpeed = 40f;
+            slideSpeed = 10f;
         }
     }
 
@@ -158,7 +158,7 @@ public class PlayerCharacter : MonoBehaviour
         transform.position += slideDir * slideSpeed * Time.deltaTime;
 
         slideSpeed -= slideSpeed * 5f * Time.deltaTime;
-        if (slideSpeed < 5f) {
+        if (slideSpeed < 3.5f) {
             state = State.Combat;
         }
     }

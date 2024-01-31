@@ -3,10 +3,10 @@ using UnityEngine;
 public class SkeletonIdleState : SkeletonBaseState
 {
 
-    public float moveRadius = 5f;
-    public float moveSpeed = 5f;
+    public float moveRadius = 2f;
+    public float moveSpeed = 1f;
     private Vector3 targetPosition;
-    private Vector3 originalPosition = new Vector3(-20, -5, 0);
+    private Vector3 originalPosition = new Vector3(-4, -4, 0);
     private SkeletonStateManager skeleton;
 
     public override void EnterState(SkeletonStateManager skeleton)
@@ -14,12 +14,9 @@ public class SkeletonIdleState : SkeletonBaseState
         Debug.Log("hello from idle state");
         this.skeleton = skeleton;
         skeleton.exclamationPoint.SetActive(false);
-        skeleton.detectionCollider.radius = 20f;
+        skeleton.detectionCollider.radius = 10f;
         SetRandomTargetPosition();
         MoveTowardsTarget();
-
-        // NEED TO:
-        // reset sword position.
 
     }
 

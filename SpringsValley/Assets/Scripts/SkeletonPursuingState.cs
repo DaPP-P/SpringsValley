@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SkeletonPursuingState : SkeletonBaseState
 {
-    public float moveSpeed = 5f;
+    public float moveSpeed = 2.5f;
     public Vector3 targetPosition;
     private Vector3 originalPosition;
     private bool playerInRadius;
@@ -14,7 +14,7 @@ public class SkeletonPursuingState : SkeletonBaseState
         this.skeleton = skeleton;
         Debug.Log("hello from pursuing state");
         skeleton.exclamationPoint.SetActive(true);
-        skeleton.detectionCollider.radius = 30f;
+        skeleton.detectionCollider.radius =15f;
         playerInRadius = false;
     }
 
@@ -23,7 +23,7 @@ public class SkeletonPursuingState : SkeletonBaseState
         LocateTarget();
         MoveTowardsTarget();
 
-        if (Vector3.Distance(skeleton.transform.position, targetPosition) <= 6.0f)
+        if (Vector3.Distance(skeleton.transform.position, targetPosition) <= 4.0f)
         {
             skeleton.SwitchState(skeleton.attackingState);
         }
