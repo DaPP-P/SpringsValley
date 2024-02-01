@@ -3,10 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - weapon
-  - SkeletonEnemy
-  - detectArea
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -14,8 +11,8 @@ TagManager:
   - 
   - Water
   - UI
-  - Player
   - 
+  - Solid
   - 
   - 
   - 
@@ -41,9 +38,6 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Behind
-    uniqueID: 1679402175
-    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

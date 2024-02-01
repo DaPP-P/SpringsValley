@@ -5,6 +5,9 @@ using UnityEngine;
 public class PlayerCharacter : MonoBehaviour
 {
 
+    private Rigidbody2D rigidbody2D;
+    private Vector3 moveDir;
+
     private SwordParent swordParent;
     private Vector3 lastMoveDir;
     private Vector3 slideDir;
@@ -23,6 +26,8 @@ public class PlayerCharacter : MonoBehaviour
 
     void Awake()
     {   
+        rigidbody2D = GetComponent<Rigidbody2D>();
+
         currentSpeed = originalSpeed;
         swordParent = GetComponentInChildren<SwordParent>();
         state = State.Normal;
@@ -48,6 +53,11 @@ public class PlayerCharacter : MonoBehaviour
             HandleDodgeRollSliding();
             break;
         }
+    }
+
+    private void FixedUpdate()
+    {
+        rigidbody2D.velocity = moveDir;
     }
 
     private void HandleState() {

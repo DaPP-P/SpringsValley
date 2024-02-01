@@ -5,89 +5,115 @@ using UnityEngine;
 public class PlayerControls : MonoBehaviour
 {
 
-    Rigidbody2D body;
-    float horizontal;
-    float vertical;
-    float movementDir;
+    private const float MOVE_SPEED = 7f;
 
-    public float defaultSpeed = 10.0f;
-    private float speed;
-
-    public SpriteRenderer playerSprite, weaponSprite;
-    public static Vector2 weaponDirectionCoords = new Vector2();
-
+    [SerializeField] private LayerMask dashLayerMask;
+    private Rigidbody2D rigidbody2D;
+    private Vector3 moveDir;
+    private bool isDashButtonDown;
+    
     private SwordParent swordParent;
+    public GameObject weapon;
+    private bool isAttacking;
+
+    public TrailRenderer trailRenderer;
+
+    private void Awake() 
+    {
+        rigidbody2D = GetComponent<Rigidbody2D>();
+        
+        swordParent = GetComponentInChildren<SwordParent>();
+        weapon.SetActive(false);
+        isAttacking = false;
+        trailRenderer.enabled = false;
+        
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        // On start set up rigidbody2D, my default speed, and my swordParent.
-        body = GetComponent<Rigidbody2D>();
-        swordParent = GetComponentInChildren<SwordParent>();
-        speed = defaultSpeed;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Updates the direction of the player and the player direction facing.
-        horizontal = Input.GetAxisRaw("Horizontal");
-        vertical = Input.GetAxisRaw("Vertical");
-        movementDir = Mathf.Sign(horizontal);
-        playerSprite.flipX = weaponDirectionCoords.x < 0;
 
-        // Input controls
-        if (Input.GetKey(KeyCode.Mouse0)) 
-        {
-            leftHit();
-        }
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            sprint();
-        }
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            ResetSpeed();
+        HandleAttack();
+
+        float moveX = 0f;
+        float moveY = 0f;
+
+            if(Input.GetKey(KeyCode.W)){
+            moveY = +1f;
         }
 
+        if(Input.GetKey(KeyCode.S)){
+            moveY = -1f;
+        }
+
+        if(Input.GetKey(KeyCode.D)){
+            moveX = +1f;
+        }
+
+        if(Input.GetKey(KeyCode.A)){
+            moveX = -1f;
+        }
+
+        moveDir = new Vector3(moveX, moveY).normalized;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isDashButtonDown = true;
+        }
     }
 
-    // Used to update the direction of the player
-    private void FixedUpdate() 
+    private void FixedUpdate()
     {
-        // Changes direction and checks which way the weapon should be facing.
-        body.velocity = new Vector2(horizontal * speed, vertical * speed);
-        weaponDirection();
+        rigidbody2D.velocity = moveDir * MOVE_SPEED;
+
+        if (isDashButtonDown)
+        {   
+            float dashAmount = 3f;
+            Vector3 dashPosition = transform.position + moveDir * dashAmount;
+            RaycastHit2D raycastHit2d = Physics2D.Raycast(transform.position,moveDir, dashAmount, dashLayerMask);
+            if (raycastHit2d.collider != null) {
+                dashPosition = raycastHit2d.point;
+            }
+            rigidbody2D.MovePosition(dashPosition);
+            isDashButtonDown = false;
+            StartCoroutine(DashAnimationCoroutine());
+        }
     }
 
-    void weaponDirection()
+    private void HandleAttack()
     {
-        // Do not change weapon position while attacking.
-        if(swordParent.IsAttacking)
-            return;
-
-        // Finds the weapon direction.
-        Vector3 mousePosition = Input.mousePosition;
-        mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
-        weaponDirectionCoords = new Vector2(
-        mousePosition.x - transform.position.x,
-        mousePosition.y - transform.position.y );  
-        weaponDirectionCoords.Normalize();
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !isAttacking)
+        {
+            StartCoroutine(AttackCoroutine());
+        }
     }
 
-    public void leftHit()
+    private IEnumerator AttackCoroutine()
     {
+        isAttacking = true;
+        weapon.SetActive(true);
         swordParent.Attack();
+
+        // Wait for the attack animation duration
+        yield return new WaitForSeconds(0.3f);
+
+        weapon.SetActive(false);
+        isAttacking = false;
     }
 
-    void sprint()
+    private IEnumerator DashAnimationCoroutine()
     {
-        speed = speed * 1.5f;
-    }
+        trailRenderer.enabled = true;
 
-    void ResetSpeed()
-    {
-        speed = defaultSpeed;
+        yield return new WaitForSeconds(0.3f);
+
+        trailRenderer.enabled = false;
     }
 
 }

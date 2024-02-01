@@ -213,7 +213,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5865464505602859500}
   - component: {fileID: 5865464505602859503}
-  - component: {fileID: 5865464505602859504}
   - component: {fileID: 5865464505602859506}
   - component: {fileID: 5865464505602859507}
   - component: {fileID: 5865464505602859501}
@@ -233,7 +232,7 @@ Transform:
   m_GameObject: {fileID: 5865464505602859509}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -20, y: -5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5865464506179318629}
@@ -262,7 +261,7 @@ MonoBehaviour:
   isDead: 0
   damageTextObject: {fileID: 5865464505316486979}
   mainSprite: {fileID: 5865464506179318631}
-  knockbackForce: 10
+  knockbackForce: 5
   rb: {fileID: 0}
   indicationTimeDone: 0
   OnHitWithReference:
@@ -271,22 +270,6 @@ MonoBehaviour:
   OnDeathWithReference:
     m_PersistentCalls:
       m_Calls: []
---- !u!58 &5865464505602859504
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5865464505602859509}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 10
 --- !u!70 &5865464505602859506
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -320,7 +303,7 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
@@ -555,7 +538,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 20
+  m_Radius: 16.34
 --- !u!1001 &5865464506929209393
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -771,6 +754,6 @@ MonoBehaviour:
   animator: {fileID: 5865464506929209385}
   delay: 1
   circleOrigin: {fileID: 3986790201021304208}
-  radius: 1.8
+  radius: 0.6
   rotation_z: 0
   scale: {x: 0, y: 0}
