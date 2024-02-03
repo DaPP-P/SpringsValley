@@ -18,9 +18,16 @@ public class SwordParent : MonoBehaviour
 
     public bool IsAttacking { get; private set; }
 
+    public int attackCount;
+
     public void ResetIsAttacking()
     {
         IsAttacking = false;
+    }
+
+    void Awake()
+    {
+        attackCount = 0;
     }
 
     void Start()
@@ -68,6 +75,7 @@ public class SwordParent : MonoBehaviour
         IsAttacking = true;
         attackBlocked = true;
         StartCoroutine(DelayAttack());
+        attackCount += 1;
     }
 
     private IEnumerator DelayAttack()
