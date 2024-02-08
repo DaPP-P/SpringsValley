@@ -342,7 +342,7 @@ GameObject:
   - component: {fileID: 7415961112144280650}
   - component: {fileID: 2304907948191272401}
   - component: {fileID: 1577296539708829628}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: damageNumber
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -514,7 +514,7 @@ GameObject:
   - component: {fileID: 5313971495348901117}
   - component: {fileID: 5187102718832787809}
   - component: {fileID: 1053565509}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -792,7 +792,7 @@ GameObject:
   - component: {fileID: 6292756321431820960}
   - component: {fileID: 6292756321431820961}
   - component: {fileID: 1651761791}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Main_Character
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -968,6 +968,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -4
       objectReference: {fileID: 0}
+    - target: {fileID: 6555809142294018235, guid: 4200ff85ed7bb8346886a06f3327a561, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 0efd97a41f62ef84cb8609938969b88e, type: 2}
+    - target: {fileID: 6987538846606605048, guid: 4200ff85ed7bb8346886a06f3327a561, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7364999974781594592, guid: 4200ff85ed7bb8346886a06f3327a561, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1030,15 +1038,23 @@ PrefabInstance:
       objectReference: {fileID: 5187102718832787809}
     - target: {fileID: 7364999974781594593, guid: 4200ff85ed7bb8346886a06f3327a561, type: 3}
       propertyPath: leftClickDamageAmount
-      value: 35
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7364999974781594594, guid: 4200ff85ed7bb8346886a06f3327a561, type: 3}
       propertyPath: m_Name
       value: SwordParent
       objectReference: {fileID: 0}
     - target: {fileID: 7364999974781594594, guid: 4200ff85ed7bb8346886a06f3327a561, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7364999974781594594, guid: 4200ff85ed7bb8346886a06f3327a561, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7364999975925673376, guid: 4200ff85ed7bb8346886a06f3327a561, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7364999975925673377, guid: 4200ff85ed7bb8346886a06f3327a561, type: 3}
       propertyPath: m_LocalScale.x

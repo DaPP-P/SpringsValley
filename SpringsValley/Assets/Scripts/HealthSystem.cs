@@ -17,7 +17,7 @@ public class HealthSystem : MonoBehaviour
     private Color spriteOriginalColor;
     public GameObject mainSprite;
 
-    public float knockbackForce = 0.1f;
+    public float knockbackForce;
     public Rigidbody2D rb;
 
     public bool indicationTimeDone = false;

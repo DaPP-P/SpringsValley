@@ -17,13 +17,15 @@ public class PlayerControls : MonoBehaviour
     private bool isAttacking;
 
     public TrailRenderer trailRenderer;
+    public Animator animator;
+    public ParticleSystem dust;
 
     private void Awake() 
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         
         swordParent = GetComponentInChildren<SwordParent>();
-        weapon.SetActive(false);
+        //weapon.SetActive(false);
         isAttacking = false;
         trailRenderer.enabled = false;
         
@@ -38,13 +40,12 @@ public class PlayerControls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         HandleAttack();
 
         float moveX = 0f;
         float moveY = 0f;
 
-            if(Input.GetKey(KeyCode.W)){
+        if(Input.GetKey(KeyCode.W)){
             moveY = +1f;
         }
 
@@ -54,6 +55,7 @@ public class PlayerControls : MonoBehaviour
 
         if(Input.GetKey(KeyCode.D)){
             moveX = +1f;
+            CreateDust();
         }
 
         if(Input.GetKey(KeyCode.A)){
@@ -66,6 +68,8 @@ public class PlayerControls : MonoBehaviour
         {
             isDashButtonDown = true;
         }
+
+        CheckPlayerDirection();
     }
 
     private void FixedUpdate()
@@ -86,24 +90,44 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
+    private void CheckPlayerDirection()
+    {
+        Vector3 vel = transform.rotation * rigidbody2D.velocity;
+        if (vel.y > 0 && vel.x == 0) {
+            animator.SetTrigger("GoUp");
+        } else if (vel.y < 0 && vel.x == 0) {
+            animator.SetTrigger("GoDown");
+        }
+        if (vel.x > 0) {
+            animator.SetTrigger("GoRight");
+        } else if (vel.x < 0) {
+            animator.SetTrigger("GoLeft");
+        }
+    }
+
     private void HandleAttack()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !isAttacking)
+        if (Input.GetKey(KeyCode.Mouse0) && !isAttacking)
         {
             StartCoroutine(AttackCoroutine());
+        }
+
+        if (Input.GetKey(KeyCode.Mouse1) && !isAttacking)
+        {
+            swordParent.SuperAttack();
         }
     }
 
     private IEnumerator AttackCoroutine()
     {
         isAttacking = true;
-        weapon.SetActive(true);
+        //weapon.SetActive(true);
         swordParent.Attack();
 
         // Wait for the attack animation duration
         yield return new WaitForSeconds(0.3f);
 
-        weapon.SetActive(false);
+        //weapon.SetActive(false);
         isAttacking = false;
     }
 
@@ -114,6 +138,10 @@ public class PlayerControls : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
         trailRenderer.enabled = false;
+    }
+
+    void CreateDust() {
+        dust.Play();
     }
 
 }
