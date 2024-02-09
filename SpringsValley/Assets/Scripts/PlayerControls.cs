@@ -18,7 +18,6 @@ public class PlayerControls : MonoBehaviour
 
     public TrailRenderer trailRenderer;
     public Animator animator;
-    public ParticleSystem dust;
 
     private void Awake() 
     {
@@ -55,7 +54,6 @@ public class PlayerControls : MonoBehaviour
 
         if(Input.GetKey(KeyCode.D)){
             moveX = +1f;
-            CreateDust();
         }
 
         if(Input.GetKey(KeyCode.A)){
@@ -138,10 +136,6 @@ public class PlayerControls : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
         trailRenderer.enabled = false;
-    }
-
-    void CreateDust() {
-        dust.Play();
     }
 
 }

@@ -7,11 +7,16 @@ public class SkeletonPursuingState : SkeletonBaseState
     private Vector3 originalPosition;
     private bool playerInRadius;
     private SkeletonStateManager skeleton;
+    public GameObject player;
+    private bool hasLineOfSight;
+
 
 
     public override void EnterState(SkeletonStateManager skeleton)
     {
         this.skeleton = skeleton;
+        player = GameObject.FindGameObjectWithTag("Player");
+        hasLineOfSight = true;
         Debug.Log("hello from pursuing state");
         skeleton.exclamationPoint.SetActive(true);
         skeleton.detectionCollider.radius =15f;
@@ -20,10 +25,9 @@ public class SkeletonPursuingState : SkeletonBaseState
 
     public override void UpdateState(SkeletonStateManager skeleton)
     {
-        LocateTarget();
         MoveTowardsTarget();
 
-        if (Vector3.Distance(skeleton.transform.position, targetPosition) <= 4.0f)
+        if (Vector3.Distance(skeleton.transform.position, player.transform.position) <= 1.0f)
         {
             skeleton.SwitchState(skeleton.attackingState);
         }
@@ -51,42 +55,36 @@ public class SkeletonPursuingState : SkeletonBaseState
     }
 
     
-    private void LocateTarget()
+    private bool LocateTarget()
     {
-        // Ensure the detectionGameObject and detectionCollider are not null
-        if (skeleton.detectionGameObject != null && skeleton.detectionCollider != null)
+        int enemyLayerMask = 1 << LayerMask.NameToLayer("Enemy");
+        int layerMask = ~enemyLayerMask; // Invert the enemy layer mask to exclude it
+        RaycastHit2D ray = Physics2D.Raycast(skeleton.transform.position, player.transform.position - skeleton.transform.position, 12, layerMask);
+        if (ray.collider != null)
         {
-            // Check if the detection collider overlaps with the skeleton's position
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(skeleton.transform.position, skeleton.detectionCollider.radius);
-
-            // Assume the player is not in the radius until proven otherwise
-            playerInRadius = false;
-
-            foreach (var collider in colliders)
+            hasLineOfSight = ray.collider.CompareTag("Player");
+            if(hasLineOfSight)
             {
-                // Check if the detected object has the "Player" tag
-                if (collider.CompareTag("Player"))
-                {
-                    Vector3 playerPosition = collider.transform.position;
-                    Vector3 offset = (skeleton.transform.position - playerPosition).normalized * 4.0f;
-                    targetPosition = playerPosition;
-                    playerInRadius = true;
-                    break; // Exit the loop if a player is found
-                }
+                Debug.DrawRay(skeleton.transform.position, player.transform.position - skeleton.transform.position, Color.green);
+                return true;
             }
-        }
-        else
+            else
+            {
+                Debug.DrawRay(skeleton.transform.position, player.transform.position - skeleton.transform.position, Color.red);
+                return false;
+            }
+        } else
         {
-            playerInRadius = false;
+            return false;
         }
     }
 
     private void MoveTowardsTarget()
     {
-        if (playerInRadius)
+        if (LocateTarget())
         {
             // Move towards the target position
-            skeleton.transform.position = Vector3.MoveTowards(skeleton.transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            skeleton.transform.position = Vector3.MoveTowards(skeleton.transform.position, player.transform.position, moveSpeed * Time.deltaTime);
         }
         else
         {

@@ -197,6 +197,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d925f1d26bd95904886e446c97ec33c3, type: 3}
+--- !u!4 &515703111 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5081634696986109183, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+  m_PrefabInstance: {fileID: 1633336736}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &590298964
 GameObject:
   m_ObjectHideFlags: 0
@@ -15642,6 +15647,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3575551801226156745, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3986790201021304209, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3986790202024872915, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464505004292815, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464505004292815, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464505316486979, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464505316486979, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5865464505602859500, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -15698,17 +15731,57 @@ PrefabInstance:
       propertyPath: rb
       value: 
       objectReference: {fileID: 203868160}
+    - target: {fileID: 5865464505602859503, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: indicationTimeDone
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5865464505602859506, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5865464505602859506, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464505602859507, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_BodyType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464505602859507, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_AngularDrag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464505602859507, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Constraints
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5865464505602859509, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: m_Name
       value: Skeleton
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464505602859509, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464505602859509, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_TagString
+      value: SkeletonEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464506129446013, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464506179318631, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464506426807866, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464506426807866, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5865464506929209384, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: leftClickDamageAmount
@@ -15731,6 +15804,58 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 887387179}
+    - target: {fileID: 643323853802461341, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.9900012
+      objectReference: {fileID: 0}
+    - target: {fileID: 643323853802461342, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+      propertyPath: m_Follow
+      value: 
+      objectReference: {fileID: 515703111}
+    - target: {fileID: 643323853802461342, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+      propertyPath: m_Lens.ModeOverride
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 643323853802461342, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+      propertyPath: m_Lens.OrthographicSize
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200923857112120357, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200923857112120359, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.9900012
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200923857112120376, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+      propertyPath: orthographic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200923857112120376, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+      propertyPath: field of view
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200923857112120376, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+      propertyPath: m_FocalLength
+      value: 0.86602545
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200923857112120376, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+      propertyPath: m_SensorSize.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200923857112120376, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+      propertyPath: m_SensorSize.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200923857112120376, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+      propertyPath: orthographic size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200923857112120376, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
+      propertyPath: m_projectionMatrixMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4913839556053688950, guid: f15fa2b26a2653f4d9c2bc7b6c557cde, type: 3}
       propertyPath: rightClickDamageAmount
       value: 35

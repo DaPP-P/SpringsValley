@@ -7,54 +7,76 @@ public class SkeletonAttackingState : SkeletonBaseState
     public EnemySwordParent enemySwordParent;
     private SkeletonStateManager skeleton;
     
+    public float moveSpeed = 2.5f;
+    float attackRange = 1.0f;
     bool attackDelayed = false;
     float delayStartTime;
+
+    public GameObject player;
+    private bool hasLineOfSight;
 
     public override void EnterState(SkeletonStateManager skeleton)
     {
         Debug.Log("hello from attacking state");
         enemySwordParent = skeleton.GetComponentInChildren<EnemySwordParent>();
+        this.skeleton = skeleton;
+        player = GameObject.FindGameObjectWithTag("Player");
+        hasLineOfSight = true;
     }
 
     public override void UpdateState(SkeletonStateManager skeleton)
     {
-        //enemySwordParent.Attack();
-        GameObject player = GameObject.FindGameObjectWithTag("Player");        
-        if (Vector3.Distance(skeleton.transform.position, player.transform.position) > 2.0f)
+        if (CheckLineOfSight(5))
+        {
+            strafe();
+        }
+        else
         {
             skeleton.SwitchState(skeleton.pursuingState);
-            attackDelayed = false;
-        } else {
-            // If the delay flag is not set, set it and record the start time
-            if (!attackDelayed)
-            {
-                attackDelayed = true;
-                delayStartTime = Time.time;
-            }
-
-            // Check if 0.3 seconds have passed since the delay started
-            if (Time.time - delayStartTime >= 0.3f)
-            {
-                // Execute the attack after the delay
-                enemySwordParent.Attack();
-                // Reset the delay flag
-                attackDelayed = false;
-            }
-
         }
+    }
+
+    private bool CheckLineOfSight(float lineOfSightRange)
+    {
+        int enemyLayerMask = 1 << LayerMask.NameToLayer("Enemy");
+        int layerMask = ~enemyLayerMask; // Invert the enemy layer mask to exclude it
+        RaycastHit2D ray = Physics2D.Raycast(skeleton.transform.position, player.transform.position - skeleton.transform.position, lineOfSightRange, layerMask);
+        if (ray.collider != null)
+        {
+            hasLineOfSight = ray.collider.CompareTag("Player");
+            if(hasLineOfSight)
+            {
+                Debug.DrawRay(skeleton.transform.position, player.transform.position - skeleton.transform.position, Color.green);
+                return true;
+            }
+            else
+            {
+                Debug.DrawRay(skeleton.transform.position, player.transform.position - skeleton.transform.position, Color.red);
+                return false;
+            }
+        } else
+        {
+            return false;
+        }
+    }
+
+    private void MoveTowardsTarget()
+    {
+        skeleton.transform.position = Vector3.MoveTowards(skeleton.transform.position, player.transform.position, moveSpeed * Time.deltaTime);
     }
 
 
     private void strafe()
     {
         // Move closer slowly
-        // Attack
-        // Mive away faster.
-
-        //if (Vector3.Distance(skeleton.transform.position, player.transform.position) > 3.0f)
-        //{
-        //
-        //}
+        if (CheckLineOfSight(attackRange))
+        {
+            enemySwordParent.Attack();
+        }
+        else
+        {
+            MoveTowardsTarget();
+        } 
     }
 
     public override void OnCollisionEnter(SkeletonStateManager skeleton, Collision collision)
