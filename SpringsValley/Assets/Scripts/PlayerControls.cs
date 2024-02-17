@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerControls : MonoBehaviour
 {
 
+    private WeaponStateManager weaponStateManager;
+
     private const float MOVE_SPEED = 7f;
 
     [SerializeField] private LayerMask dashLayerMask;
@@ -26,6 +28,9 @@ public class PlayerControls : MonoBehaviour
         
         swordParent = GetComponentInChildren<SwordParent>();
         bowParent = GetComponentInChildren<BowParent>();
+
+        weaponStateManager = GetComponentInChildren<WeaponStateManager>();
+
         //weapon.SetActive(false);
         isAttacking = false;
         trailRenderer.enabled = false;
@@ -110,6 +115,7 @@ public class PlayerControls : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse0) && !isAttacking)
         {
             StartCoroutine(AttackCoroutine());
+            //weaponStateManager.Attack();
         }
 
         if (Input.GetKey(KeyCode.Mouse1) && !isAttacking)
@@ -122,7 +128,7 @@ public class PlayerControls : MonoBehaviour
     {
         isAttacking = true;
         //weapon.SetActive(true);
-        swordParent.Attack();
+        weaponStateManager.Attack();
 
         // Wait for the attack animation duration
         yield return new WaitForSeconds(0.3f);
