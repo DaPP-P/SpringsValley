@@ -21,6 +21,8 @@ public class SwordParent : MonoBehaviour
     public Transform circleOrigin;
     public float radius;
 
+    private List<GameObject> hitObjects = new List<GameObject>();
+
     void Awake()
     {
         attackCount = 0;
@@ -35,6 +37,7 @@ public class SwordParent : MonoBehaviour
     public void ResetIsAttacking()
     {
         isAttacking = false;
+        hitObjects.Clear();
     }
 
     /* Follows the mouse */
@@ -124,10 +127,12 @@ public class SwordParent : MonoBehaviour
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(circleOrigin.position, radius))
         {
             HealthSystem healthSystem;
-            if (healthSystem = collider.GetComponent<HealthSystem>())
+            if ((healthSystem = collider.GetComponent<HealthSystem>()) != null && !hitObjects.Contains(collider.gameObject))
             {
+                Debug.Log("I hit " + collider.gameObject.name);
                 healthSystem.Damage(damageAmount, transform.parent.gameObject);
-                print("hit");
+                hitObjects.Add(collider.gameObject);
+   
             }
         }
     }

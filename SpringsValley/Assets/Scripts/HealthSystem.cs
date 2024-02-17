@@ -21,6 +21,8 @@ public class HealthSystem : MonoBehaviour
     public Rigidbody2D rb;
 
     public bool indicationTimeDone = false;
+
+    private SkeletonStateManager skeletonStateManager;
     
     //public event EventHandler<DamageEventArgs> OnTakeDamage;
     //public event EventHandler<HealEventArgs> OnHeal;
@@ -36,6 +38,8 @@ public class HealthSystem : MonoBehaviour
         spriteOriginalColor = characterSpriteRenderer.color;
         
         rb = GetComponent<Rigidbody2D>();
+
+        skeletonStateManager = GetComponent<SkeletonStateManager>();
     }
 
     public void InitializeHealthSystem(int healthValue)
@@ -77,7 +81,10 @@ public class HealthSystem : MonoBehaviour
 
             // Apply knockback force to the Rigidbody
             rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
-            StartCoroutine(StopKnockbackAfterDuration(0.5f));
+            StartCoroutine(StopKnockbackAfterDuration(0.3f));
+
+            // Make it so the hit enemy does not try to move
+            skeletonStateManager.SwitchState(skeletonStateManager.nothingState);
     }
 
     private IEnumerator StopKnockbackAfterDuration(float duration) {
@@ -86,6 +93,7 @@ public class HealthSystem : MonoBehaviour
 
         // Stop the knockback force
         rb.velocity = Vector2.zero;
+        skeletonStateManager.SwitchState(skeletonStateManager.pursuingState);
     }
 
     public void Heal (int amount)

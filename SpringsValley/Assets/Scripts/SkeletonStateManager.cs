@@ -9,6 +9,7 @@ public class SkeletonStateManager : MonoBehaviour
     public SkeletonIdleState idleState = new SkeletonIdleState();
     public SkeletonPursuingState pursuingState = new SkeletonPursuingState();
     public SkeletonAttackingState attackingState = new SkeletonAttackingState();
+    public SkeletonNothingState nothingState = new SkeletonNothingState();
 
     public SpriteRenderer characterRenderer;
     public GameObject detectionGameObject;
