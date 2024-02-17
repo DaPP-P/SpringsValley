@@ -11,8 +11,9 @@ public class PlayerControls : MonoBehaviour
     private Rigidbody2D rigidbody2D;
     private Vector3 moveDir;
     private bool isDashButtonDown;
-    
     private SwordParent swordParent;
+    private BowParent bowParent;
+
     public GameObject weapon;
     private bool isAttacking;
 
@@ -24,6 +25,7 @@ public class PlayerControls : MonoBehaviour
         rigidbody2D = GetComponent<Rigidbody2D>();
         
         swordParent = GetComponentInChildren<SwordParent>();
+        bowParent = GetComponentInChildren<BowParent>();
         //weapon.SetActive(false);
         isAttacking = false;
         trailRenderer.enabled = false;
