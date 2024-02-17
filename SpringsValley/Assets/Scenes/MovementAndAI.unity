@@ -15663,29 +15663,9 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 5865464505004292815, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5865464505316486979, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5865464505316486979, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5865464505602859500, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: m_RootOrder
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5865464505602859500, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.24999999
-      objectReference: {fileID: 0}
-    - target: {fileID: 5865464505602859500, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.24999999
       objectReference: {fileID: 0}
     - target: {fileID: 5865464505602859500, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15727,34 +15707,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5865464505602859501, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5865464505602859503, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: rb
       value: 
       objectReference: {fileID: 203868160}
-    - target: {fileID: 5865464505602859503, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
-      propertyPath: indicationTimeDone
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5865464505602859506, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5865464505602859506, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5865464505602859507, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
-      propertyPath: m_BodyType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5865464505602859507, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
-      propertyPath: m_AngularDrag
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5865464505602859507, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 5865464505602859509, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: m_Name
       value: Skeleton
@@ -15762,10 +15722,6 @@ PrefabInstance:
     - target: {fileID: 5865464505602859509, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: m_Layer
       value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5865464505602859509, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
-      propertyPath: m_TagString
-      value: SkeletonEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 5865464506129446013, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: m_Layer
@@ -15779,8 +15735,8 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 5865464506426807866, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 5865464506929209384, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5865464506929209384, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
