@@ -9,11 +9,20 @@ public class WeaponStateManager : MonoBehaviour
     public WeaponBowState bowState = new WeaponBowState();
     public WeaponSwordState swordState = new WeaponSwordState();
 
+    public SpriteRenderer characterRenderer, weaponRenderer;
+
     public GameObject swordPrefab;
     public GameObject bowPrefab;
+    public GameObject arrowPrefab;
+    
     public Transform hand;
+    public Transform backHand;
 
     public GameObject currentWeaponInstance;
+    public GameObject arrow;
+
+    public Transform circleOrigin;
+    public float radius;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +34,7 @@ public class WeaponStateManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //currentState.UpdateState(this);
+        currentState.UpdateState(this);
     }
 
     public void SwitchState(WeaponBaseState state)
@@ -37,13 +46,19 @@ public class WeaponStateManager : MonoBehaviour
     public void InstantiateSwordPrefab()
     {
         // Instantiate the sword prefab at the hand position
-        currentWeaponInstance = Instantiate(swordPrefab, hand.position, hand.rotation, hand);
+        currentWeaponInstance = Instantiate(swordPrefab, hand.position, Quaternion.identity, hand);
+        circleOrigin = currentWeaponInstance.transform.Find("CircleOrigin");
     }
 
     public void InstantiateBowPrefab()
     {
         // Instantiate the bow prefab at the hand position
         currentWeaponInstance = Instantiate(bowPrefab, hand.position, hand.rotation, hand);
+    }
+
+    public void InstantiateArrowPrefab()
+    {
+        arrow =  Instantiate(arrowPrefab, hand.position, hand.rotation);
     }
 
     public void DestroyCurrentInstance()
@@ -63,5 +78,28 @@ public class WeaponStateManager : MonoBehaviour
         {
             ((WeaponBowState)currentState).bowAttack();
         }
+    }
+
+    public void CheckHits()
+    {
+        if (currentState is WeaponSwordState)
+        {
+            ((WeaponSwordState)currentState).DetectColliders();
+        }
+    }
+
+    public void ResetAttack()
+    {
+        if (currentState is WeaponSwordState)
+        {
+            ((WeaponSwordState)currentState).ResetAttack();
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Vector3 position = circleOrigin == null ? Vector3.zero : circleOrigin.position;
+        Gizmos.DrawWireSphere(position, radius);
     }
 }
