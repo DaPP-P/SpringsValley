@@ -115,25 +115,27 @@ public class PlayerControls : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse0) && !isAttacking)
         {
             StartCoroutine(AttackCoroutine());
-            //weaponStateManager.Attack();
         }
 
         if (Input.GetKey(KeyCode.Mouse1) && !isAttacking)
         {
-            swordParent.SuperAttack();
+            StartCoroutine(SpecialAttackCoroutine());
         }
     }
 
     private IEnumerator AttackCoroutine()
     {
         isAttacking = true;
-        //weapon.SetActive(true);
         weaponStateManager.Attack();
-
-        // Wait for the attack animation duration
         yield return new WaitForSeconds(0.3f);
+        isAttacking = false;
+    }
 
-        //weapon.SetActive(false);
+    private IEnumerator SpecialAttackCoroutine()
+    {
+        isAttacking = true;
+        weaponStateManager.SpecialAttack();
+        yield return new WaitForSeconds(0.5f);
         isAttacking = false;
     }
 

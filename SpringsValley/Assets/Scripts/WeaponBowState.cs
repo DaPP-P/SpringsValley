@@ -14,7 +14,10 @@ public class WeaponBowState : WeaponBaseState
     private bool isAttacking = false;
 
     float timer;
-    float holdDur = 1f;
+    float holdDur = 0.5f;
+
+    float specialTimer;
+    float specialHoldDur = 0.7f;
 
     private List<GameObject> hitObjects = new List<GameObject>();
 
@@ -56,15 +59,26 @@ public class WeaponBowState : WeaponBaseState
         }
     }
 
-    private IEnumerator StartBowAttack()
+    public void bowSpecialAttack()
     {
-        isAttacking = true;
-        yield return new WaitForSeconds(1f);
-        if (!Input.GetMouseButtonUp(0))
+        if(Input.GetMouseButtonDown(1))
         {
-             weapon.InstantiateArrowPrefab(); 
+            specialTimer = Time.time;
         }
-        isAttacking = false;
+        else if (Input.GetMouseButton(1))
+        {
+            if (Time.time - specialTimer > specialHoldDur)
+            {
+                specialTimer = Time.time;
+                weapon.InstantiateArrowPrefab();
+                weapon.InstantiateArrowPrefab(10);
+                weapon.InstantiateArrowPrefab(-10);
+            }
+        }
+        else
+        {
+            specialTimer = float.PositiveInfinity;
+        }
     }
 
     public void followMouse()

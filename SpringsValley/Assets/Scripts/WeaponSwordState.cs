@@ -7,10 +7,8 @@ public class WeaponSwordState : WeaponBaseState
     private WeaponStateManager weapon;
     private SwordStats swordStats;
     private Animator swordAnimator;
-    
     private int attackCount;
     private int damageAmount;
-    private float delay = 0.4f;
     private bool attackBlocked;
 
 
@@ -61,8 +59,25 @@ public class WeaponSwordState : WeaponBaseState
         attackBlocked = true;
         isAttacking = true;
         attackCount += 1;
+        weapon.StartCoroutine(DelayAttack(0.3f));
+    }
 
-        weapon.StartCoroutine(DelayAttack(delay));
+    public void swordSpecialAttack()
+    {
+        Debug.Log("Special Attack");
+
+        if (attackBlocked)
+            return;
+        
+        /* Need to convert damageAmount to float and then round so damage
+         * amount can be leftClickDamage * 1.5 */
+        damageAmount = swordStats.leftClickDamageAmount;
+
+        swordAnimator.SetTrigger("StabAttack");
+
+        attackBlocked = true;
+        isAttacking = true;
+        weapon.StartCoroutine(DelayAttack(0.4f));
     }
 
     private IEnumerator DelayAttack(float delayTime)

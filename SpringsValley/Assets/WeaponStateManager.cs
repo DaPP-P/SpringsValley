@@ -56,9 +56,16 @@ public class WeaponStateManager : MonoBehaviour
         currentWeaponInstance = Instantiate(bowPrefab, hand.position, hand.rotation, hand);
     }
 
-    public void InstantiateArrowPrefab()
-    {
-        arrow =  Instantiate(arrowPrefab, hand.position, hand.rotation);
+    public void InstantiateArrowPrefab(int? rotation = null)
+    {   
+        if (rotation.HasValue)
+        {
+            arrow = Instantiate(arrowPrefab, hand.position, hand.rotation * Quaternion.Euler(0, 0, rotation.Value));
+        }
+        else
+        {
+            arrow = Instantiate(arrowPrefab, hand.position, hand.rotation);
+        }
     }
 
     public void DestroyCurrentInstance()
@@ -77,6 +84,20 @@ public class WeaponStateManager : MonoBehaviour
         else if (currentState is WeaponBowState)
         {
             ((WeaponBowState)currentState).bowAttack();
+        }
+    }
+
+    public void SpecialAttack()
+    {
+        // Check if the current state is the sword state
+        if (currentState is WeaponSwordState)
+        {
+            // Cast currentState to WeaponSwordState and call the swordAttack method
+            ((WeaponSwordState)currentState).swordSpecialAttack();
+        }
+        else if (currentState is WeaponBowState)
+        {
+            ((WeaponBowState)currentState).bowSpecialAttack();
         }
     }
 
