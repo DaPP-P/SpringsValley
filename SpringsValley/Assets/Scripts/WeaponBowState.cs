@@ -11,6 +11,10 @@ public class WeaponBowState : WeaponBaseState
     private float delay = 0.4f;
     private bool attackBlocked;
     public int offset = 0;
+    private bool isAttacking = false;
+
+    float timer;
+    float holdDur = 1f;
 
     private List<GameObject> hitObjects = new List<GameObject>();
 
@@ -34,8 +38,33 @@ public class WeaponBowState : WeaponBaseState
 
     public void bowAttack()
     {
-        Debug.Log("bow attack");
-        weapon.InstantiateArrowPrefab();
+        if(Input.GetMouseButtonDown(0))
+        {
+            timer = Time.time;
+        }
+        else if (Input.GetMouseButton(0))
+        {
+            if (Time.time - timer > holdDur)
+            {
+                timer = Time.time;
+                weapon.InstantiateArrowPrefab();
+            }
+        }
+        else
+        {
+            timer = float.PositiveInfinity;
+        }
+    }
+
+    private IEnumerator StartBowAttack()
+    {
+        isAttacking = true;
+        yield return new WaitForSeconds(1f);
+        if (!Input.GetMouseButtonUp(0))
+        {
+             weapon.InstantiateArrowPrefab(); 
+        }
+        isAttacking = false;
     }
 
     public void followMouse()
