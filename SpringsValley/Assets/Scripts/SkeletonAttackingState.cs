@@ -13,7 +13,17 @@ public class SkeletonAttackingState : SkeletonBaseState
     float delayStartTime;
 
     public GameObject player;
+    public GameObject followObject;
+
     private bool hasLineOfSight;
+
+    private float lineOfSightRange = 5f;
+
+    // Stuff needed for circling the player
+    public float circleRadius = 5f;
+
+    private Vector3 velocity = Vector3.zero;
+    private Vector3 targetPosition;
 
     public override void EnterState(SkeletonStateManager skeleton)
     {
@@ -21,14 +31,15 @@ public class SkeletonAttackingState : SkeletonBaseState
         enemySwordParent = skeleton.GetComponentInChildren<EnemySwordParent>();
         this.skeleton = skeleton;
         player = GameObject.FindGameObjectWithTag("Player");
+        followObject = GameObject.FindGameObjectWithTag("FollowObject");
         hasLineOfSight = true;
     }
 
     public override void UpdateState(SkeletonStateManager skeleton)
     {
-        if (CheckLineOfSight(5))
+        if ((Vector3.Distance(skeleton.transform.position, player.transform.position) <= 10.0f) && LocateTarget(lineOfSightRange))
         {
-            strafe();
+            AttackMode();
         }
         else
         {
@@ -36,48 +47,92 @@ public class SkeletonAttackingState : SkeletonBaseState
         }
     }
 
-    private bool CheckLineOfSight(float lineOfSightRange)
+    private bool LocateTarget(float range)
     {
         int enemyLayerMask = 1 << LayerMask.NameToLayer("Enemy");
         int layerMask = ~enemyLayerMask; // Invert the enemy layer mask to exclude it
-        RaycastHit2D ray = Physics2D.Raycast(skeleton.transform.position, player.transform.position - skeleton.transform.position, lineOfSightRange, layerMask);
-        if (ray.collider != null)
+        
+        RaycastHit2D rayCenter = Physics2D.Raycast(skeleton.transform.position, player.transform.position - skeleton.transform.position, range, layerMask);
+
+        Vector3 modifiedDirectionTop = (player.transform.position + Vector3.up * 0.5f) - skeleton.transform.position;
+        RaycastHit2D rayTop = Physics2D.Raycast(skeleton.transform.position, modifiedDirectionTop, range, layerMask);
+
+        Vector3 modifiedDirectionBottom = (player.transform.position + Vector3.up * -0.5f) - skeleton.transform.position;
+        RaycastHit2D rayBottom = Physics2D.Raycast(skeleton.transform.position, modifiedDirectionBottom, range, layerMask);
+
+        if ((rayCenter.collider != null) && (rayCenter.collider.CompareTag("Player")))
         {
-            hasLineOfSight = ray.collider.CompareTag("Player");
-            if(hasLineOfSight)
-            {
-                Debug.DrawRay(skeleton.transform.position, player.transform.position - skeleton.transform.position, Color.green);
-                return true;
-            }
-            else
-            {
-                Debug.DrawRay(skeleton.transform.position, player.transform.position - skeleton.transform.position, Color.red);
-                return false;
-            }
-        } else
-        {
-            return false;
+            Debug.DrawRay(skeleton.transform.position, player.transform.position - skeleton.transform.position, Color.green);
+            return true;
+        } else {
+            Debug.DrawRay(skeleton.transform.position, player.transform.position - skeleton.transform.position, Color.red);
         }
+
+        if ((rayTop.collider != null) && rayTop.collider.CompareTag("Player"))
+        {
+            Debug.DrawRay(skeleton.transform.position, modifiedDirectionTop, Color.green);
+            return true;
+        } else {
+            Debug.DrawRay(skeleton.transform.position, modifiedDirectionTop, Color.red);
+        }
+
+        if ((rayBottom.collider != null) && rayBottom.collider.CompareTag("Player"))
+        {
+            Debug.DrawRay(skeleton.transform.position, modifiedDirectionBottom, Color.green);
+            return true;
+        } else {
+            Debug.DrawRay(skeleton.transform.position, modifiedDirectionBottom, Color.red);
+        }
+        return false;
     }
+
+    private bool LocateFollow(float range)
+    {
+        Debug.Log("Should be follwing follow object");
+        Debug.Log(followObject.name);
+        int enemyLayerMask = 1 << LayerMask.NameToLayer("Enemy");
+        int layerMask = ~enemyLayerMask; // Invert the enemy layer mask to exclude it
+
+        RaycastHit2D rayFollow = Physics2D.Raycast(skeleton.transform.position, followObject.transform.position - skeleton.transform.position, range, layerMask);
+        
+        if ((rayFollow.collider != null) && rayFollow.collider.CompareTag("FollowObject"))
+        {
+            Debug.DrawRay(skeleton.transform.position, followObject.transform.position - skeleton.transform.position, Color.green);
+            return true;
+        } else {
+            Debug.DrawRay(skeleton.transform.position, followObject.transform.position - skeleton.transform.position, Color.red);
+        }
+        return false;
+    }
+
 
     private void MoveTowardsTarget()
     {
-        skeleton.transform.position = Vector3.MoveTowards(skeleton.transform.position, player.transform.position, moveSpeed * Time.deltaTime);
-    }
 
 
-    private void strafe()
-    {
-        // Move closer slowly
-        if (CheckLineOfSight(attackRange))
+        if (LocateTarget(lineOfSightRange))
         {
-            enemySwordParent.Attack();
+            // Move towards the target position
+            skeleton.transform.position = Vector3.MoveTowards(skeleton.transform.position, player.transform.position, moveSpeed * Time.deltaTime);
+        } else if (LocateFollow(lineOfSightRange))
+        {
+            skeleton.transform.position = Vector3.MoveTowards(skeleton.transform.position, followObject.transform.position, moveSpeed * Time.deltaTime);
         }
         else
         {
-            MoveTowardsTarget();
-        } 
+            // Handle the case where the player is not in the radius (e.g., stop pursuing, switch to idle state, etc.)
+            skeleton.SwitchState(skeleton.idleState);
+        }
     }
+
+    private void AttackMode()
+{
+    Debug.Log("We are in attack mode");
+    // Find the players location
+    // Start to rotate around that location
+    // Wave in and out 
+    // Every now and then speed up and attack the player
+}
 
     public override void OnCollisionEnter(SkeletonStateManager skeleton, Collision collision)
     {
