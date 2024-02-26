@@ -24,6 +24,7 @@ public class SkeletonAttackingState : SkeletonBaseState
 
     private Vector3 velocity = Vector3.zero;
     private Vector3 targetPosition;
+    private float angle;
 
     public override void EnterState(SkeletonStateManager skeleton)
     {
@@ -37,8 +38,9 @@ public class SkeletonAttackingState : SkeletonBaseState
 
     public override void UpdateState(SkeletonStateManager skeleton)
     {
-        if ((Vector3.Distance(skeleton.transform.position, player.transform.position) <= 10.0f) && LocateTarget(lineOfSightRange))
+        if ((Vector3.Distance(skeleton.transform.position, player.transform.position) <= 15.0f) && LocateTarget(lineOfSightRange))
         {
+            circleRadius = Vector3.Distance(skeleton.transform.position, player.transform.position);
             AttackMode();
         }
         else
@@ -108,8 +110,6 @@ public class SkeletonAttackingState : SkeletonBaseState
 
     private void MoveTowardsTarget()
     {
-
-
         if (LocateTarget(lineOfSightRange))
         {
             // Move towards the target position
@@ -128,10 +128,9 @@ public class SkeletonAttackingState : SkeletonBaseState
     private void AttackMode()
 {
     Debug.Log("We are in attack mode");
-    // Find the players location
-    // Start to rotate around that location
-    // Wave in and out 
-    // Every now and then speed up and attack the player
+    angle += Time.deltaTime * 100; // update angle
+    Vector3 direction = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.up; // calculate direction from center - rotate the up vector Angle degrees clockwise
+    skeleton.transform.position = player.transform.position + direction * circleRadius; // update position based on center, the direction, and the radius (which is a constant)
 }
 
     public override void OnCollisionEnter(SkeletonStateManager skeleton, Collision collision)

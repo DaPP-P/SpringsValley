@@ -6,6 +6,7 @@ public class WeaponBowState : WeaponBaseState
 {
     private WeaponStateManager weapon;
     private BowStats bowStats;
+    private Animator bowAnimator;
 
     private int damageAmount;
     private float delay = 0.4f;
@@ -14,10 +15,10 @@ public class WeaponBowState : WeaponBaseState
     private bool isAttacking = false;
 
     float timer;
-    float holdDur = 0.5f;
+    float holdDur = 0.8f;
 
     float specialTimer;
-    float specialHoldDur = 0.7f;
+    float specialHoldDur = 1.2f;
 
     private List<GameObject> hitObjects = new List<GameObject>();
 
@@ -26,6 +27,9 @@ public class WeaponBowState : WeaponBaseState
         Debug.Log("hello from bow state");
         this.weapon = weapon;
         weapon.InstantiateBowPrefab();
+
+        bowStats = weapon.currentWeaponInstance.GetComponent<BowStats>();
+        bowAnimator = weapon.currentWeaponInstance.GetComponent<Animator>(); 
     }
 
     public override void UpdateState(WeaponStateManager weapon)
@@ -37,47 +41,76 @@ public class WeaponBowState : WeaponBaseState
             weapon.DestroyCurrentInstance();
             weapon.SwitchState(weapon.swordState);
         }
+
+        if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
+        {
+            bowAnimator.SetTrigger("bowInterupt");
+        }
     }
 
+    // Add a delay to bow attack
     public void bowAttack()
     {
+
+        float animationChange = 0.4f;
+
         if(Input.GetMouseButtonDown(0))
         {
             timer = Time.time;
+            
         }
         else if (Input.GetMouseButton(0))
         {
+            bowAnimator.SetTrigger("bowPull");
+            if (Time.time - timer > animationChange)
+            {
+                bowAnimator.SetTrigger("bowShoot");
+            }
+
             if (Time.time - timer > holdDur)
             {
                 timer = Time.time;
                 weapon.InstantiateArrowPrefab();
+                bowAnimator.SetTrigger("bowInterupt");
             }
         }
         else
         {
             timer = float.PositiveInfinity;
+            bowAnimator.SetTrigger("bowInterupt");
         }
     }
 
     public void bowSpecialAttack()
     {
+        float animationChange = 0.7f;
+
         if(Input.GetMouseButtonDown(1))
         {
             specialTimer = Time.time;
         }
         else if (Input.GetMouseButton(1))
         {
+            bowAnimator.SetTrigger("bowPull");
+            if (Time.time - timer > animationChange)
+            {
+                bowAnimator.SetTrigger("bowShoot");
+            }
+
             if (Time.time - specialTimer > specialHoldDur)
             {
                 specialTimer = Time.time;
                 weapon.InstantiateArrowPrefab();
                 weapon.InstantiateArrowPrefab(10);
                 weapon.InstantiateArrowPrefab(-10);
+                bowAnimator.SetTrigger("bowInterupt");
             }
         }
         else
         {
             specialTimer = float.PositiveInfinity;
+            bowAnimator.SetTrigger("bowInterupt");
+
         }
     }
 
