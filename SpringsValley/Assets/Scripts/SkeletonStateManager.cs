@@ -20,7 +20,6 @@ public class SkeletonStateManager : MonoBehaviour
     void Start()
     {
         detectionCollider = detectionGameObject.GetComponent<CircleCollider2D>();
-
         currentState = idleState;
         currentState.EnterState(this);
     }
