@@ -7,7 +7,7 @@ public class AnimationEventHelper : MonoBehaviour
 {
     public UnityEvent OnAnimationEventTriggered, OnAttackPreformed;
 
-    private WeaponStateManager weaponStateManager;
+    public WeaponStateManager weaponStateManager;
 
     private void Start()
     {
