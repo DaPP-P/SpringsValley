@@ -1,4 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
+
+//TODO: MAKE TARGET POSITION UPDATE EVERY X SECS INSTEAD OF JUST WHEN AT END POSITION.
 
 public class SkeletonPursuingState : SkeletonBaseState
 {
@@ -9,38 +14,127 @@ public class SkeletonPursuingState : SkeletonBaseState
     public GameObject player;
     public GameObject followObject;
     public GameObject distantFollowObject;
-    private float lineOfSightRange = 12f; 
 
+    public Transform target;
+    public float speed = 400;
+
+    // How close the skeleton needs to be to be close to the player.
+    public float nextWayPointDistance = 2f;
+    Path path;
+    int currentWayPoint = 0;
+    bool reachedEndOfPath = false;
+
+    public float lineOfSightTimer;
+    Seeker seeker;
+    Rigidbody2D rb;
+
+    /*
+     * Setup needed when SkeletonPursuingState is loaded.
+     */
     public override void EnterState(SkeletonStateManager skeleton)
     {
+        // initial admin setup.
         this.skeleton = skeleton;
         player = GameObject.FindGameObjectWithTag("Player");
-        followObject = GameObject.FindGameObjectWithTag("FollowObject");
-        distantFollowObject = GameObject.FindGameObjectWithTag("DistantFollowObject");
+        target = player.transform;
         Debug.Log("hello from pursuing state");
         skeleton.exclamationPoint.SetActive(true);
-        skeleton.detectionCollider.radius = 15f;
+        lineOfSightTimer =  Time.time;
+        reachedEndOfPath = false;
+
+        // Gets the needed components.
+        seeker = skeleton.GetComponent<Seeker>();
+        rb = skeleton.GetComponent<Rigidbody2D>();
+
+        // Starts to figure out where the skeleton needs to go.
+        skeleton.StartCoroutine(UpdatePathRepeatedly());   
     }
 
+    /*
+     * Coroutine to keep the path updated repeatedly.
+     */
+    IEnumerator UpdatePathRepeatedly()
+    {
+            UpdatePath();
+            yield return new WaitForSeconds(0.5f); 
+    }
+
+    /*
+     * Updates the path for pathfinding.
+     */
+    void UpdatePath()
+    {
+        if (seeker.IsDone() && !reachedEndOfPath)
+            seeker.StartPath(rb.position, target.position, OnPathComplete);
+    }
+
+    /*
+     * Call back when path finding is complete.
+     */
+    void OnPathComplete(Path p)
+    {
+        if (!p.error)
+        {
+            path = p;
+            currentWayPoint = 0;
+        }
+    }
+
+    /* 
+     * Update Method.
+     */
     public override void UpdateState(SkeletonStateManager skeleton)
     {
-        MoveTowardsTarget();
 
-        if (Vector3.Distance(skeleton.transform.position, player.transform.position) <= 5.0f)
+       if (path == null)
         {
+            return;
+        }
+
+        // Check if the skeleton has gone far from its spawn location.
+        if (skeleton.CheckDistanceFromSpawn(20f))
+        {
+            skeleton.retreating = true;
+            skeleton.SwitchState(skeleton.idleState);
+        }
+
+        // Checks the line of sight.
+        // If line of sight is true resets the line of sight timer.
+        if (skeleton.CheckLineOfSight(player))
+        {
+            lineOfSightTimer = Time.time;
+        }
+        else if (!skeleton.CheckLineOfSight(player)) {
+            // If there is no line of sight for eight seconds switches sates to idle state.
+            if (Time.time - lineOfSightTimer > 5f) {
+                skeleton.SwitchState(skeleton.idleState);
+            }
+        }
+
+        // Checks if the skeleton is close to the player.
+        if (currentWayPoint >= path.vectorPath.Count)
+        {
+            reachedEndOfPath = true;
             skeleton.SwitchState(skeleton.attackingState);
+            return;
+        } else 
+        {
+            reachedEndOfPath = false;
         }
 
-        Vector3 direction = targetPosition - skeleton.transform.position;
+        // Calculate direction and force towards the current waypoint
+        Vector2 direction = ((Vector2)path.vectorPath[currentWayPoint] - rb.position).normalized;
+        Vector2 force = direction * speed * Time.deltaTime;
 
-        if (Vector3.Dot(direction, skeleton.transform.right) < 0)
+        // Adds force to the player.
+        rb.AddForce(force);
+        
+         // Check distance to current waypoint, and move to the next if reached.
+            float distance = Vector2.Distance(rb.position, path.vectorPath[currentWayPoint]);
+        if (distance < nextWayPointDistance)
         {
-            skeleton.characterRenderer.flipX = true;
-        }
-        else
-        {
-            skeleton.characterRenderer.flipX = false;
-        }
+            currentWayPoint ++;
+        } 
     }
 
     public override void OnCollisionEnter(SkeletonStateManager skeleton, Collision collision)
@@ -53,81 +147,4 @@ public class SkeletonPursuingState : SkeletonBaseState
 
     }
 
-    
-    private bool LocateTarget(float range)
-    {
-        int enemyLayerMask = 1 << LayerMask.NameToLayer("Enemy");
-        int layerMask = ~enemyLayerMask; // Invert the enemy layer mask to exclude it
-        
-        RaycastHit2D rayCenter = Physics2D.Raycast(skeleton.transform.position, player.transform.position - skeleton.transform.position, range, layerMask);
-
-        Vector3 modifiedDirectionTop = (player.transform.position + Vector3.up * 0.5f) - skeleton.transform.position;
-        RaycastHit2D rayTop = Physics2D.Raycast(skeleton.transform.position, modifiedDirectionTop, range, layerMask);
-
-        Vector3 modifiedDirectionBottom = (player.transform.position + Vector3.up * -0.5f) - skeleton.transform.position;
-        RaycastHit2D rayBottom = Physics2D.Raycast(skeleton.transform.position, modifiedDirectionBottom, range, layerMask);
-
-        if ((rayCenter.collider != null) && (rayCenter.collider.CompareTag("Player")))
-        {
-            Debug.DrawRay(skeleton.transform.position, player.transform.position - skeleton.transform.position, Color.green);
-            return true;
-        } else {
-            Debug.DrawRay(skeleton.transform.position, player.transform.position - skeleton.transform.position, Color.red);
-        }
-
-        if ((rayTop.collider != null) && rayTop.collider.CompareTag("Player"))
-        {
-            Debug.DrawRay(skeleton.transform.position, modifiedDirectionTop, Color.green);
-            return true;
-        } else {
-            Debug.DrawRay(skeleton.transform.position, modifiedDirectionTop, Color.red);
-        }
-
-        if ((rayBottom.collider != null) && rayBottom.collider.CompareTag("Player"))
-        {
-            Debug.DrawRay(skeleton.transform.position, modifiedDirectionBottom, Color.green);
-            return true;
-        } else {
-            Debug.DrawRay(skeleton.transform.position, modifiedDirectionBottom, Color.red);
-        }
-        return false;
-    }
-
-    private bool LocateFollow(GameObject following, float range, string tagName)
-    {
-        Debug.Log(following.name);
-        int enemyLayerMask = 1 << LayerMask.NameToLayer("Enemy");
-        int layerMask = ~enemyLayerMask; // Invert the enemy layer mask to exclude it
-
-        RaycastHit2D rayFollow = Physics2D.Raycast(skeleton.transform.position, following.transform.position - skeleton.transform.position, range, layerMask);
-        
-        if ((rayFollow.collider != null) && rayFollow.collider.CompareTag(tagName))
-        {
-            Debug.DrawRay(skeleton.transform.position, following.transform.position - skeleton.transform.position, Color.green);
-            return true;
-        } else {
-            Debug.DrawRay(skeleton.transform.position, following.transform.position - skeleton.transform.position, Color.red);
-        }
-        return false;
-    }
-
-
-    private void MoveTowardsTarget()
-    {
-        if (LocateTarget(lineOfSightRange))
-        {
-            // Move towards the target position
-            skeleton.transform.position = Vector3.MoveTowards(skeleton.transform.position, player.transform.position, moveSpeed * Time.deltaTime);
-        } else if (LocateFollow(followObject, lineOfSightRange, "FollowObject"))
-        {
-            skeleton.transform.position = Vector3.MoveTowards(skeleton.transform.position, followObject.transform.position, moveSpeed * Time.deltaTime);
-        } else if (LocateFollow(distantFollowObject, lineOfSightRange, "DistantFollowObject"))
-        {
-            skeleton.transform.position = Vector3.MoveTowards(skeleton.transform.position, followObject.transform.position, moveSpeed * Time.deltaTime);
-        }        else
-        {
-            // Handle the case where the player is not in the radius (e.g., stop pursuing, switch to idle state, etc.)
-            skeleton.SwitchState(skeleton.idleState);
-        }
-    }
 }

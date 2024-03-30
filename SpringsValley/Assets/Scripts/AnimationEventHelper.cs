@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+//TODO: NEED TO FIGURE OUT WHATS GOING ON HERE.
 public class AnimationEventHelper : MonoBehaviour
 {
     public UnityEvent OnAnimationEventTriggered, OnAttackPreformed;
@@ -14,7 +15,7 @@ public class AnimationEventHelper : MonoBehaviour
         weaponStateManager = GetComponentInParent<Transform>().GetComponentInParent<WeaponStateManager>();
         if (weaponStateManager == null)
         {
-            Debug.LogError("WeaponStateManager component not found in parent objects!");
+            ////Debug.LogError("WeaponStateManager component not found in parent objects!");
         }
         else
         {

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5865464505004292812}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: radiusOrigin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 5865464505602859506}
   - component: {fileID: 5865464505602859507}
   - component: {fileID: 5865464505602859501}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Skeleton
   m_TagString: SkeletonEnemy
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ MonoBehaviour:
   damageTextObject: {fileID: 5865464505316486979}
   mainSprite: {fileID: 5865464506179318631}
   knockbackForce: 5
-  rb: {fileID: 0}
+  rb: {fileID: 5865464505602859507}
   indicationTimeDone: 0
   OnHitWithReference:
     m_PersistentCalls:
@@ -333,7 +333,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5865464506129446011}
   - component: {fileID: 5865464506129446010}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ExclamationPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -417,7 +417,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5865464506179318629}
   - component: {fileID: 5865464506179318628}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -501,7 +501,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5865464506426807867}
   - component: {fileID: 5865464506426807864}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: detectOrigin
   m_TagString: detectArea
   m_Icon: {fileID: 0}
@@ -572,7 +572,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 0b8489da378fb0a4982908613d75e476, type: 2}
     - target: {fileID: 6987538846606605048, guid: cfc484500e4f47340b626122dba18761, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7364999974781594592, guid: cfc484500e4f47340b626122dba18761, type: 3}
       propertyPath: m_RootOrder
@@ -624,11 +624,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7364999974781594594, guid: cfc484500e4f47340b626122dba18761, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7364999975925673376, guid: cfc484500e4f47340b626122dba18761, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7364999975925673376, guid: cfc484500e4f47340b626122dba18761, type: 3}
       propertyPath: m_IsActive
@@ -718,6 +718,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  weaponStateManager: {fileID: 0}
 --- !u!4 &3986790201021304208 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7364999975925673377, guid: cfc484500e4f47340b626122dba18761, type: 3}
@@ -740,13 +741,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3986790202024872915}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 584fff8d1905b824a82909e5180ad1d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SkeletonStateManager: {fileID: 5865464505602859501}
-  leftClickDamageAmount: 10
+  leftClickDamageAmount: 1
   pointerPosition: {x: 0, y: 0}
   characterRenderer: {fileID: 5865464506179318628}
   weaponRenderer: {fileID: 1776914574077003096}
