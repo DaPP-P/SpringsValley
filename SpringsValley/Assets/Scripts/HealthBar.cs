@@ -19,6 +19,7 @@ public class HealthBar : MonoBehaviour
         }
         else
         {
+            healthBar.fillAmount = 0f;
             Debug.LogError("HealthSystem instance not found!");
         }
     }
