@@ -18,8 +18,8 @@ public class SkeletonPursuingState : SkeletonBaseState
     public Transform target;
     public float speed = 400;
 
-    // How close the skeleton needs to be to be close to the player.
-    public float nextWayPointDistance = 2f;
+    // How close the skeleton needs to be to find a new path.
+    public float nextWayPointDistance = 8f;
     Path path;
     int currentWayPoint = 0;
     bool reachedEndOfPath = false;
@@ -27,6 +27,10 @@ public class SkeletonPursuingState : SkeletonBaseState
     public float lineOfSightTimer;
     Seeker seeker;
     Rigidbody2D rb;
+
+
+    private float updateTargetTimer = 0f;
+    public float updateTargetInterval = 0.2f;
 
     /*
      * Setup needed when SkeletonPursuingState is loaded.
@@ -55,8 +59,8 @@ public class SkeletonPursuingState : SkeletonBaseState
      */
     IEnumerator UpdatePathRepeatedly()
     {
-            UpdatePath();
-            yield return new WaitForSeconds(0.5f); 
+        UpdatePath();
+        yield return new WaitForSeconds(0.5f); 
     }
 
     /*

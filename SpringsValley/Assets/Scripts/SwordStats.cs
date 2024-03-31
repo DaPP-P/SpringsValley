@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //TODO: CAN PROBABLY REMOVE THIS FROM MONOBEHAVIOUR.
-//TODO: CHANGE TO NORMAL AND SPECIAL ATTACK AMOUNT.
-
 
 public class SwordStats : MonoBehaviour
 {

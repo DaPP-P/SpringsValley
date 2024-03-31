@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class WeaponBowState : WeaponBaseState
 {
-    private WeaponStateManager weapon;
-    private BowStats bowStats;
-    private Animator bowAnimator;
+    private WeaponStateManager weapon; // Instance to the Weapon State Manager.
+    private BowStats bowStats; // The Bow stats
+    private Animator bowAnimator; // The animation for the bow.
 
-    private int damageAmount;
-    private float delay = 0.4f;
-    private bool attackBlocked;
-    public int offset = 0;
-    private bool isAttacking = false;
+    private int damageAmount; // The amount of damage an attack should do.
+    private float delay = 0.4f; // The delay between attacks. //TODO: THINK I CAN DELETE.
+    private bool attackBlocked; // Boolean of whether or not the attack is blocked.
+    public int offset = 0; //TODO: Should not need.
+    private bool isAttacking = false; // Boolean of whether not the player is attacking.
 
     float timer;
     float holdDur = 0.8f;
@@ -22,6 +22,9 @@ public class WeaponBowState : WeaponBaseState
 
     private List<GameObject> hitObjects = new List<GameObject>();
 
+    /* 
+     * Setup needed when WeaponBowState is loaded.
+     */
     public override void EnterState(WeaponStateManager weapon)
     {
         Debug.Log("hello from bow state");

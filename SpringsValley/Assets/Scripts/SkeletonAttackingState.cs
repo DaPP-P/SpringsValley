@@ -45,9 +45,6 @@ public class SkeletonAttackingState : SkeletonBaseState
         player = GameObject.FindGameObjectWithTag("Player");
         lineOfSightTimer = Time.time;
 
-        // TODO: MIGHT NOT NEED.
-        hasLineOfSight = true;
-
         // Gets the needed components.
         seeker = skeleton.GetComponent<Seeker>();
         rb = skeleton.GetComponent<Rigidbody2D>();
@@ -59,26 +56,13 @@ public class SkeletonAttackingState : SkeletonBaseState
     public override void UpdateState(SkeletonStateManager skeleton)
     {
 
-        // If the skeleton can't see the player go back to the pursuing state.
-        if (!CheckLineOfSight()) {
+        // If the skeleton can't see the player or the player is to far away go back to the pursuing state.
+        // Otherwise attack.
+        if (!skeleton.CheckLineOfSight(player) || (Vector3.Distance(skeleton.transform.position, player.transform.position) > 3.5f)) {
             skeleton.SwitchState(skeleton.pursuingState);
+        } else {
+            attackMethod();
         }
-
-        // dash and swing in the players direction
-        if (!attacking && (Time.time - attackDelay > 0.5f)) {
-            attacking = true;
-
-        }
-
-        //// if ((Vector3.Distance(skeleton.transform.position, player.transform.position) <= 15.0f) && LocateTarget(lineOfSightRange))
-        //// {
-        ////     circleRadius = Vector3.Distance(skeleton.transform.position, player.transform.position);
-        ////     AttackMode();
-        //// }
-        //// else
-        //// {
-        ////     skeleton.SwitchState(skeleton.pursuingState);
-        //// }
     }
 
     /*
@@ -86,59 +70,16 @@ public class SkeletonAttackingState : SkeletonBaseState
      */
     private void attackMethod()
     {
+        // Calculate the direction vector from the skeleton to the player
+        Vector3 direction = (player.transform.position - skeleton.transform.position).normalized;
+
+        // Move the skeleton along the direction vector
+        skeleton.transform.position += direction * moveSpeed * Time.deltaTime;
+
         Debug.Log("Skeleton should attack!");
+        enemySwordParent.Attack();
         attacking = false;
         attackDelay = 0f;
-    }
-
-    /*
-     * Method to check if the skeleton has a line of sight with the player
-     */
-    private bool CheckLineOfSight()
-    {
-        // Invert the enemy layer mask to exclude it so it doesn't get in the way of the LoS
-        int enemyLayerMask = 1 << LayerMask.NameToLayer("Enemy");
-        int layerMask = ~enemyLayerMask;
-        
-        /*
-         * Sets up three ray casts. One aiming at the center of the player,
-         * one at the bottom of the player and one at the top of the player.
-         */
-        RaycastHit2D rayCenter = Physics2D.Raycast(skeleton.transform.position, player.transform.position - skeleton.transform.position, 12, layerMask);
-        Vector3 modifiedDirectionTop = (player.transform.position + Vector3.up * 0.5f) - skeleton.transform.position;
-        RaycastHit2D rayTop = Physics2D.Raycast(skeleton.transform.position, modifiedDirectionTop, 12, layerMask);
-        Vector3 modifiedDirectionBottom = (player.transform.position + Vector3.up * -0.5f) - skeleton.transform.position;
-        RaycastHit2D rayBottom = Physics2D.Raycast(skeleton.transform.position, modifiedDirectionBottom, 12, layerMask);
-
-        // Checks center ray cast if hits returns true.
-        if ((rayCenter.collider != null) && (rayCenter.collider.CompareTag("Player")))
-        {
-            Debug.DrawRay(skeleton.transform.position, player.transform.position - skeleton.transform.position, Color.green);
-            return true;
-        } else {
-            Debug.DrawRay(skeleton.transform.position, player.transform.position - skeleton.transform.position, Color.red);
-        }
-
-        // Checks top ray cast if hits returns true.
-        if ((rayTop.collider != null) && rayTop.collider.CompareTag("Player"))
-        {
-            Debug.DrawRay(skeleton.transform.position, modifiedDirectionTop, Color.green);
-            return true;
-            } else {
-            Debug.DrawRay(skeleton.transform.position, modifiedDirectionTop, Color.red);
-        }
-
-        // Checks bottom ray cast if hits returns true.
-        if ((rayBottom.collider != null) && rayBottom.collider.CompareTag("Player"))
-        {
-            Debug.DrawRay(skeleton.transform.position, modifiedDirectionBottom, Color.green);
-            return true;
-        } else {
-            Debug.DrawRay(skeleton.transform.position, modifiedDirectionBottom, Color.red);
-        }
-
-        // returns false if no hits.
-        return false;
     }
 
     public override void OnCollisionEnter(SkeletonStateManager skeleton, Collision collision)

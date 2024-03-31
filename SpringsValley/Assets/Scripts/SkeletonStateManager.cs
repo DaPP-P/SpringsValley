@@ -9,17 +9,23 @@ TODO LIST:
 * //// Add comments to weaponStateManager 
 * Add comments to WeaponBowState and WeaponSwordState.
 * //// Add CheckLineOfSight to SkeletonStateManager.
-* Maybe add A* to SkeletonStateManger, as all three use it.
-* Add Target position update every x secs instead of just when reaching end.
-* Use Path finding in IdleState.
+* Not worth it. ////Maybe add A* to SkeletonStateManger, as all three use it.
+* ////Add Target position update every x secs instead of just when reaching end.
+* For later. ////Use Path finding in IdleState.
 * ////Use Path finding when retreating and add some logic to make it smoother.
     * ////Started on this. Need to change it so go back to default settings after 10 distance from spawn.
-* Make Skeleton not be able to go through walls. Probably using rigidbody.
-* Add more universal variables to SkeletonStateManger.
-* Add comments to SkeletonStateManager.
-* Fix BowStats and SwordStats. 
-* GET ONTO COMBAT.
-* Delete things I can delete.
+* //// Make Skeleton not be able to go through walls. Probably using rigidbody.
+* Will do later date not that important. ////Add more universal variables to SkeletonStateManger.
+* ////Add comments to SkeletonStateManager.
+* Fuck it not important it works but to make things cleaner will needed to be done////Fix BowStats and SwordStats. 
+* DISABLED STAB ATTACK IN PLAYER CONTROLS CAN NOT BE BOTHERED FIXING ITS A MESS////Fix stab attack.
+* Super basic but just have somethingish. have heaps of bugs to work through ////GET ONTO COMBAT.
+* this will be done in clean up ////Delete things I can delete.
+* UI baby
+    * Esc key opens menu. Resume and Quit btn
+    * On Death. Restart and Quit btn
+    * On Win. Restart and Quit btn.
+        * Win will happen GameObject(skeletonEnemy == 0)
 */
 
 public class SkeletonStateManager : MonoBehaviour
@@ -123,7 +129,6 @@ public class SkeletonStateManager : MonoBehaviour
      * If further then distance returns true
      */
     public bool CheckDistanceFromSpawn(float distance) {
-        Debug.Log(Vector3.Distance(this.transform.position, originalPosition));
        if (Vector3.Distance(this.transform.position, originalPosition) > distance) {
         return true;
        } else 

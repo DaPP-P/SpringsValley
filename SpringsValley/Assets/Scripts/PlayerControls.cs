@@ -127,10 +127,10 @@ public class PlayerControls : MonoBehaviour
         }
 
         // If right click, call the SpecialAttackCoroutine.
-        if (Input.GetKey(KeyCode.Mouse1) && !isAttacking)
-        {
-            StartCoroutine(SpecialAttackCoroutine());
-        }
+        ////if (Input.GetKey(KeyCode.Mouse1) && !isAttacking)
+        ////{
+        ////    StartCoroutine(SpecialAttackCoroutine());
+        ////}
     }
 
     /*

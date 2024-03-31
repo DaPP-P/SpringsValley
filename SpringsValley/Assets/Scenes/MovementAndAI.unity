@@ -16049,9 +16049,21 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5865464505602859506, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Direction
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464505602859506, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5865464505602859507, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: m_LinearDrag
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464505602859507, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Constraints
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5865464505602859509, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: m_Name
@@ -16063,6 +16075,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5865464506179318629, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865464506929209384, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -16511,7 +16527,7 @@ Rigidbody2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2014744111}
   m_BodyType: 0
-  m_Simulated: 1
+  m_Simulated: 0
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1

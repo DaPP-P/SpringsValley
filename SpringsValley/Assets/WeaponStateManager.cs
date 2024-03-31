@@ -26,7 +26,7 @@ public class WeaponStateManager : MonoBehaviour
      */
     void Start()
     {
-        // Sets the first state to swordState.
+        // Initial Admin.
         currentState = swordState;
         currentState.EnterState(this);
     }

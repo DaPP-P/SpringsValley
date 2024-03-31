@@ -118,7 +118,9 @@ public class HealthSystem : MonoBehaviour
             StartCoroutine(StopKnockbackAfterDuration(0.3f));
 
             // Make it so the hit enemy does not try to move
-            skeletonStateManager.SwitchState(skeletonStateManager.nothingState);
+            if (gameObject.CompareTag("SkeletonEnemy")) {
+                skeletonStateManager.SwitchState(skeletonStateManager.nothingState);
+            }
     }
 
     /**
@@ -130,9 +132,11 @@ public class HealthSystem : MonoBehaviour
         // Wait for the specified duration
         yield return new WaitForSeconds(duration);
 
-        // Stop the knockback force and resume pursuing the player
+        // Stop the knockback force and resumes pursuing the player
         rb.velocity = Vector2.zero;
-        skeletonStateManager.SwitchState(skeletonStateManager.pursuingState);
+        if (gameObject.CompareTag("SkeletonEnemy")) {
+            skeletonStateManager.SwitchState(skeletonStateManager.pursuingState);
+        }
     }
 
     /** 
