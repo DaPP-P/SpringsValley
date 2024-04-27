@@ -5,13 +5,11 @@ using UnityEngine;
 public class EnemySwordParent : MonoBehaviour
 {
 
-    public SkeletonStateManager SkeletonStateManager;
+    public SkeletonStateManager SkeletonStateManager; // Reference to the skeleton state manager.
+    public int leftClickDamageAmount = 10; // The amount of damage the skeletons sword attack does.
 
-
-    public int leftClickDamageAmount = 10;
-
-    public Vector2 pointerPosition;
-    public SpriteRenderer characterRenderer, weaponRenderer;
+    //TODO: MAKE NEW ANIMATIONS AND A NEW SYSTEM FOR ORGANIZING ANIMATION.
+    public SpriteRenderer characterRenderer, weaponRenderer; // Sprite Renderer
     public int offset = 0;
     public Animator animator; 
     public float delay = 2.0f;
