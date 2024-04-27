@@ -5,11 +5,11 @@ using UnityEngine;
 public class EnemySwordParent : MonoBehaviour
 {
 
-    public SkeletonStateManager SkeletonStateManager;
+    public SkeletonStateManager SkeletonStateManager; // Reference to the skeleton state manager.
+    public int leftClickDamageAmount = 10; // The amount of damage the skeletons sword attack does.
 
-    public int leftClickDamageAmount = 10;
-    public Vector2 pointerPosition;
-    public SpriteRenderer characterRenderer, weaponRenderer;
+    //TODO: MAKE NEW ANIMATIONS AND A NEW SYSTEM FOR ORGANIZING ANIMATION.
+    public SpriteRenderer characterRenderer, weaponRenderer; // Sprite Renderer
     public int offset = 0;
     public Animator animator; 
     public float delay = 2.0f;
@@ -35,17 +35,23 @@ public class EnemySwordParent : MonoBehaviour
 
     void Update()
     {
-
         if (IsAttacking)
             return;
 
-        if (!SkeletonStateManager)
+        if (SkeletonStateManager == null)
+        {
+            // Do nothing.
+        }
+        else if (SkeletonStateManager.currentState.GetType() == typeof(SkeletonPursuingState) || SkeletonStateManager.currentState.GetType() == typeof(SkeletonAttackingState))
         {
             DisplayWeapon();
+        } 
+        else  if (SkeletonStateManager.currentState.GetType() == typeof(SkeletonIdleState))
+        {
+            ResetSwordPosition();
         }
-
-        
     }
+
 
     public void DisplayWeapon()
     {
@@ -121,4 +127,11 @@ public class EnemySwordParent : MonoBehaviour
             }
         }
     }
+
+    public void ResetSwordPosition() 
+    {
+        Vector3 defaultPosition = new Vector3(0, 0, 0);
+        transform.rotation = Quaternion.Euler(defaultPosition);
+    }
+
 }

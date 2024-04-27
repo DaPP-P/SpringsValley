@@ -5,15 +5,19 @@ TagManager:
   serializedVersion: 2
   tags:
   - weapon
+  - SkeletonEnemy
+  - detectArea
+  - FollowObject
+  - DistantFollowObject
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - Player
-  - 
+  - Enemy
+  - Solid
   - 
   - 
   - 
@@ -39,8 +43,8 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Behind
-    uniqueID: 1679402175
+  - name: Ground
+    uniqueID: 56319009
     locked: 0
   - name: Default
     uniqueID: 0

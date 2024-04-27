@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/**
+ ** Simple class for updating and displaying the healthbar.
+ * TODO: destoy the healthbar if the healthsystem is zero.
+*/
 public class HealthBar : MonoBehaviour
 {
     public Image healthBar;
@@ -15,6 +19,7 @@ public class HealthBar : MonoBehaviour
         }
         else
         {
+            healthBar.fillAmount = 0f;
             Debug.LogError("HealthSystem instance not found!");
         }
     }
