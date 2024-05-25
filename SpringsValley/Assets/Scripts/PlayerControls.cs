@@ -7,7 +7,7 @@ public class PlayerControls : MonoBehaviour
     private WeaponStateManager weaponStateManager; // Reference to WeaponStateManager needed for swapping weapons.
     private const float MOVE_SPEED = 7f;     // Player movement speed.
     [SerializeField] private LayerMask dashLayerMask;  // For the players dash.
-    private Rigidbody2D rigidbody2D; // Players rigidbody.
+    public Rigidbody2D rigidbody2D; // Players rigidbody.
     private Vector3 moveDir; // Player movement direction.
     private bool isDashButtonDown; // Checks if dash button has been pressed.
     private SwordParent swordParent; // Reference to the sword weapon.
@@ -16,6 +16,13 @@ public class PlayerControls : MonoBehaviour
 
     public TrailRenderer trailRenderer; // The players trail.
     public Animator animator; // The animator to play the players trail.
+
+    private float dashAttackLength = .5f;
+    public float dashAttackSpeed;
+
+    private bool movementFreeze = false;
+
+    private float dashAttackCounter, dashAttackCoolCounter;
 
     /*
      * Setup needed when player is Awaken.
@@ -72,8 +79,12 @@ public class PlayerControls : MonoBehaviour
     private void FixedUpdate()
     {
         // Sets the rigidbody velocity in the direction and speed wanted.
-        rigidbody2D.velocity = moveDir * MOVE_SPEED;
+        if (!movementFreeze) {
+            rigidbody2D.velocity = moveDir * MOVE_SPEED;
+        } else {
+            rigidbody2D.velocity = gameHelperScript.returnMouseDirection(gameObject) * dashAttackSpeed;
 
+        }
         // If Space pressed make the player dash.
         if (isDashButtonDown)
         {   
@@ -115,11 +126,30 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
+    public void callDashAndAttack(){
+        StartCoroutine(dashingWhileAttacking());
+    }
+
+    /* 
+     * Handle the player moving forward while attacking.
+     */
+    public IEnumerator dashingWhileAttacking(){
+        Debug.Log(gameHelperScript.returnMouseDirection(gameObject));
+        movementFreeze = true;
+        // Wait for 0.1 seconds
+        yield return new WaitForSeconds(.1f);
+
+        // Stop the dash
+        rigidbody2D.velocity = Vector2.zero;
+        movementFreeze = false;
+    }
+
     /* 
      * Method for checking if the player is attacking.
      */
     private void HandleAttack()
     {
+
         // If left click, call the AttackCoroutine.
         if (Input.GetKey(KeyCode.Mouse0) && !isAttacking)
         {

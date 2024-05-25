@@ -11,6 +11,11 @@ public class WeaponSwordState : WeaponBaseState
     private int damageAmount; // The amount of damage an attack should do.
     private bool attackBlocked; // Boolean of whether or not the attack is blocked.
 
+    public PlayerControls playerControls; // Reference to the player controls.
+
+    public float dashDistance = 10f;
+
+    public Vector3 difference;
 
     public bool isAttacking { get; private set; } //TODO: Hope i dont need.
     public int offset = 0; //TODO: Should not need.
@@ -32,7 +37,7 @@ public class WeaponSwordState : WeaponBaseState
         swordStats = weapon.currentWeaponInstance.GetComponent<SwordStats>();
         swordAnimator = weapon.currentWeaponInstance.GetComponent<Animator>();    
         weapon.weaponRenderer = weapon.currentWeaponInstance.GetComponent<SpriteRenderer>();
-    
+        playerControls = GameObject.Find("Main_Character").GetComponent<PlayerControls>();
     }
 
     /*
@@ -63,6 +68,7 @@ public class WeaponSwordState : WeaponBaseState
 
         // As this is a normal attack set it to the normal damage amount.
         damageAmount = swordStats.leftClickDamageAmount;
+        playerControls.callDashAndAttack();    
 
         // This is so the attack switches between attacking down and attacking up.
         // Plays the normal sword attack animation.
@@ -121,7 +127,7 @@ public class WeaponSwordState : WeaponBaseState
     {
         // Converts the mouse coordinates to in game coordinates and finds the difference between
         // there and the weapon.hand.
-        Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - weapon.hand.transform.position;
+        difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - weapon.hand.transform.position;
         difference.Normalize();
         
         

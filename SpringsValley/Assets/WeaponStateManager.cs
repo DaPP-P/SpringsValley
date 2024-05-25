@@ -8,6 +8,8 @@ public class WeaponStateManager : MonoBehaviour
     public WeaponBowState bowState = new WeaponBowState(); // Create instance of bowState.
     public WeaponSwordState swordState = new WeaponSwordState(); // Create instance of weaponState.
 
+    public Rigidbody2D rigidbody2D; // Players rigidbody.
+
     public SpriteRenderer characterRenderer, weaponRenderer; //TODO: THINK I CAN DELETE.
 
     public GameObject swordPrefab; // Sword Prefab
@@ -29,6 +31,7 @@ public class WeaponStateManager : MonoBehaviour
         // Initial Admin.
         currentState = swordState;
         currentState.EnterState(this);
+        rigidbody2D = GetComponentInParent<Rigidbody2D>();
     }
 
     /*
@@ -79,6 +82,12 @@ public class WeaponStateManager : MonoBehaviour
         // Otherwise spawn the arrow straight.
         else
             arrow = Instantiate(arrowPrefab, hand.position, hand.rotation);
+    }
+
+    public void moveWhileAttack(Vector3 mousePos)
+    {
+        rigidbody2D.velocity = mousePos;
+        Debug.Log("should be moving");
     }
 
     /*
