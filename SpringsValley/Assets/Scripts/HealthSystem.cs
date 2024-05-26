@@ -12,7 +12,7 @@ public class HealthSystem : MonoBehaviour
     
     // TODO: Use isDead to trigger death animation
     [SerializeField]
-    private bool isDead = false;
+    public bool isDead = false;
     
     // TODO: This is to do with dealing with taking damage. Make it so it creates a new object and looks better.
     public GameObject damageTextObject;
@@ -31,6 +31,8 @@ public class HealthSystem : MonoBehaviour
     // Need Sketelon State Manager so skeleton can be set to an idle state whie in knockback state.
     // TODO: Only call and use skeletonStateManger if the object is of type skeleton.
     private SkeletonStateManager skeletonStateManager;
+
+    public HealthBar healthBar;
     
     ///// public event EventHandler<DamageEventArgs> OnTakeDamage;
     //// public event EventHandler<HealEventArgs> OnHeal;
@@ -56,6 +58,7 @@ public class HealthSystem : MonoBehaviour
         skeletonStateManager = GetComponent<SkeletonStateManager>();
     }
 
+    
     /**
      ** Initialize Healthsystem Method
      * @param `initalise health of the object` 
@@ -74,10 +77,6 @@ public class HealthSystem : MonoBehaviour
      */
     public void Damage (int amount, GameObject sender) 
     {
-        // ? Don't know if I need this if set up properly
-        if (isDead)
-            return;
-
         // So the sender can't find itself.
         if (sender.layer == gameObject.layer)
             return;
@@ -88,15 +87,18 @@ public class HealthSystem : MonoBehaviour
         // TODO: Remove how this is done. Stated Above.
         StartCoroutine(DamageIndication("-"+amount, Color.red));   
 
+        if (currentHealth < 1) {
+            //isDead = true;
+            //healthBar.healthBar.fillAmount = 0;
+            Destroy(gameObject);
+        }
+
         // Gives knockback to the hit object. Else kills and destroys the object.
         if (currentHealth > 0)
         {
              Debug.Log("Sender position: " + sender.transform.position);
              Knockback(knockbackForce, sender.transform.position);
-        }
-        else
-        {
-            isDead = true;
+        } else {
             Destroy(gameObject);
         }
     }

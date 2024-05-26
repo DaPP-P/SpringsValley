@@ -68,7 +68,8 @@ public class WeaponSwordState : WeaponBaseState
 
         // As this is a normal attack set it to the normal damage amount.
         damageAmount = swordStats.leftClickDamageAmount;
-        playerControls.callDashAndAttack();    
+        playerControls.callDashAndAttack(); 
+        weapon.playAttackSound();   
 
         // This is so the attack switches between attacking down and attacking up.
         // Plays the normal sword attack animation.

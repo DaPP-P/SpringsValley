@@ -60,6 +60,7 @@ public class WeaponBowState : WeaponBaseState
         if(Input.GetMouseButtonDown(0))
         {
             timer = Time.time;
+            weapon.playDrawbackSound();
             
         }
         else if (Input.GetMouseButton(0))
@@ -91,6 +92,8 @@ public class WeaponBowState : WeaponBaseState
         if(Input.GetMouseButtonDown(1))
         {
             specialTimer = Time.time;
+            weapon.playDrawbackSound();
+
         }
         else if (Input.GetMouseButton(1))
         {

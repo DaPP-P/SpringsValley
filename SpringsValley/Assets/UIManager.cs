@@ -50,6 +50,7 @@ public class UIManager : MonoBehaviour
     {
         // Restart the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 1;
     }
 
     public void ExitButtonClicked()

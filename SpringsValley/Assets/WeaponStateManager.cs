@@ -23,6 +23,9 @@ public class WeaponStateManager : MonoBehaviour
     public Transform circleOrigin; // Hit radius.
     public float radius;
 
+    public AudioSource source;
+    public AudioClip swordAttackSound, bowAttackSound, bowDrawbackSound;
+
     /*
      * Setup needed when WeaponStateManager is loaded.
      */
@@ -76,6 +79,9 @@ public class WeaponStateManager : MonoBehaviour
      */
     public void InstantiateArrowPrefab(int? rotation = null)
     {   
+        playAttackSound();
+
+
         // If the arrow is meant to be spawned on an rotation (special attack), add it.
         if (rotation.HasValue)
             arrow = Instantiate(arrowPrefab, hand.position, hand.rotation * Quaternion.Euler(0, 0, rotation.Value));
@@ -133,6 +139,32 @@ public class WeaponStateManager : MonoBehaviour
         {
             // Cast currentState to WeaponBowState and call the bowAttack method.
             ((WeaponBowState)currentState).bowSpecialAttack();
+        }
+    }
+
+    public void playAttackSound()
+    {
+        // Check if the current state is the Sword state
+        if (currentState is WeaponSwordState)
+        {
+            // Cast currentState to WeaponSwordState and call the swordAttack method
+            source.PlayOneShot(swordAttackSound);
+        }
+        // Check if the current state is the Bow state
+        else if (currentState is WeaponBowState)
+        {
+            // Cast currentState to WeaponBowState and call the bowAttack method
+            source.PlayOneShot(bowAttackSound);
+        }
+    }
+
+    public void playDrawbackSound()
+    {
+        // Check if the current state is the Bow state
+        if (currentState is WeaponBowState)
+        {
+            // Cast currentState to WeaponBowState and call the bowAttack method
+            source.PlayOneShot(bowDrawbackSound);
         }
     }
 

@@ -24,6 +24,9 @@ public class PlayerControls : MonoBehaviour
 
     private float dashAttackCounter, dashAttackCoolCounter;
 
+    public AudioSource source;
+    public AudioClip dashSound;
+
     /*
      * Setup needed when player is Awaken.
      */
@@ -102,7 +105,9 @@ public class PlayerControls : MonoBehaviour
             rigidbody2D.MovePosition(dashPosition);
             isDashButtonDown = false;
 
-            // Starts the dash animation.
+            // Starts the dash animation and play dash sound.
+            source.PlayOneShot(dashSound);
+
             StartCoroutine(DashAnimationCoroutine());
         }
     }
@@ -157,10 +162,10 @@ public class PlayerControls : MonoBehaviour
         }
 
         // If right click, call the SpecialAttackCoroutine.
-        ////if (Input.GetKey(KeyCode.Mouse1) && !isAttacking)
-        ////{
-        ////    StartCoroutine(SpecialAttackCoroutine());
-        ////}
+        if (Input.GetKey(KeyCode.Mouse1) && !isAttacking)
+        {
+            StartCoroutine(SpecialAttackCoroutine());
+        }
     }
 
     /*

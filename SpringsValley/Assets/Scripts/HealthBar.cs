@@ -13,23 +13,22 @@ public class HealthBar : MonoBehaviour
     public HealthSystem healthSystem;
     void Start()
     {
-        if (healthSystem != null)
-        {
-            UpdateHealthBar();
-        }
-        else
-        {
-            healthBar.fillAmount = 0f;
-            Debug.LogError("HealthSystem instance not found!");
-        }
+        //if (healthSystem != null)
+        //{
+        //    UpdateHealthBar();
+        //}
+        //else
+        //{
+        //    Debug.LogError("HealthSystem instance not found!");
+        //}
     }
 
     void Update()
     {
-        UpdateHealthBar();
+    //    UpdateHealthBar();
     }
 
-    void UpdateHealthBar()
+    public void UpdateHealthBar()
     {
         // Make sure healthSystem is not null before accessing its methods
         if (healthSystem != null)
