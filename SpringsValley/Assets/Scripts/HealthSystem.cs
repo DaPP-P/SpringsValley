@@ -33,6 +33,9 @@ public class HealthSystem : MonoBehaviour
     private SkeletonStateManager skeletonStateManager;
 
     public HealthBar healthBar;
+
+    public AudioSource source;
+    public AudioClip hitSound;
     
     ///// public event EventHandler<DamageEventArgs> OnTakeDamage;
     //// public event EventHandler<HealEventArgs> OnHeal;
@@ -83,6 +86,7 @@ public class HealthSystem : MonoBehaviour
 
         // sets currentHealth to currentHealth - damageTaken
         currentHealth -= amount;
+        source.PlayOneShot(hitSound);
 
         // TODO: Remove how this is done. Stated Above.
         StartCoroutine(DamageIndication("-"+amount, Color.red));   
