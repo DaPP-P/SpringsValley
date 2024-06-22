@@ -15,6 +15,8 @@ public class WeaponStateManager : MonoBehaviour
     public GameObject swordPrefab; // Sword Prefab
     public GameObject bowPrefab; // Bow Prefab
     public GameObject arrowPrefab; // Arrow Prefab
+
+    public Sprite playerTornado;
     
     public Transform hand; // Location where weapons rotate around.
     public GameObject currentWeaponInstance; // The current weapon.

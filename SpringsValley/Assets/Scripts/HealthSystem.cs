@@ -40,6 +40,9 @@ public class HealthSystem : MonoBehaviour
     ///// public event EventHandler<DamageEventArgs> OnTakeDamage;
     //// public event EventHandler<HealEventArgs> OnHeal;
 
+    public Animator animator; // The animator to play the players trail.
+
+
     public UnityEvent<GameObject> OnHitWithReference, OnDeathWithReference;
 
     /** Start Method
@@ -92,9 +95,13 @@ public class HealthSystem : MonoBehaviour
         StartCoroutine(DamageIndication("-"+amount, Color.red));   
 
         if (currentHealth < 1) {
+            animator.SetTrigger("Die");
+            // NEED TO SET TIMER THEN DESTORY OBJECT
+
+
             //isDead = true;
             //healthBar.healthBar.fillAmount = 0;
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
 
         // Gives knockback to the hit object. Else kills and destroys the object.
@@ -103,7 +110,7 @@ public class HealthSystem : MonoBehaviour
              Debug.Log("Sender position: " + sender.transform.position);
              Knockback(knockbackForce, sender.transform.position);
         } else {
-            Destroy(gameObject);
+            //Destroy(gameObject); DONT KNOW ABOUT 
         }
     }
 

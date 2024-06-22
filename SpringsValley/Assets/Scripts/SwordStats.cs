@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class SwordStats : MonoBehaviour
 {
-
     public int leftClickDamageAmount = 15;
     public int rightClickDamageAmount = 25;
     
