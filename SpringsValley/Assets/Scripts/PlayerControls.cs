@@ -165,6 +165,7 @@ public class PlayerControls : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse1) && !isAttacking)
         {
             StartCoroutine(SpecialAttackCoroutine());
+
         }
     }
 

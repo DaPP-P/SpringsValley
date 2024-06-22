@@ -98,16 +98,18 @@ public class WeaponSwordState : WeaponBaseState
         if (attackBlocked)
             return;
         
+        
+
         // As this is a special attack set it to the special damage amount.
-        damageAmount = swordStats.rightClickDamageAmount;
+        //damageAmount = swordStats.rightClickDamageAmount;
 
         // Plays the special sword attack animation.
-        swordAnimator.SetTrigger("StabAttack");
+        //swordAnimator.SetTrigger("StabAttack");
 
         // stops attacking and has a delay so attacking has a cool down.
-        attackBlocked = true;
-        isAttacking = true;
-        weapon.StartCoroutine(DelayAttack(0.4f));
+        //attackBlocked = true;
+        //isAttacking = true;
+        //weapon.StartCoroutine(DelayAttack(0.4f));
     }
 
     /*
