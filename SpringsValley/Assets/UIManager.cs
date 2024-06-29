@@ -5,13 +5,16 @@ using UnityEngine.SceneManagement;
 public class UIManager : MonoBehaviour
 {
     public GameObject uiCanvas; // Reference to your UI canvas
-    public static GameObject gameOverPanel; // Reference to your Game Over panel
+    public GameObject gameOverPanel; // Reference to your Game Over panel
+
+    public bool checkAlive;
 
     void Start()
     {
         // Ensure the UI canvas is initially disabled
         uiCanvas.SetActive(false);
         gameOverPanel.SetActive(false);
+        checkAlive = true;
     }
 
     void Update()
@@ -28,9 +31,19 @@ public class UIManager : MonoBehaviour
             // Restart the current scene
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+
+        if (HealthSystem.isDead && checkAlive)
+        {
+            Debug.Log("Player is dead");
+            checkAlive = false;
+            StartCoroutine(utility.DelayedAction(2f, () =>
+            {
+                ShowGameOverPanel();
+            }));
+        }
     }
 
-    public static void ShowGameOverPanel()
+    public void ShowGameOverPanel()
     {
         // Show the Game Over panel
         Time.timeScale = 0;

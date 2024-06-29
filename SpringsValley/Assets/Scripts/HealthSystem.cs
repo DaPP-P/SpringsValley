@@ -12,7 +12,7 @@ public class HealthSystem : MonoBehaviour
     
     // TODO: Use isDead to trigger death animation
     [SerializeField]
-    public bool isDead = false;
+    public static bool isDead = false;
     
     // TODO: This is to do with dealing with taking damage. Make it so it creates a new object and looks better.
     public GameObject damageTextObject;
@@ -98,25 +98,21 @@ public class HealthSystem : MonoBehaviour
                 Destroy(gameObject);
             }
             
-            Debug.Log("Dead");
-            animator.SetTrigger("Die");
+            if (CompareTag("Player")) {
+                isDead = true;
+                animator.SetTrigger("Die");
             
-           StartCoroutine(utility.DelayedAction(1.5f, () =>
-            {
-                Destroy(gameObject);
-            }));
-
-            UIManager.ShowGameOverPanel();
-            
+                StartCoroutine(utility.DelayedAction(1.5f, () =>
+                {
+                    Destroy(gameObject);
+                }));
+            }
         }
-
         // Gives knockback to the hit object. Else kills and destroys the object.
-        if (currentHealth > 0)
+        else if (currentHealth > 0)
         {
              Debug.Log("Sender position: " + sender.transform.position);
              Knockback(knockbackForce, sender.transform.position);
-        } else {
-            //Destroy(gameObject); 
         }
     }
 
