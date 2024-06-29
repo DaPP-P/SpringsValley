@@ -89,19 +89,25 @@ public class HealthSystem : MonoBehaviour
 
         // sets currentHealth to currentHealth - damageTaken
         currentHealth -= amount;
-        source.PlayOneShot(hitSound);
+        source.PlayOneShot(hitSound);  
 
-        // TODO: Remove how this is done. Stated Above.
-        StartCoroutine(DamageIndication("-"+amount, Color.red));   
-
+        // Checks if the object is dead
         if (currentHealth < 1) {
+
+            if (CompareTag("SkeletonEnemy")) {
+                Destroy(gameObject);
+            }
+            
+            Debug.Log("Dead");
             animator.SetTrigger("Die");
-            // NEED TO SET TIMER THEN DESTORY OBJECT
+            
+           StartCoroutine(utility.DelayedAction(1.5f, () =>
+            {
+                Destroy(gameObject);
+            }));
 
-
-            //isDead = true;
-            //healthBar.healthBar.fillAmount = 0;
-            //Destroy(gameObject);
+            UIManager.ShowGameOverPanel();
+            
         }
 
         // Gives knockback to the hit object. Else kills and destroys the object.
@@ -110,7 +116,7 @@ public class HealthSystem : MonoBehaviour
              Debug.Log("Sender position: " + sender.transform.position);
              Knockback(knockbackForce, sender.transform.position);
         } else {
-            //Destroy(gameObject); DONT KNOW ABOUT 
+            //Destroy(gameObject); 
         }
     }
 

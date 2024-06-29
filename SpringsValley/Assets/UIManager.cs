@@ -5,11 +5,13 @@ using UnityEngine.SceneManagement;
 public class UIManager : MonoBehaviour
 {
     public GameObject uiCanvas; // Reference to your UI canvas
+    public static GameObject gameOverPanel; // Reference to your Game Over panel
 
     void Start()
     {
         // Ensure the UI canvas is initially disabled
         uiCanvas.SetActive(false);
+        gameOverPanel.SetActive(false);
     }
 
     void Update()
@@ -26,6 +28,13 @@ public class UIManager : MonoBehaviour
             // Restart the current scene
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+    }
+
+    public static void ShowGameOverPanel()
+    {
+        // Show the Game Over panel
+        Time.timeScale = 0;
+        gameOverPanel.SetActive(true);
     }
 
     void TogglePauseMenu()
