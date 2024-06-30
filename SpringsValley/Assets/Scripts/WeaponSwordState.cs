@@ -22,6 +22,8 @@ public class WeaponSwordState : WeaponBaseState
 
     private List<GameObject> hitObjects = new List<GameObject>(); // A list of objects hit.
 
+    private Animator animator;
+
     /*
      * Setup needed when WeaponSwordState is loaded.
      */
@@ -38,6 +40,7 @@ public class WeaponSwordState : WeaponBaseState
         swordAnimator = weapon.currentWeaponInstance.GetComponent<Animator>();    
         weapon.weaponRenderer = weapon.currentWeaponInstance.GetComponent<SpriteRenderer>();
         playerControls = GameObject.Find("Main_Character").GetComponent<PlayerControls>();
+        animator = GameObject.Find("Sprite").GetComponent<Animator>();
     }
 
     /*
@@ -97,6 +100,8 @@ public class WeaponSwordState : WeaponBaseState
         // if the attack is blocked, don't attack.
         if (attackBlocked)
             return;
+        
+        animator.SetTrigger("GoTornado");
         
         
 
