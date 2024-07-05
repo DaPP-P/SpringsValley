@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class WeaponSwordState : WeaponBaseState
 {
     private WeaponStateManager weapon; // Instance to the Weapon State Manager.
@@ -101,7 +102,18 @@ public class WeaponSwordState : WeaponBaseState
         if (attackBlocked)
             return;
         
-        animator.SetTrigger("GoTornado");
+        animator.SetBool("TornadoMode", true);
+        weapon.weaponRenderer.enabled = false;
+
+        weapon.StartCoroutine(utility.DelayedAction(2f, () =>
+            {
+                animator.SetBool("TornadoMode", false);
+            }));
+
+        weapon.StartCoroutine(utility.DelayedAction(.5f, () =>
+            {
+                weapon.weaponRenderer.enabled = true;
+            }));
         
         
 
@@ -184,8 +196,8 @@ public class WeaponSwordState : WeaponBaseState
             HealthSystem healthSystem;
             if ((healthSystem = collider.GetComponent<HealthSystem>()) != null) // && !hitObjects.Contains(collider.gameObject)
             {
-                Debug.Log("I hit " + collider.gameObject.name);
-                Debug.Log(weapon.currentWeaponInstance);
+                //Debug.Log("I hit " + collider.gameObject.name);
+                //Debug.Log(weapon.currentWeaponInstance);
                 healthSystem.Damage(damageAmount, weapon.currentWeaponInstance);
                 hitObjects.Add(collider.gameObject);
    

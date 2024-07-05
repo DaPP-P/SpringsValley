@@ -388,13 +388,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 10
   maxHealth: 50
-  isDead: 0
   damageTextObject: {fileID: 8678189278288514646}
   mainSprite: {fileID: 8631681132544379486}
   knockbackForce: 5
   rb: {fileID: 6579519844066325239}
   indicationTimeDone: 0
   healthBar: {fileID: 0}
+  source: {fileID: 0}
+  hitSound: {fileID: 0}
+  animator: {fileID: 0}
   OnHitWithReference:
     m_PersistentCalls:
       m_Calls:
@@ -499,6 +501,7 @@ MonoBehaviour:
   swordPrefab: {fileID: 8859321701252322727, guid: be6361dd9d839d440ad8af9bd541b664, type: 3}
   bowPrefab: {fileID: 7547907993333423013, guid: bca49845fc3b36a4abfa815c49023459, type: 3}
   arrowPrefab: {fileID: 2507513558012188766, guid: 21f233881621af24b887d3704051e59e, type: 3}
+  playerTornado: {fileID: 0}
   hand: {fileID: 7717928722651698827}
   currentWeaponInstance: {fileID: 0}
   arrow: {fileID: 0}
@@ -552,6 +555,7 @@ GameObject:
   - component: {fileID: 3235798092646006961}
   - component: {fileID: 7717928722505704341}
   - component: {fileID: 7717928722603767291}
+  - component: {fileID: 7182851972209414794}
   m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
@@ -754,6 +758,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7182851972209414794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8631681132544379486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b5b34afea390f42907f872580c9a9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8678189278288514646
 GameObject:
   m_ObjectHideFlags: 0
@@ -983,7 +999,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6096746793684237436, guid: 6da3cab4456244883a0c0e2c9d6e10eb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.9900012
+      value: 3.9900017
       objectReference: {fileID: 0}
     - target: {fileID: 6096746793684237436, guid: 6da3cab4456244883a0c0e2c9d6e10eb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1081,7 +1097,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5538579440631174614, guid: ddda8df6e2de041fd9d63c32eec52128, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.9900012
+      value: 3.9900017
       objectReference: {fileID: 0}
     - target: {fileID: 5538579440631174614, guid: ddda8df6e2de041fd9d63c32eec52128, type: 3}
       propertyPath: m_LocalPosition.z
