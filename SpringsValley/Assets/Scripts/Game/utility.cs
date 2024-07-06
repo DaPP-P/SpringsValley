@@ -5,16 +5,27 @@ using System;
 
 public class utility : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public GameObject player;
+    private PlayerHealth playerHealth;
+
     void Start()
     {
-        
+        if (player != null)
+        {
+            playerHealth = player.GetComponent<PlayerHealth>();
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (playerHealth != null)
+            {
+                playerHealth.Damage(10, gameObject);
+                Debug.Log("Player Health: " + playerHealth.currentHealth);
+            }
+        }
     }
 
     public static IEnumerator DelayedAction(float time, Action action)

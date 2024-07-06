@@ -32,15 +32,6 @@ public class UIManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        if (checkAlive)
-        {
-            Debug.Log("Player is dead");
-            checkAlive = false;
-            StartCoroutine(utility.DelayedAction(2f, () =>
-            {
-                ShowGameOverPanel();
-            }));
-        }
     }
 
     public void ShowGameOverPanel()

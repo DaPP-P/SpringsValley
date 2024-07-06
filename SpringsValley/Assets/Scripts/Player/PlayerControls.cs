@@ -26,6 +26,7 @@ public class PlayerControls : MonoBehaviour
 
     public AudioSource source;
     public AudioClip dashSound;
+    public AudioClip deathSound;
 
     /*
      * Setup needed when player is Awaken.
@@ -204,6 +205,11 @@ public class PlayerControls : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
         trailRenderer.enabled = false;
+    }
+
+    public void playerDeath() {
+        animator.SetBool("isDead", true);
+        source.PlayOneShot(deathSound);
     }
 
 }

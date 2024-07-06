@@ -7,15 +7,17 @@ using TMPro;
 public class HealthSystem : MonoBehaviour
 {
     // bool to check if the object is alive
-    private bool isAlive = true;
+    protected bool isAlive = true;
 
     // health stats
     [SerializeField]
-    private int currentHealth, maxHealth;
+    public int currentHealth, maxHealth;
 
     // TODO: Make KnockbackForce something that comes from the sender objects weapon.
     public float knockbackForce;
     public Rigidbody2D rb;
+
+    public Animator animator;
 
 
     /** Start Method
