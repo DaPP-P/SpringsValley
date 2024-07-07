@@ -10,8 +10,6 @@ public class WeaponStateManager : MonoBehaviour
 
     public Rigidbody2D rigidbody2D; // Players rigidbody.
 
-    public SpriteRenderer characterRenderer, weaponRenderer; //TODO: THINK I CAN DELETE.
-
     public GameObject swordPrefab; // Sword Prefab
     public GameObject bowPrefab; // Bow Prefab
     public GameObject arrowPrefab; // Arrow Prefab

@@ -7,20 +7,20 @@ public class UIManager : MonoBehaviour
     public GameObject uiCanvas; // Reference to your UI canvas
     public GameObject gameOverPanel; // Reference to your Game Over panel
 
-    public bool checkAlive;
+    public bool isAlive;
 
     void Start()
     {
         // Ensure the UI canvas is initially disabled
         uiCanvas.SetActive(false);
         gameOverPanel.SetActive(false);
-        checkAlive = true;
+        isAlive = true;
     }
 
     void Update()
     {
         // Check for Esc key press
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && isAlive)
         {
             // Toggle the visibility of the UI canvas
             TogglePauseMenu();
@@ -55,7 +55,6 @@ public class UIManager : MonoBehaviour
 
     public void ResumeButtonClicked()
     {
-        // Hide the UI canvas
         TogglePauseMenu();
     }
 

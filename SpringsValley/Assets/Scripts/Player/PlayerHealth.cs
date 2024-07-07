@@ -24,6 +24,7 @@ public class PlayerHealth : HealthSystem
         if (currentHealth < 1) {
             isAlive = false;      
             
+            uiManager.isAlive = false;
             playerControls.playerDeath();
             
             StartCoroutine(utility.DelayedAction(1.5f, () => 

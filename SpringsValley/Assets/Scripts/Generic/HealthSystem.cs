@@ -7,7 +7,7 @@ using TMPro;
 public class HealthSystem : MonoBehaviour
 {
     // bool to check if the object is alive
-    protected bool isAlive = true;
+    public bool isAlive = true;
 
     // health stats
     [SerializeField]
