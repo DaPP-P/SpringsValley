@@ -39,7 +39,6 @@ public class WeaponSwordState : WeaponBaseState
         // Gets the needed components.
         swordStats = weapon.currentWeaponInstance.GetComponent<SwordStats>();
         swordAnimator = weapon.currentWeaponInstance.GetComponent<Animator>();    
-        weapon.weaponRenderer = weapon.currentWeaponInstance.GetComponent<SpriteRenderer>();
         playerControls = GameObject.Find("Main_Character").GetComponent<PlayerControls>();
         animator = GameObject.Find("Sprite").GetComponent<Animator>();
     }
@@ -103,17 +102,13 @@ public class WeaponSwordState : WeaponBaseState
             return;
         
         animator.SetBool("TornadoMode", true);
-        weapon.weaponRenderer.enabled = false;
 
         weapon.StartCoroutine(utility.DelayedAction(2f, () =>
             {
                 animator.SetBool("TornadoMode", false);
             }));
 
-        weapon.StartCoroutine(utility.DelayedAction(.5f, () =>
-            {
-                weapon.weaponRenderer.enabled = true;
-            }));
+
         
         
 
@@ -166,14 +161,6 @@ public class WeaponSwordState : WeaponBaseState
 
         weapon.hand.transform.localScale = scale;
 
-        if ( weapon.hand.transform.eulerAngles.z > 0 &&  weapon.hand.transform.eulerAngles.z < 180)
-        {
-            weapon.weaponRenderer.sortingOrder = weapon.characterRenderer.sortingOrder - 1;
-        } 
-        else 
-        {
-            weapon.weaponRenderer.sortingOrder = weapon.characterRenderer.sortingOrder + 1;
-        }
     }
 
     /*
