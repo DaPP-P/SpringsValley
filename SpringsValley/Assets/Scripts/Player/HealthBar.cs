@@ -10,10 +10,15 @@ public class HealthBar : MonoBehaviour
     public PlayerHealth playerHealth;
     public TextMeshProUGUI  healthText;
     public Image healthBar;
+
+    public Image energyBar;
     float lerpSpeed;
 
     private float currentHealth;
     private float maxHealth;
+
+    private float currentEnergy;
+    private float maxEnergy;
 
     // Start is called before the first frame update
     void Start()
@@ -26,9 +31,13 @@ public class HealthBar : MonoBehaviour
         lerpSpeed = 3f * Time.deltaTime;
         currentHealth = (float)playerHealth.currentHealth;
         maxHealth = (float)playerHealth.maxHealth;
+        currentEnergy = (float)playerHealth.currentEnergy;
+        maxEnergy = (float)playerHealth.maxEnergy;
+        
 
         healthText.text = "Health: " + playerHealth.currentHealth;
         HealthBarFiller();
+        EnergyBarFiller();
         ColourChange();
     }
 
@@ -37,9 +46,19 @@ public class HealthBar : MonoBehaviour
         healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, currentHealth / maxHealth, lerpSpeed); 
     }
 
+    void EnergyBarFiller()
+    {
+        energyBar.fillAmount = Mathf.Lerp(energyBar.fillAmount, currentEnergy / maxEnergy, lerpSpeed); 
+
+    }
+
     void ColourChange()
     {
         Color healthColour = Color.Lerp(Color.red, Color.green, (currentHealth / maxHealth));
         healthBar.color = healthColour;
+
+        Color energyColour = Color.Lerp(Color.white, Color.blue, (currentEnergy / maxEnergy));
+        energyBar.color = energyColour;
     }
+
 }

@@ -7,8 +7,12 @@ public class PlayerHealth : HealthSystem
     public UIManager uiManager;
     private PlayerControls playerControls;
 
+    public float currentEnergy, maxEnergy;
+    public float energyIncreaseAmount = 1f;
+
     void Start(){
         playerControls = GetComponent<PlayerControls>();
+        StartCoroutine(IncreaseEnergyOverTime());
     }
 
     public override void Damage(int amount, GameObject sender)
@@ -30,6 +34,20 @@ public class PlayerHealth : HealthSystem
             StartCoroutine(utility.DelayedAction(1.5f, () => 
                 uiManager.ShowGameOverPanel()));
         }
-        
+    }
+
+    IEnumerator IncreaseEnergyOverTime()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.2f);
+            IncreaseEnergy(energyIncreaseAmount);
+        }
+    }
+
+    void IncreaseEnergy(float amount)
+    {
+        currentEnergy = Mathf.Min(currentEnergy + amount, maxEnergy);
     }
 }
+

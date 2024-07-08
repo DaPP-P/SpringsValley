@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerControls : MonoBehaviour
 {
     private WeaponStateManager weaponStateManager; // Reference to WeaponStateManager needed for swapping weapons.
+    
+    private PlayerHealth playerHealth;
     private const float MOVE_SPEED = 7f;     // Player movement speed.
     [SerializeField] private LayerMask dashLayerMask;  // For the players dash.
     public Rigidbody2D rigidbody2D; // Players rigidbody.
@@ -41,7 +43,8 @@ public class PlayerControls : MonoBehaviour
         // Getting components
         swordParent = GetComponentInChildren<SwordParent>();
         bowParent = GetComponentInChildren<BowParent>();
-        weaponStateManager = GetComponentInChildren<WeaponStateManager>();        
+        weaponStateManager = GetComponentInChildren<WeaponStateManager>();
+        playerHealth = GetComponent<PlayerHealth>();        
     }
 
     /*
@@ -90,8 +93,9 @@ public class PlayerControls : MonoBehaviour
 
         }
         // If Space pressed make the player dash.
-        if (isDashButtonDown)
+        if (isDashButtonDown && playerHealth.currentEnergy >= 10)
         {   
+            playerHealth.currentEnergy -= 10;
             float dashAmount = 3f;
             Vector3 dashPosition = transform.position + moveDir * dashAmount;
             
