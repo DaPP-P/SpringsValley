@@ -33,6 +33,11 @@ public class PlayerHealth : HealthSystem
             
             StartCoroutine(utility.DelayedAction(1.5f, () => 
                 uiManager.ShowGameOverPanel()));
+        } else if (currentHealth > 0)
+        {
+            isAlive = true;
+            knockbackSender = sender;
+            damageIndication();
         }
     }
 

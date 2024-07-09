@@ -18,6 +18,8 @@ public class HealthSystem : MonoBehaviour
     public Rigidbody2D rb;
 
     public Animator animator;
+    public GameObject knockbackSender;
+    public SpriteRenderer spriteRenderer;
 
 
     /** Start Method
@@ -59,14 +61,28 @@ public class HealthSystem : MonoBehaviour
         // Checks if the object is dead
         if (currentHealth < 1) {
             isAlive = false;
+            Destroy(gameObject);
         }
         // Gives knockback to the hit object. Else kills and destroys the object.
         else if (currentHealth > 0)
         {
             isAlive = true;
-             Debug.Log("Sender position: " + sender.transform.position);
-             Knockback(knockbackForce, sender.transform.position);
+            knockbackSender = sender;
+            damageIndication();
         }
+    }
+
+    protected void damageIndication()
+    {
+        spriteRenderer.color = Color.red;
+        if (knockbackSender != null) {
+            Knockback(knockbackForce, knockbackSender.transform.position);
+        }
+
+        StartCoroutine(utility.DelayedAction(0.2f, () =>
+        {
+            spriteRenderer.color = Color.white;
+        }));
     }
 
 

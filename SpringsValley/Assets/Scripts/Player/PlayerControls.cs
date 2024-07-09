@@ -53,7 +53,7 @@ public class PlayerControls : MonoBehaviour
     void Update()
     {
         // Checks if Mouse0 or Mouse1 are clicked.
-        //HandleAttack();
+        HandleAttack();
 
         // Sets movement to zero.
         float moveX = 0f;
@@ -157,22 +157,21 @@ public class PlayerControls : MonoBehaviour
     /* 
      * Method for checking if the player is attacking.
      */
-    //private void HandleAttack()
-    //{
+    private void HandleAttack()
+    {
+         // If left click, call the AttackCoroutine.
+        if (Input.GetKey(KeyCode.Mouse0) && !isAttacking)
+        {
+            StartCoroutine(AttackCoroutine());
+        }
 
-        // // If left click, call the AttackCoroutine.
-        // if (Input.GetKey(KeyCode.Mouse0) && !isAttacking)
-        // {
-        //     StartCoroutine(AttackCoroutine());
-        // }
+         // If right click, call the SpecialAttackCoroutine.
+        if (Input.GetKey(KeyCode.Mouse1) && !isAttacking)
+        {
+            StartCoroutine(SpecialAttackCoroutine());
 
-        // // If right click, call the SpecialAttackCoroutine.
-        // if (Input.GetKey(KeyCode.Mouse1) && !isAttacking)
-        // {
-        //     StartCoroutine(SpecialAttackCoroutine());
-
-        // }
-    //}
+        }
+    }
 
     /*
      * Coroutine for a normal attack. 
