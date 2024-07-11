@@ -6,6 +6,10 @@ using TMPro;
 
 public class HealthSystem : MonoBehaviour
 {
+
+    //todo DELETE AT SOME POINT THIS IS JUST FOR TESTING
+    public GameObject testobject;
+
     // bool to check if the object is alive
     public bool isAlive = true;
 
@@ -75,7 +79,7 @@ public class HealthSystem : MonoBehaviour
     protected void damageIndication()
     {
         spriteRenderer.color = Color.red;
-        if (knockbackSender != null) {
+        if (knockbackSender != null && knockbackSender != testobject) {
             Knockback(knockbackForce, knockbackSender.transform.position);
         }
 

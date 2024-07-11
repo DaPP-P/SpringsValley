@@ -92,16 +92,16 @@ public class PlayerControls : MonoBehaviour
             rigidbody2D.velocity = gameHelperScript.returnMouseDirection(gameObject) * dashAttackSpeed;
 
         }
-        // If Space pressed make the player dash.
-        if (isDashButtonDown && playerHealth.currentEnergy >= 10)
-        {   
-            playerHealth.currentEnergy -= 10;
+if (isDashButtonDown)
+    {   
+        if (playerHealth.CanDecreaseEnergy(10)) 
+        {
             float dashAmount = 3f;
             Vector3 dashPosition = transform.position + moveDir * dashAmount;
             
             // Uses a ray cast is check if the player will hit a wall before dash. If it will hit 
             // a wall it sets the dash distance to only be up to the wall.
-            RaycastHit2D raycastHit2d = Physics2D.Raycast(transform.position,moveDir, dashAmount, dashLayerMask);
+            RaycastHit2D raycastHit2d = Physics2D.Raycast(transform.position, moveDir, dashAmount, dashLayerMask);
             if (raycastHit2d.collider != null) {
                 dashPosition = raycastHit2d.point;
             }
@@ -110,11 +110,17 @@ public class PlayerControls : MonoBehaviour
             rigidbody2D.MovePosition(dashPosition);
             isDashButtonDown = false;
 
-            // Starts the dash animation and play dash sound.
+            // Starts the dash animation and plays dash sound.
             source.PlayOneShot(dashSound);
 
             StartCoroutine(DashAnimationCoroutine());
+        } 
+        else 
+        {
+            // Reset the dash button down if energy cannot be decreased
+            isDashButtonDown = false;
         }
+    }
     }
 
     /*

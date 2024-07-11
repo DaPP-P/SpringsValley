@@ -8,12 +8,17 @@ public class utility : MonoBehaviour
     public GameObject player;
     private PlayerHealth playerHealth;
 
+    //todo DELETE AT SOME POINT THIS IS JUST FOR TESTING
+    public GameObject testobject;
+
     void Start()
     {
         if (player != null)
         {
             playerHealth = player.GetComponent<PlayerHealth>();
         }
+
+        testobject = testobject;
     }
 
     void Update()
@@ -23,7 +28,6 @@ public class utility : MonoBehaviour
             if (playerHealth != null)
             {
                 playerHealth.Damage(10, gameObject);
-                Debug.Log("Player Health: " + playerHealth.currentHealth);
             }
         }
     }
