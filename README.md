@@ -9,6 +9,17 @@ Controls:
 * left click for normal attack
 * right click for special attack
 
+
+## Currently Working On
+Plan for the rest of the week:
+- Redo the player weapons so most of the stats are in the weapon stats Scripts.
+- Add damage number indicators.
+- Fix the bow.
+- Add the tornado attack to the player.
+- Make it so when using special attacks it decrreases the energy bar.
+- Have a sound queue for when the energy bar is too low to do something.
+
+
 ## Next Steps
 ### Fixes
 * Skeletons get stuck on object, its worse in the build then the scene.
