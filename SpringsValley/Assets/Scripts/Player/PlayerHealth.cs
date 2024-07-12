@@ -24,11 +24,8 @@ public class PlayerHealth : HealthSystem
         if (sender.layer == gameObject.layer)
             return;
 
-        // sets currentHealth to currentHealth - damageTaken
-        currentHealth -= amount;
-
         // Checks if the object is dead
-        if (currentHealth < 1) {
+        if (currentHealth < 1 && isAlive) {
             isAlive = false;      
             
             uiManager.isAlive = false;
@@ -38,6 +35,12 @@ public class PlayerHealth : HealthSystem
                 uiManager.ShowGameOverPanel()));
         } else if (currentHealth > 0)
         {
+            if (currentHealth - amount < 1) {
+                currentHealth = 0;
+            } else {
+                currentHealth -= amount;
+            }
+
             isAlive = true;
             knockbackSender = sender;
             damageIndication();

@@ -2165,6 +2165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 4345916194102860221}
+  testobject: {fileID: 0}
 --- !u!4 &1318571844
 Transform:
   m_ObjectHideFlags: 0
@@ -18904,6 +18905,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d21f28d298adf46d1bd273a9155cd6d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testobject: {fileID: 0}
   isAlive: 1
   currentHealth: 100
   maxHealth: 200
@@ -18940,6 +18942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d21f28d298adf46d1bd273a9155cd6d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testobject: {fileID: 0}
   isAlive: 1
   currentHealth: 50
   maxHealth: 50
@@ -19460,6 +19463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9f1ee4da8da8d34b8872634831afd18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testobject: {fileID: 1318571842}
   isAlive: 1
   currentHealth: 100
   maxHealth: 100
@@ -19472,6 +19476,8 @@ MonoBehaviour:
   currentEnergy: 100
   maxEnergy: 100
   energyIncreaseAmount: 1
+  source: {fileID: 8631681132613109929}
+  lowEnergySound: {fileID: 8300000, guid: 1ed8fb76fc64e4e46847348138782234, type: 3}
 --- !u!1 &8631681132613109928
 GameObject:
   m_ObjectHideFlags: 0
