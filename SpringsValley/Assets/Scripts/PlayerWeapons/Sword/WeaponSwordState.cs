@@ -25,6 +25,9 @@ public class WeaponSwordState : WeaponBaseState
 
     private Animator animator;
 
+    private GameObject swordPrefab; // Sword Prefab
+
+
     /*
      * Setup needed when WeaponSwordState is loaded.
      */

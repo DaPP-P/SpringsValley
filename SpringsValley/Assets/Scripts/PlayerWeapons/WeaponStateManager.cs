@@ -26,6 +26,8 @@ public class WeaponStateManager : MonoBehaviour
     public AudioSource source;
     public AudioClip swordAttackSound, bowAttackSound, bowDrawbackSound;
 
+    protected GameObject activateWeaponSprite;
+
     /*
      * Setup needed when WeaponStateManager is loaded.
      */
@@ -52,6 +54,11 @@ public class WeaponStateManager : MonoBehaviour
     {
         currentState = state;
         state.EnterState(this);
+        newState();
+    }
+
+    private void newState() {
+        //activateWeaponSprite = currentState.
     }
 
     /*
