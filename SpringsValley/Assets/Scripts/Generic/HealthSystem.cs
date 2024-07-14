@@ -72,13 +72,14 @@ public class HealthSystem : MonoBehaviour
         {
             isAlive = true;
             knockbackSender = sender;
-            damageIndication();
+            damageIndication(amount);
         }
     }
 
-    protected void damageIndication()
+    protected void damageIndication(int damageAmount)
     {
         spriteRenderer.color = Color.red;
+        DamagePopup.Create(transform.position, damageAmount);
         if (knockbackSender != null && knockbackSender != testobject) {
             Knockback(knockbackForce, knockbackSender.transform.position);
         }
