@@ -12,6 +12,7 @@ public class PlayerHealth : HealthSystem
 
     public AudioSource source;
     public AudioClip lowEnergySound;
+    public AudioClip damageSound;
 
     void Start(){
         playerControls = GetComponent<PlayerControls>();
@@ -25,10 +26,13 @@ public class PlayerHealth : HealthSystem
             return;
 
         knockbackSender = sender;
+
+        if (isAlive) {
         damageIndication(amount);
+        }
 
         // Checks if the object is dead
-        if (currentHealth - amount < 1) {
+        if ((currentHealth - amount < 1) && isAlive) {
             currentHealth = 0;
             isAlive = false;      
             
@@ -68,5 +72,20 @@ public class PlayerHealth : HealthSystem
             return false;
         }
     }
+
+    protected void damageIndication(int damageAmount)
+    {
+        source.PlayOneShot(damageSound);
+        spriteRenderer.color = Color.red;
+        DamagePopup.Create(transform.position, damageAmount);
+        if (knockbackSender != null && knockbackSender != testobject) {
+            Knockback(knockbackForce, knockbackSender.transform.position);
+        }
+
+        StartCoroutine(utility.DelayedAction(0.2f, () =>
+        {
+            spriteRenderer.color = Color.white;
+        }));
+    }    
 }
 
