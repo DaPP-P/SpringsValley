@@ -52,7 +52,9 @@ public class WeaponSwordState : WeaponBaseState
     public override void UpdateState(WeaponStateManager weapon)
     {
         // Keeps track of where the mouse is.
-        followMouse();
+        if (!UIManager.isPaused) {
+            followMouse();
+        }
 
         // Checks if the player switches weapon.
         if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -184,10 +186,8 @@ public class WeaponSwordState : WeaponBaseState
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(weapon.circleOrigin.position, weapon.radius))
         {
             HealthSystem healthSystem;
-            if ((healthSystem = collider.GetComponent<HealthSystem>()) != null) // && !hitObjects.Contains(collider.gameObject)
+            if ((healthSystem = collider.GetComponent<HealthSystem>()) != null && !hitObjects.Contains(collider.gameObject))
             {
-                //Debug.Log("I hit " + collider.gameObject.name);
-                //Debug.Log(weapon.currentWeaponInstance);
                 healthSystem.Damage(damageAmount, weapon.currentWeaponInstance);
                 hitObjects.Add(collider.gameObject);
    

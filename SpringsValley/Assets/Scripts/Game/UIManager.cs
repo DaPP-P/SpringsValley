@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
 
     public bool isAlive;
 
+    static public bool isPaused;
+
     void Start()
     {
         // Ensure the UI canvas is initially disabled
@@ -44,7 +46,7 @@ public class UIManager : MonoBehaviour
     void TogglePauseMenu()
     {
         // Check if the game is paused
-        bool isPaused = !uiCanvas.activeSelf;
+        isPaused = !uiCanvas.activeSelf;
 
         // Toggle the visibility of the UI canvas
         uiCanvas.SetActive(isPaused);
