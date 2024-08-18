@@ -37,7 +37,9 @@ public class WeaponBowState : WeaponBaseState
 
     public override void UpdateState(WeaponStateManager weapon)
     {
-        followMouse();
+        if (!UIManager.isPaused) {
+            followMouse();
+        }
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -74,8 +76,8 @@ public class WeaponBowState : WeaponBaseState
             if (Time.time - timer > holdDur)
             {
                 timer = Time.time;
-                weapon.InstantiateArrowPrefab();
                 bowAnimator.SetTrigger("bowInterupt");
+                weapon.InstantiateArrowPrefab();
             }
         }
         else
@@ -120,6 +122,7 @@ public class WeaponBowState : WeaponBaseState
         }
     }
 
+    // Simple Method for following the mouse.
     public void followMouse()
     {
         Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - weapon.hand.transform.position;
@@ -139,16 +142,16 @@ public class WeaponBowState : WeaponBaseState
         weapon.hand.transform.localScale = scale;
     }
 
+    // Simple method to check detection.
     public void DetectColliders()
     {
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(weapon.circleOrigin.position, weapon.radius))
         {
             HealthSystem healthSystem;
-            if ((healthSystem = collider.GetComponent<HealthSystem>()) != null) // && !hitObjects.Contains(collider.gameObject)
+           
+           if ((healthSystem = collider.GetComponent<HealthSystem>()) != null)
             {
-                Debug.Log("I hit " + collider.gameObject.name);
                 healthSystem.Damage(damageAmount, weapon.currentWeaponInstance);
-                hitObjects.Add(collider.gameObject);
             }
         }
     }
