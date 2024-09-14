@@ -24,7 +24,7 @@ public class WeaponStateManager : MonoBehaviour
     public float radius;
 
     public AudioSource source;
-    public AudioClip swordAttackSound, bowAttackSound, bowDrawbackSound;
+    public AudioClip swordAttackSound, bowAttackSound, bowDrawbackSound, swordSpecialAttackSound;
 
     protected GameObject activateWeaponSprite;
 
@@ -163,6 +163,11 @@ public class WeaponStateManager : MonoBehaviour
             // Cast currentState to WeaponBowState and call the bowAttack method
             source.PlayOneShot(bowAttackSound);
         }
+    }
+
+    public void playSwordSpecialAttackdown()
+    {
+        source.PlayOneShot(swordSpecialAttackSound);
     }
 
     public void playDrawbackSound()

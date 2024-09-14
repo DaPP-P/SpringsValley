@@ -74,9 +74,11 @@ public class WeaponSwordState : WeaponBaseState
         if (attackBlocked)
             return;
 
+        followMouse();
+
         // As this is a normal attack set it to the normal damage amount.
         damageAmount = swordStats.leftClickDamageAmount;
-        playerControls.callDashAndAttack(); 
+        playerControls.callDashAndAttack(2, 0.15f); 
         weapon.playAttackSound();   
 
         // This is so the attack switches between attacking down and attacking up.
@@ -94,6 +96,8 @@ public class WeaponSwordState : WeaponBaseState
         isAttacking = true;
         attackCount += 1;
         weapon.StartCoroutine(DelayAttack(0.3f));
+
+        //defaultWeaponPosition();
     }
 
     /*
@@ -101,18 +105,27 @@ public class WeaponSwordState : WeaponBaseState
      */
     public void swordSpecialAttack()
     {
+        if (attackBlocked)
+            return;
 
-   
+        followMouse();
+
+
         // As this is a special attack set it to the special damage amount.
         damageAmount = swordStats.rightClickDamageAmount;
 
-        // Plays the special sword attack animation.
+        // Plays the special sword attack animation
+        weapon.playSwordSpecialAttackdown();
         swordAnimator.SetTrigger("powerAttack");
+        playerControls.callDashAndAttack(6, 0.4f); 
+
 
         // stops attacking and has a delay so attacking has a cool down.
         attackBlocked = true;
         isAttacking = true;
-        weapon.StartCoroutine(DelayAttack(0.4f));
+        weapon.StartCoroutine(DelayAttack(0.8f));
+        
+        //defaultWeaponPosition();
     }
 
     /*
@@ -121,6 +134,7 @@ public class WeaponSwordState : WeaponBaseState
     private IEnumerator DelayAttack(float delayTime)
     {
         yield return new WaitForSeconds(delayTime);
+        defaultWeaponPosition();
         attackBlocked = false;
     }
 
@@ -151,7 +165,11 @@ public class WeaponSwordState : WeaponBaseState
         }
 
         weapon.hand.transform.localScale = scale;
+    }
 
+    public void defaultWeaponPosition(){
+        weapon.hand.transform.localRotation = Quaternion.identity;
+        weapon.hand.transform.localScale = Vector3.one;
     }
 
     /*

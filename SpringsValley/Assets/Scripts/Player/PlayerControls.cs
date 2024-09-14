@@ -88,39 +88,37 @@ public class PlayerControls : MonoBehaviour
         // Sets the rigidbody velocity in the direction and speed wanted.
         if (!movementFreeze) {
             rigidbody2D.velocity = moveDir * MOVE_SPEED;
-        } else {
-            rigidbody2D.velocity = gameHelperScript.returnMouseDirection(gameObject) * dashAttackSpeed;
-
-        }
-if (isDashButtonDown)
-    {   
-        if (playerHealth.CanDecreaseEnergy(10)) 
-        {
-            float dashAmount = 3f;
-            Vector3 dashPosition = transform.position + moveDir * dashAmount;
-            
-            // Uses a ray cast is check if the player will hit a wall before dash. If it will hit 
-            // a wall it sets the dash distance to only be up to the wall.
-            RaycastHit2D raycastHit2d = Physics2D.Raycast(transform.position, moveDir, dashAmount, dashLayerMask);
-            if (raycastHit2d.collider != null) {
-                dashPosition = raycastHit2d.point;
-            }
-
-            // Moves the player in the dash direction.
-            rigidbody2D.MovePosition(dashPosition);
-            isDashButtonDown = false;
-
-            // Starts the dash animation and plays dash sound.
-            source.PlayOneShot(dashSound);
-
-            StartCoroutine(DashAnimationCoroutine());
         } 
-        else 
-        {
-            // Reset the dash button down if energy cannot be decreased
-            isDashButtonDown = false;
+
+    if (isDashButtonDown)
+        {   
+            if (playerHealth.CanDecreaseEnergy(10)) 
+            {
+                float dashAmount = 3f;
+                Vector3 dashPosition = transform.position + moveDir * dashAmount;
+            
+                // Uses a ray cast is check if the player will hit a wall before dash. If it will hit 
+                // a wall it sets the dash distance to only be up to the wall.
+                RaycastHit2D raycastHit2d = Physics2D.Raycast(transform.position, moveDir, dashAmount, dashLayerMask);
+                if (raycastHit2d.collider != null) {
+                    dashPosition = raycastHit2d.point;
+                }
+
+                // Moves the player in the dash direction.
+                rigidbody2D.MovePosition(dashPosition);
+                isDashButtonDown = false;
+
+                // Starts the dash animation and plays dash sound.
+                source.PlayOneShot(dashSound);
+
+                StartCoroutine(DashAnimationCoroutine());
+            }    
+            else 
+            {
+                // Reset the dash button down if energy cannot be decreased
+                isDashButtonDown = false;
+            }
         }
-    }
     }
 
     /*
@@ -142,18 +140,20 @@ if (isDashButtonDown)
         }
     }
 
-    public void callDashAndAttack(){
-        StartCoroutine(dashingWhileAttacking());
+    public void callDashAndAttack(int dashAmount, float waitTime){
+        StartCoroutine(dashingWhileAttacking(dashAmount, waitTime));
     }
 
     /* 
      * Handle the player moving forward while attacking.
      */
-    public IEnumerator dashingWhileAttacking(){
-        Debug.Log(gameHelperScript.returnMouseDirection(gameObject));
+    public IEnumerator dashingWhileAttacking(int dashAmount, float waitTime){
+
         movementFreeze = true;
+
+        rigidbody2D.velocity = gameHelperScript.returnMouseDirection(gameObject) * dashAmount;
         // Wait for 0.1 seconds
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(waitTime);
 
         // Stop the dash
         rigidbody2D.velocity = Vector2.zero;
