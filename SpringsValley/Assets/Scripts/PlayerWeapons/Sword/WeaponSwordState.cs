@@ -53,7 +53,7 @@ public class WeaponSwordState : WeaponBaseState
     {
         // Keeps track of where the mouse is.
         if (!UIManager.isPaused) {
-            followMouse();
+            //followMouse();
         }
 
         // Checks if the player switches weapon.
@@ -102,31 +102,17 @@ public class WeaponSwordState : WeaponBaseState
     public void swordSpecialAttack()
     {
 
-        // if the attack is blocked, don't attack.
-        if (attackBlocked)
-            return;
-        
-        animator.SetBool("TornadoMode", true);
-
-        weapon.StartCoroutine(utility.DelayedAction(2f, () =>
-            {
-                animator.SetBool("TornadoMode", false);
-            }));
-
-
-        
-        
-
+   
         // As this is a special attack set it to the special damage amount.
-        //damageAmount = swordStats.rightClickDamageAmount;
+        damageAmount = swordStats.rightClickDamageAmount;
 
         // Plays the special sword attack animation.
-        //swordAnimator.SetTrigger("StabAttack");
+        swordAnimator.SetTrigger("powerAttack");
 
         // stops attacking and has a delay so attacking has a cool down.
-        //attackBlocked = true;
-        //isAttacking = true;
-        //weapon.StartCoroutine(DelayAttack(0.4f));
+        attackBlocked = true;
+        isAttacking = true;
+        weapon.StartCoroutine(DelayAttack(0.4f));
     }
 
     /*
