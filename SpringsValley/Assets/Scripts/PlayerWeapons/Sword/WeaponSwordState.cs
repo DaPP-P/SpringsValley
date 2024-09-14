@@ -27,6 +27,9 @@ public class WeaponSwordState : WeaponBaseState
 
     private GameObject swordPrefab; // Sword Prefab
 
+    public PlayerHealth playerHealth;
+
+
 
     /*
      * Setup needed when WeaponSwordState is loaded.
@@ -44,6 +47,8 @@ public class WeaponSwordState : WeaponBaseState
         swordAnimator = weapon.currentWeaponInstance.GetComponent<Animator>();    
         playerControls = GameObject.Find("Main_Character").GetComponent<PlayerControls>();
         animator = GameObject.Find("Sprite").GetComponent<Animator>();
+        playerHealth = GameObject.Find("Main_Character").GetComponent<PlayerHealth>();
+
     }
 
     /*
@@ -108,6 +113,10 @@ public class WeaponSwordState : WeaponBaseState
         if (attackBlocked)
             return;
 
+        if (playerHealth.CanDecreaseEnergy(15) == false) {
+            return;
+        } else {
+
         followMouse();
 
 
@@ -126,6 +135,7 @@ public class WeaponSwordState : WeaponBaseState
         weapon.StartCoroutine(DelayAttack(0.8f));
         
         //defaultWeaponPosition();
+        }
     }
 
     /*

@@ -20,6 +20,8 @@ public class WeaponBowState : WeaponBaseState
     float specialTimer;
     float specialHoldDur = 1.2f;
 
+    public PlayerHealth playerHealth;
+
     private List<GameObject> hitObjects = new List<GameObject>();
 
     /* 
@@ -33,6 +35,8 @@ public class WeaponBowState : WeaponBaseState
 
         bowStats = weapon.currentWeaponInstance.GetComponent<BowStats>();
         bowAnimator = weapon.currentWeaponInstance.GetComponent<Animator>(); 
+        playerHealth = GameObject.Find("Main_Character").GetComponent<PlayerHealth>();
+
     }
 
     public override void UpdateState(WeaponStateManager weapon)
@@ -89,6 +93,13 @@ public class WeaponBowState : WeaponBaseState
 
     public void bowSpecialAttack()
     {
+
+        //TODO: MAKE IT ONLY CHECK ONCE.
+        if (playerHealth.CanDecreaseEnergy(15) == false) {
+            return;
+        } else {
+            
+
         float animationChange = 0.7f;
 
         if(Input.GetMouseButtonDown(1))
@@ -118,7 +129,7 @@ public class WeaponBowState : WeaponBaseState
         {
             specialTimer = float.PositiveInfinity;
             bowAnimator.SetTrigger("bowInterupt");
-
+        }
         }
     }
 
