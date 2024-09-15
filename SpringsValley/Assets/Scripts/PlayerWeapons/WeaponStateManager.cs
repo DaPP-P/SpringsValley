@@ -17,6 +17,8 @@ public class WeaponStateManager : MonoBehaviour
     public Sprite playerTornado;
     
     public Transform hand; // Location where weapons rotate around.
+
+    public Transform hand2;
     public GameObject currentWeaponInstance; // The current weapon.
     public GameObject arrow; // TODO: unsure.
 
@@ -57,8 +59,31 @@ public class WeaponStateManager : MonoBehaviour
         newState();
     }
 
+    public int CheckMovementDirection() {
+        if (rigidbody2D.velocity.x > 0)
+        {
+            return 1;
+        }
+        else if (rigidbody2D.velocity.x < 0)
+        {
+            return 2;
+        } 
+
+        if (rigidbody2D.velocity.y > 0)
+        {
+            Debug.Log("Moving Up");
+        }
+        else if (rigidbody2D.velocity.y < 0)
+        {
+            Debug.Log("Moving Down");
+        }
+
+        return 0;
+    }
+
     private void newState() {
         //activateWeaponSprite = currentState.
+
     }
 
     /*

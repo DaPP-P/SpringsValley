@@ -68,6 +68,14 @@ public class WeaponSwordState : WeaponBaseState
             weapon.DestroyCurrentInstance();
             weapon.SwitchState(weapon.bowState);
         }
+
+        if (weapon.CheckMovementDirection() == 1)
+        {
+            weapon.currentWeaponInstance.transform.SetParent(weapon.hand2);
+        } else if (weapon.CheckMovementDirection() == 2) {
+            weapon.currentWeaponInstance.transform.SetParent(weapon.hand);
+
+        }
     }
 
     /*
