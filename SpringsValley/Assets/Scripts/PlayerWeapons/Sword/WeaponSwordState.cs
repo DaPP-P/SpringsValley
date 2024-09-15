@@ -142,7 +142,6 @@ public class WeaponSwordState : WeaponBaseState
         isAttacking = true;
         weapon.StartCoroutine(DelayAttack(0.8f));
         
-        //defaultWeaponPosition();
         }
     }
 
@@ -211,10 +210,13 @@ public class WeaponSwordState : WeaponBaseState
             if ((healthSystem = collider.GetComponent<HealthSystem>()) != null && !hitObjects.Contains(collider.gameObject))
             {
                 healthSystem.Damage(damageAmount, weapon.currentWeaponInstance);
+                healthSystem.onFire(2);
                 hitObjects.Add(collider.gameObject);
    
             }
         }
     }
+
+    // Make a method alongs the line of 
 
 }

@@ -25,6 +25,9 @@ public class HealthSystem : MonoBehaviour
     public GameObject knockbackSender;
     public SpriteRenderer spriteRenderer;
 
+    public GameObject player;
+
+
 
     /** Start Method
      ** Initialize Health System, items to deal with taking damage, rigidbody componet, and skeleton state manager.
@@ -34,6 +37,7 @@ public class HealthSystem : MonoBehaviour
     {
         // Rigidbody to set velocity.
         rb = GetComponent<Rigidbody2D>();
+
    }
 
     
@@ -46,6 +50,12 @@ public class HealthSystem : MonoBehaviour
         currentHealth = healthValue;
         maxHealth = healthValue;
         isAlive = true;
+    }
+
+    public void BasicDamage(int amount)
+    {
+        currentHealth -= amount;
+        damageIndication(amount);
     }
 
 
@@ -71,8 +81,13 @@ public class HealthSystem : MonoBehaviour
         else if (currentHealth > 0)
         {
             isAlive = true;
+
+            if (sender != null){
             knockbackSender = sender;
+            }
+            
             damageIndication(amount);
+
         }
     }
 
@@ -147,5 +162,24 @@ public class HealthSystem : MonoBehaviour
     {
         return (float)currentHealth / maxHealth;
     }
+
+    /**
+     ** Method to set on fire
+     */
+    public void onFire(int amount) {
+        StartCoroutine(fireTick(0.2f, amount));
+    }
+
+    private IEnumerator fireTick (float duration, int amount) {
+
+
+        int damageCount = 0;
+        while (damageCount < 5){
+            BasicDamage(1);
+            yield return new WaitForSeconds(duration);
+            damageCount++;
+            Debug.Log(damageCount);
+        }
+    }    
 
 }

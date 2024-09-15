@@ -876,14 +876,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 439529259}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.08715578, w: 0.9961947}
   m_LocalPosition: {x: 45.8, y: 68.63581, z: 0.0034008622}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 917056429}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 10}
 --- !u!1 &516399675
 GameObject:
   m_ObjectHideFlags: 0
@@ -1011,6 +1011,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5865464505602859503, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1396135127}
     - target: {fileID: 5865464505602859503, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: spriteRenderer
       value: 
@@ -1920,7 +1924,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 945485772}
-  - component: {fileID: 945485773}
   m_Layer: 0
   m_Name: ----UI AND TOOLS ----
   m_TagString: Untagged
@@ -1946,18 +1949,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &945485773
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 945485771}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8961c7b6063dd2c44a1690143c85e1b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1031719968
 GameObject:
   m_ObjectHideFlags: 0
@@ -17794,6 +17785,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1347667525}
   m_CullTransparentMesh: 1
+--- !u!1 &1396135127 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5865464505602859509, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+  m_PrefabInstance: {fileID: 556478657}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1545302678
 GameObject:
   m_ObjectHideFlags: 0
@@ -19024,6 +19020,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   knockbackSender: {fileID: 0}
   spriteRenderer: {fileID: 248967763437528438}
+  player: {fileID: 248967765016426471}
 --- !u!4 &248967765016426494
 Transform:
   m_ObjectHideFlags: 0
@@ -19061,6 +19058,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   knockbackSender: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  player: {fileID: 0}
 --- !u!61 &2227509450867656338
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -19582,6 +19580,7 @@ MonoBehaviour:
   animator: {fileID: 7717928722542868237}
   knockbackSender: {fileID: 0}
   spriteRenderer: {fileID: 3235798092719194695}
+  player: {fileID: 0}
   uiManager: {fileID: 1165836276}
   currentEnergy: 100
   maxEnergy: 100

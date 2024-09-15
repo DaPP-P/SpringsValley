@@ -26,4 +26,5 @@ public class gameHelperScript : MonoBehaviour
 
         return difference;
     }
+
 }
