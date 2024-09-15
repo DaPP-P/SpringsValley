@@ -62,10 +62,25 @@ public class PlayerHealth : HealthSystem
         currentEnergy = Mathf.Min(currentEnergy + amount, maxEnergy);
     }
 
+    public void DecreaseEnergy(float amount)
+    {
+        currentEnergy = Mathf.Min(currentEnergy - amount);
+    }
+
     public bool CanDecreaseEnergy(int amount)
     {
         if(currentEnergy >= amount) {
             currentEnergy -= amount;
+            return true;
+        } else {
+            source.PlayOneShot(lowEnergySound);
+            return false;
+        }
+    }
+
+    public bool BasicCanDecreaseEngery(int amount)
+    {
+      if(currentEnergy >= amount) {
             return true;
         } else {
             source.PlayOneShot(lowEnergySound);

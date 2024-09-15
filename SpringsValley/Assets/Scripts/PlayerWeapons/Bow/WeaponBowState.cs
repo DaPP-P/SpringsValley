@@ -95,10 +95,9 @@ public class WeaponBowState : WeaponBaseState
     {
 
         //TODO: MAKE IT ONLY CHECK ONCE.
-        if (playerHealth.CanDecreaseEnergy(15) == false) {
+        if (playerHealth.BasicCanDecreaseEngery(15) == false) {
             return;
         } else {
-            
 
         float animationChange = 0.7f;
 
@@ -114,6 +113,7 @@ public class WeaponBowState : WeaponBaseState
             if (Time.time - timer > animationChange)
             {
                 bowAnimator.SetTrigger("bowShoot");
+                //playerHealth.DecreaseEnergy(15);
             }
 
             if (Time.time - specialTimer > specialHoldDur)
@@ -123,6 +123,7 @@ public class WeaponBowState : WeaponBaseState
                 weapon.InstantiateArrowPrefab(10);
                 weapon.InstantiateArrowPrefab(-10);
                 bowAnimator.SetTrigger("bowInterupt");
+                playerHealth.DecreaseEnergy(15);
             }
         }
         else
