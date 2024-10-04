@@ -10,8 +10,6 @@ public class WeaponStateManager : MonoBehaviour
 
     public Rigidbody2D rigidbody2D; // Players rigidbody.
 
-    public SpriteRenderer characterRenderer, weaponRenderer; //TODO: THINK I CAN DELETE.
-
     public GameObject swordPrefab; // Sword Prefab
     public GameObject bowPrefab; // Bow Prefab
     public GameObject arrowPrefab; // Arrow Prefab
@@ -19,6 +17,8 @@ public class WeaponStateManager : MonoBehaviour
     public Sprite playerTornado;
     
     public Transform hand; // Location where weapons rotate around.
+
+    public Transform hand2;
     public GameObject currentWeaponInstance; // The current weapon.
     public GameObject arrow; // TODO: unsure.
 
@@ -26,7 +26,12 @@ public class WeaponStateManager : MonoBehaviour
     public float radius;
 
     public AudioSource source;
-    public AudioClip swordAttackSound, bowAttackSound, bowDrawbackSound;
+    public AudioClip swordAttackSound, bowAttackSound, bowDrawbackSound, swordSpecialAttackSound;
+
+    protected GameObject activateWeaponSprite;
+
+    // Bool so the weapon cant be changed while attacking.
+    public bool weaponLock = false;
 
     /*
      * Setup needed when WeaponStateManager is loaded.
@@ -52,8 +57,39 @@ public class WeaponStateManager : MonoBehaviour
      */
     public void SwitchState(WeaponBaseState state)
     {
-        currentState = state;
-        state.EnterState(this);
+        if (!weaponLock) {
+            DestroyCurrentInstance();
+            currentState = state;
+            state.EnterState(this);
+            newState();
+        }
+    }
+
+    public int CheckMovementDirection() {
+        if (rigidbody2D.velocity.x > 0)
+        {
+            return 1;
+        }
+        else if (rigidbody2D.velocity.x < 0)
+        {
+            return 2;
+        } 
+
+        if (rigidbody2D.velocity.y > 0)
+        {
+            Debug.Log("Moving Up");
+        }
+        else if (rigidbody2D.velocity.y < 0)
+        {
+            Debug.Log("Moving Down");
+        }
+
+        return 0;
+    }
+
+    private void newState() {
+        //activateWeaponSprite = currentState.
+
     }
 
     /*
@@ -160,6 +196,11 @@ public class WeaponStateManager : MonoBehaviour
         }
     }
 
+    public void playSwordSpecialAttackdown()
+    {
+        source.PlayOneShot(swordSpecialAttackSound);
+    }
+
     public void playDrawbackSound()
     {
         // Check if the current state is the Bow state
@@ -176,6 +217,14 @@ public class WeaponStateManager : MonoBehaviour
         if (currentState is WeaponSwordState)
         {
             ((WeaponSwordState)currentState).DetectColliders();
+        }
+    }
+
+    public void CheckSpecialHits()
+    {
+        if (currentState is WeaponSwordState)
+        {
+            ((WeaponSwordState)currentState).SpecialDetectColliders();
         }
     }
 

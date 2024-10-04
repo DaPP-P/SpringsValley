@@ -6,7 +6,7 @@ using UnityEngine.Events;
 //TODO: NEED TO FIGURE OUT WHATS GOING ON HERE.
 public class AnimationEventHelper : MonoBehaviour
 {
-    public UnityEvent OnAnimationEventTriggered, OnAttackPreformed;
+    public UnityEvent OnAnimationEventTriggered, OnAttackPreformed, OnSpecialAttackPreformed;
 
     public WeaponStateManager weaponStateManager;
 
@@ -20,6 +20,7 @@ public class AnimationEventHelper : MonoBehaviour
         else
         {
             OnAttackPreformed.AddListener(weaponStateManager.CheckHits);
+            OnSpecialAttackPreformed.AddListener(weaponStateManager.CheckSpecialHits);
             OnAnimationEventTriggered.AddListener(weaponStateManager.ResetAttack);
         }
     }
@@ -32,5 +33,10 @@ public class AnimationEventHelper : MonoBehaviour
     public void TriggerAttack()
     {
         OnAttackPreformed.Invoke();
+    }
+
+    public void TriggerSpecialAttack()
+    {
+        OnSpecialAttackPreformed.Invoke();
     }
 }

@@ -20,6 +20,8 @@ public class WeaponBowState : WeaponBaseState
     float specialTimer;
     float specialHoldDur = 1.2f;
 
+    public PlayerHealth playerHealth;
+
     private List<GameObject> hitObjects = new List<GameObject>();
 
     /* 
@@ -33,11 +35,15 @@ public class WeaponBowState : WeaponBaseState
 
         bowStats = weapon.currentWeaponInstance.GetComponent<BowStats>();
         bowAnimator = weapon.currentWeaponInstance.GetComponent<Animator>(); 
+        playerHealth = GameObject.Find("Main_Character").GetComponent<PlayerHealth>();
+
     }
 
     public override void UpdateState(WeaponStateManager weapon)
     {
-        followMouse();
+        if (!UIManager.isPaused) {
+            followMouse();
+        }
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -74,8 +80,8 @@ public class WeaponBowState : WeaponBaseState
             if (Time.time - timer > holdDur)
             {
                 timer = Time.time;
-                weapon.InstantiateArrowPrefab();
                 bowAnimator.SetTrigger("bowInterupt");
+                weapon.InstantiateArrowPrefab();
             }
         }
         else
@@ -87,6 +93,12 @@ public class WeaponBowState : WeaponBaseState
 
     public void bowSpecialAttack()
     {
+
+        //TODO: MAKE IT ONLY CHECK ONCE.
+        if (playerHealth.BasicCanDecreaseEngery(15) == false) {
+            return;
+        } else {
+
         float animationChange = 0.7f;
 
         if(Input.GetMouseButtonDown(1))
@@ -101,6 +113,7 @@ public class WeaponBowState : WeaponBaseState
             if (Time.time - timer > animationChange)
             {
                 bowAnimator.SetTrigger("bowShoot");
+                //playerHealth.DecreaseEnergy(15);
             }
 
             if (Time.time - specialTimer > specialHoldDur)
@@ -110,16 +123,18 @@ public class WeaponBowState : WeaponBaseState
                 weapon.InstantiateArrowPrefab(10);
                 weapon.InstantiateArrowPrefab(-10);
                 bowAnimator.SetTrigger("bowInterupt");
+                playerHealth.DecreaseEnergy(15);
             }
         }
         else
         {
             specialTimer = float.PositiveInfinity;
             bowAnimator.SetTrigger("bowInterupt");
-
+        }
         }
     }
 
+    // Simple Method for following the mouse.
     public void followMouse()
     {
         Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - weapon.hand.transform.position;
@@ -139,16 +154,16 @@ public class WeaponBowState : WeaponBaseState
         weapon.hand.transform.localScale = scale;
     }
 
+    // Simple method to check detection.
     public void DetectColliders()
     {
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(weapon.circleOrigin.position, weapon.radius))
         {
             HealthSystem healthSystem;
-            if ((healthSystem = collider.GetComponent<HealthSystem>()) != null) // && !hitObjects.Contains(collider.gameObject)
+           
+           if ((healthSystem = collider.GetComponent<HealthSystem>()) != null)
             {
-                Debug.Log("I hit " + collider.gameObject.name);
                 healthSystem.Damage(damageAmount, weapon.currentWeaponInstance);
-                hitObjects.Add(collider.gameObject);
             }
         }
     }

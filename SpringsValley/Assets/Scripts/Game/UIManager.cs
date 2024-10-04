@@ -7,20 +7,22 @@ public class UIManager : MonoBehaviour
     public GameObject uiCanvas; // Reference to your UI canvas
     public GameObject gameOverPanel; // Reference to your Game Over panel
 
-    public bool checkAlive;
+    public bool isAlive;
+
+    static public bool isPaused;
 
     void Start()
     {
         // Ensure the UI canvas is initially disabled
         uiCanvas.SetActive(false);
         gameOverPanel.SetActive(false);
-        checkAlive = true;
+        isAlive = true;
     }
 
     void Update()
     {
         // Check for Esc key press
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && isAlive)
         {
             // Toggle the visibility of the UI canvas
             TogglePauseMenu();
@@ -32,15 +34,6 @@ public class UIManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        if (HealthSystem.isDead && checkAlive)
-        {
-            Debug.Log("Player is dead");
-            checkAlive = false;
-            StartCoroutine(utility.DelayedAction(2f, () =>
-            {
-                ShowGameOverPanel();
-            }));
-        }
     }
 
     public void ShowGameOverPanel()
@@ -53,7 +46,7 @@ public class UIManager : MonoBehaviour
     void TogglePauseMenu()
     {
         // Check if the game is paused
-        bool isPaused = !uiCanvas.activeSelf;
+        isPaused = !uiCanvas.activeSelf;
 
         // Toggle the visibility of the UI canvas
         uiCanvas.SetActive(isPaused);
@@ -64,7 +57,6 @@ public class UIManager : MonoBehaviour
 
     public void ResumeButtonClicked()
     {
-        // Hide the UI canvas
         TogglePauseMenu();
     }
 

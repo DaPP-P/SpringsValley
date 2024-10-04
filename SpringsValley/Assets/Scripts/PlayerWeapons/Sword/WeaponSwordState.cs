@@ -25,6 +25,12 @@ public class WeaponSwordState : WeaponBaseState
 
     private Animator animator;
 
+    private GameObject swordPrefab; // Sword Prefab
+
+    public PlayerHealth playerHealth;
+
+
+
     /*
      * Setup needed when WeaponSwordState is loaded.
      */
@@ -39,9 +45,10 @@ public class WeaponSwordState : WeaponBaseState
         // Gets the needed components.
         swordStats = weapon.currentWeaponInstance.GetComponent<SwordStats>();
         swordAnimator = weapon.currentWeaponInstance.GetComponent<Animator>();    
-        weapon.weaponRenderer = weapon.currentWeaponInstance.GetComponent<SpriteRenderer>();
         playerControls = GameObject.Find("Main_Character").GetComponent<PlayerControls>();
         animator = GameObject.Find("Sprite").GetComponent<Animator>();
+        playerHealth = GameObject.Find("Main_Character").GetComponent<PlayerHealth>();
+
     }
 
     /*
@@ -50,14 +57,23 @@ public class WeaponSwordState : WeaponBaseState
     public override void UpdateState(WeaponStateManager weapon)
     {
         // Keeps track of where the mouse is.
-        followMouse();
+        if (!UIManager.isPaused) {
+            //followMouse();
+        }
 
         // Checks if the player switches weapon.
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {   
             // Destroys the current weapon instance and switches to the other weapon.
-            weapon.DestroyCurrentInstance();
             weapon.SwitchState(weapon.bowState);
+        }
+
+        if (weapon.CheckMovementDirection() == 1)
+        {
+            weapon.currentWeaponInstance.transform.SetParent(weapon.hand2);
+        } else if (weapon.CheckMovementDirection() == 2) {
+            weapon.currentWeaponInstance.transform.SetParent(weapon.hand);
+
         }
     }
 
@@ -70,9 +86,12 @@ public class WeaponSwordState : WeaponBaseState
         if (attackBlocked)
             return;
 
+        weapon.weaponLock = true;
+        followMouse();
+
         // As this is a normal attack set it to the normal damage amount.
         damageAmount = swordStats.leftClickDamageAmount;
-        playerControls.callDashAndAttack(); 
+        playerControls.callDashAndAttack(2, 0.15f); 
         weapon.playAttackSound();   
 
         // This is so the attack switches between attacking down and attacking up.
@@ -90,6 +109,8 @@ public class WeaponSwordState : WeaponBaseState
         isAttacking = true;
         attackCount += 1;
         weapon.StartCoroutine(DelayAttack(0.3f));
+
+        //defaultWeaponPosition();
     }
 
     /*
@@ -97,36 +118,34 @@ public class WeaponSwordState : WeaponBaseState
      */
     public void swordSpecialAttack()
     {
-
-        // if the attack is blocked, don't attack.
         if (attackBlocked)
             return;
-        
-        animator.SetBool("TornadoMode", true);
-        weapon.weaponRenderer.enabled = false;
 
-        weapon.StartCoroutine(utility.DelayedAction(2f, () =>
-            {
-                animator.SetBool("TornadoMode", false);
-            }));
+        if (playerHealth.CanDecreaseEnergy(15) == false) {
+            return;
+        } else {
 
-        weapon.StartCoroutine(utility.DelayedAction(.5f, () =>
-            {
-                weapon.weaponRenderer.enabled = true;
-            }));
-        
-        
+        weapon.weaponLock = true;
+        followMouse();
+
 
         // As this is a special attack set it to the special damage amount.
-        //damageAmount = swordStats.rightClickDamageAmount;
+        damageAmount = swordStats.rightClickDamageAmount;
 
-        // Plays the special sword attack animation.
-        //swordAnimator.SetTrigger("StabAttack");
+        // Plays the special sword attack animation
+        weapon.playSwordSpecialAttackdown();
+        swordAnimator.SetTrigger("powerAttack");
+        playerControls.callDashAndAttack(6, 0.4f); 
+
 
         // stops attacking and has a delay so attacking has a cool down.
-        //attackBlocked = true;
-        //isAttacking = true;
-        //weapon.StartCoroutine(DelayAttack(0.4f));
+        attackBlocked = true;
+        isAttacking = true;
+        weapon.StartCoroutine(DelayAttack(0.8f));
+
+
+        
+        }
     }
 
     /*
@@ -135,6 +154,7 @@ public class WeaponSwordState : WeaponBaseState
     private IEnumerator DelayAttack(float delayTime)
     {
         yield return new WaitForSeconds(delayTime);
+        defaultWeaponPosition();
         attackBlocked = false;
     }
 
@@ -165,15 +185,11 @@ public class WeaponSwordState : WeaponBaseState
         }
 
         weapon.hand.transform.localScale = scale;
+    }
 
-        if ( weapon.hand.transform.eulerAngles.z > 0 &&  weapon.hand.transform.eulerAngles.z < 180)
-        {
-            weapon.weaponRenderer.sortingOrder = weapon.characterRenderer.sortingOrder - 1;
-        } 
-        else 
-        {
-            weapon.weaponRenderer.sortingOrder = weapon.characterRenderer.sortingOrder + 1;
-        }
+    public void defaultWeaponPosition(){
+        weapon.hand.transform.localRotation = Quaternion.identity;
+        weapon.hand.transform.localScale = Vector3.one;
     }
 
     /*
@@ -183,6 +199,7 @@ public class WeaponSwordState : WeaponBaseState
     {
         hitObjects.Clear();
         isAttacking = false;
+        weapon.weaponLock = false;
         Debug.Log("reset attack");
     }
 
@@ -194,15 +211,30 @@ public class WeaponSwordState : WeaponBaseState
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(weapon.circleOrigin.position, weapon.radius))
         {
             HealthSystem healthSystem;
-            if ((healthSystem = collider.GetComponent<HealthSystem>()) != null) // && !hitObjects.Contains(collider.gameObject)
+            if ((healthSystem = collider.GetComponent<HealthSystem>()) != null && !hitObjects.Contains(collider.gameObject))
             {
-                //Debug.Log("I hit " + collider.gameObject.name);
-                //Debug.Log(weapon.currentWeaponInstance);
                 healthSystem.Damage(damageAmount, weapon.currentWeaponInstance);
                 hitObjects.Add(collider.gameObject);
    
             }
         }
     }
+
+     public void SpecialDetectColliders()
+    {
+        foreach (Collider2D collider in Physics2D.OverlapCircleAll(weapon.circleOrigin.position, weapon.radius))
+        {
+            HealthSystem healthSystem;
+            if ((healthSystem = collider.GetComponent<HealthSystem>()) != null && !hitObjects.Contains(collider.gameObject))
+            {
+                healthSystem.Damage(damageAmount, weapon.currentWeaponInstance);
+                healthSystem.onFire(2, weapon.currentWeaponInstance);
+                hitObjects.Add(collider.gameObject);
+   
+            }
+        }
+    }
+
+    // Make a method alongs the line of 
 
 }

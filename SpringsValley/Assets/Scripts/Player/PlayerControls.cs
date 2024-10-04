@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerControls : MonoBehaviour
 {
     private WeaponStateManager weaponStateManager; // Reference to WeaponStateManager needed for swapping weapons.
+    
+    private PlayerHealth playerHealth;
     private const float MOVE_SPEED = 7f;     // Player movement speed.
     [SerializeField] private LayerMask dashLayerMask;  // For the players dash.
     public Rigidbody2D rigidbody2D; // Players rigidbody.
@@ -26,6 +28,7 @@ public class PlayerControls : MonoBehaviour
 
     public AudioSource source;
     public AudioClip dashSound;
+    public AudioClip deathSound;
 
     /*
      * Setup needed when player is Awaken.
@@ -40,7 +43,8 @@ public class PlayerControls : MonoBehaviour
         // Getting components
         swordParent = GetComponentInChildren<SwordParent>();
         bowParent = GetComponentInChildren<BowParent>();
-        weaponStateManager = GetComponentInChildren<WeaponStateManager>();        
+        weaponStateManager = GetComponentInChildren<WeaponStateManager>();
+        playerHealth = GetComponent<PlayerHealth>();        
     }
 
     /*
@@ -84,31 +88,36 @@ public class PlayerControls : MonoBehaviour
         // Sets the rigidbody velocity in the direction and speed wanted.
         if (!movementFreeze) {
             rigidbody2D.velocity = moveDir * MOVE_SPEED;
-        } else {
-            rigidbody2D.velocity = gameHelperScript.returnMouseDirection(gameObject) * dashAttackSpeed;
+        } 
 
-        }
-        // If Space pressed make the player dash.
-        if (isDashButtonDown)
+    if (isDashButtonDown)
         {   
-            float dashAmount = 3f;
-            Vector3 dashPosition = transform.position + moveDir * dashAmount;
+            if (playerHealth.CanDecreaseEnergy(10)) 
+            {
+                float dashAmount = 3f;
+                Vector3 dashPosition = transform.position + moveDir * dashAmount;
             
-            // Uses a ray cast is check if the player will hit a wall before dash. If it will hit 
-            // a wall it sets the dash distance to only be up to the wall.
-            RaycastHit2D raycastHit2d = Physics2D.Raycast(transform.position,moveDir, dashAmount, dashLayerMask);
-            if (raycastHit2d.collider != null) {
-                dashPosition = raycastHit2d.point;
+                // Uses a ray cast is check if the player will hit a wall before dash. If it will hit 
+                // a wall it sets the dash distance to only be up to the wall.
+                RaycastHit2D raycastHit2d = Physics2D.Raycast(transform.position, moveDir, dashAmount, dashLayerMask);
+                if (raycastHit2d.collider != null) {
+                    dashPosition = raycastHit2d.point;
+                }
+
+                // Moves the player in the dash direction.
+                rigidbody2D.MovePosition(dashPosition);
+                isDashButtonDown = false;
+
+                // Starts the dash animation and plays dash sound.
+                source.PlayOneShot(dashSound);
+
+                StartCoroutine(DashAnimationCoroutine());
+            }    
+            else 
+            {
+                // Reset the dash button down if energy cannot be decreased
+                isDashButtonDown = false;
             }
-
-            // Moves the player in the dash direction.
-            rigidbody2D.MovePosition(dashPosition);
-            isDashButtonDown = false;
-
-            // Starts the dash animation and play dash sound.
-            source.PlayOneShot(dashSound);
-
-            StartCoroutine(DashAnimationCoroutine());
         }
     }
 
@@ -131,18 +140,20 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
-    public void callDashAndAttack(){
-        StartCoroutine(dashingWhileAttacking());
+    public void callDashAndAttack(int dashAmount, float waitTime){
+        StartCoroutine(dashingWhileAttacking(dashAmount, waitTime));
     }
 
     /* 
      * Handle the player moving forward while attacking.
      */
-    public IEnumerator dashingWhileAttacking(){
-        Debug.Log(gameHelperScript.returnMouseDirection(gameObject));
+    public IEnumerator dashingWhileAttacking(int dashAmount, float waitTime){
+
         movementFreeze = true;
+
+        rigidbody2D.velocity = gameHelperScript.returnMouseDirection(gameObject) * dashAmount;
         // Wait for 0.1 seconds
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(waitTime);
 
         // Stop the dash
         rigidbody2D.velocity = Vector2.zero;
@@ -154,14 +165,13 @@ public class PlayerControls : MonoBehaviour
      */
     private void HandleAttack()
     {
-
-        // If left click, call the AttackCoroutine.
+         // If left click, call the AttackCoroutine.
         if (Input.GetKey(KeyCode.Mouse0) && !isAttacking)
         {
             StartCoroutine(AttackCoroutine());
         }
 
-        // If right click, call the SpecialAttackCoroutine.
+         // If right click, call the SpecialAttackCoroutine.
         if (Input.GetKey(KeyCode.Mouse1) && !isAttacking)
         {
             StartCoroutine(SpecialAttackCoroutine());
@@ -204,6 +214,11 @@ public class PlayerControls : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
         trailRenderer.enabled = false;
+    }
+
+    public void playerDeath() {
+        animator.SetBool("isDead", true);
+        source.PlayOneShot(deathSound);
     }
 
 }
