@@ -59,7 +59,7 @@ public class HealthSystem : MonoBehaviour
             isAlive = false;
             Destroy(gameObject);
         }
-        
+
         currentHealth -= amount;
         damageIndication(amount, false);
     }
@@ -181,6 +181,9 @@ public class HealthSystem : MonoBehaviour
     }
 
     private IEnumerator fireTick (float duration, int amount) {
+        
+        yield return new WaitForSeconds(duration);
+        
         int damageCount = 0;
         while (damageCount < 5){
             BasicDamage(2);
