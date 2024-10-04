@@ -30,6 +30,9 @@ public class WeaponStateManager : MonoBehaviour
 
     protected GameObject activateWeaponSprite;
 
+    // Bool so the weapon cant be changed while attacking.
+    public bool weaponLock = false;
+
     /*
      * Setup needed when WeaponStateManager is loaded.
      */
@@ -54,9 +57,12 @@ public class WeaponStateManager : MonoBehaviour
      */
     public void SwitchState(WeaponBaseState state)
     {
-        currentState = state;
-        state.EnterState(this);
-        newState();
+        if (!weaponLock) {
+            DestroyCurrentInstance();
+            currentState = state;
+            state.EnterState(this);
+            newState();
+        }
     }
 
     public int CheckMovementDirection() {

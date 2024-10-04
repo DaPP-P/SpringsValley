@@ -54,6 +54,12 @@ public class HealthSystem : MonoBehaviour
 
     public void BasicDamage(int amount)
     {
+        // Checks if the object is dead
+        if (currentHealth < 1) {
+            isAlive = false;
+            Destroy(gameObject);
+        }
+        
         currentHealth -= amount;
         damageIndication(amount, false);
     }
@@ -171,13 +177,13 @@ public class HealthSystem : MonoBehaviour
         // So the sender can't find itself.
         if (sender.layer == gameObject.layer)
             return;
-        StartCoroutine(fireTick(0.2f, amount));
+        StartCoroutine(fireTick(0.5f, amount));
     }
 
     private IEnumerator fireTick (float duration, int amount) {
         int damageCount = 0;
         while (damageCount < 5){
-            BasicDamage(1);
+            BasicDamage(2);
             yield return new WaitForSeconds(duration);
             damageCount++;
             Debug.Log(damageCount);

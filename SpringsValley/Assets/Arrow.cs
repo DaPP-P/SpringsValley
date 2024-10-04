@@ -24,6 +24,14 @@ public class Arrow : MonoBehaviour
         {
             Debug.Log(hitInfo.name);
             damageAmount = 10;
+
+            // Check if the hit object is on the "Solid" layer
+            if (hitInfo.gameObject.layer == LayerMask.NameToLayer("Solid"))
+            {
+                Destroy(gameObject);  // Destroy this game object if hit object is on the "Solid" layer
+                return;  // Exit the method early to avoid applying damage or other logic
+            }
+
             // Attempt to get the HealthSystem component from the hit game object
             HealthSystem healthSystem = hitInfo.GetComponent<HealthSystem>();
             if (healthSystem != null)

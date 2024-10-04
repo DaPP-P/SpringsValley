@@ -65,7 +65,6 @@ public class WeaponSwordState : WeaponBaseState
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {   
             // Destroys the current weapon instance and switches to the other weapon.
-            weapon.DestroyCurrentInstance();
             weapon.SwitchState(weapon.bowState);
         }
 
@@ -87,6 +86,7 @@ public class WeaponSwordState : WeaponBaseState
         if (attackBlocked)
             return;
 
+        weapon.weaponLock = true;
         followMouse();
 
         // As this is a normal attack set it to the normal damage amount.
@@ -125,6 +125,7 @@ public class WeaponSwordState : WeaponBaseState
             return;
         } else {
 
+        weapon.weaponLock = true;
         followMouse();
 
 
@@ -141,6 +142,8 @@ public class WeaponSwordState : WeaponBaseState
         attackBlocked = true;
         isAttacking = true;
         weapon.StartCoroutine(DelayAttack(0.8f));
+
+
         
         }
     }
@@ -196,6 +199,7 @@ public class WeaponSwordState : WeaponBaseState
     {
         hitObjects.Clear();
         isAttacking = false;
+        weapon.weaponLock = false;
         Debug.Log("reset attack");
     }
 
