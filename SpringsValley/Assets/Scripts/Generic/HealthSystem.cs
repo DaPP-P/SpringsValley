@@ -55,7 +55,7 @@ public class HealthSystem : MonoBehaviour
     public void BasicDamage(int amount)
     {
         currentHealth -= amount;
-        damageIndication(amount);
+        damageIndication(amount, false);
     }
 
 
@@ -91,11 +91,11 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
-    protected void damageIndication(int damageAmount)
+    protected void damageIndication(int damageAmount, bool isKnockback = true)
     {
         spriteRenderer.color = Color.red;
         DamagePopup.Create(transform.position, damageAmount);
-        if (knockbackSender != null && knockbackSender != testobject) {
+        if (knockbackSender != null && knockbackSender != testobject && isKnockback) {
             Knockback(knockbackForce, knockbackSender.transform.position);
         }
 
@@ -166,13 +166,15 @@ public class HealthSystem : MonoBehaviour
     /**
      ** Method to set on fire
      */
-    public void onFire(int amount) {
+    public void onFire(int amount, GameObject sender) 
+    {
+        // So the sender can't find itself.
+        if (sender.layer == gameObject.layer)
+            return;
         StartCoroutine(fireTick(0.2f, amount));
     }
 
     private IEnumerator fireTick (float duration, int amount) {
-
-
         int damageCount = 0;
         while (damageCount < 5){
             BasicDamage(1);

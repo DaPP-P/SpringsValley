@@ -214,6 +214,14 @@ public class WeaponStateManager : MonoBehaviour
         }
     }
 
+    public void CheckSpecialHits()
+    {
+        if (currentState is WeaponSwordState)
+        {
+            ((WeaponSwordState)currentState).SpecialDetectColliders();
+        }
+    }
+
     public void ResetAttack()
     {
         if (currentState is WeaponSwordState)

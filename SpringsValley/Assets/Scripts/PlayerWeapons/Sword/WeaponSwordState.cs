@@ -210,7 +210,21 @@ public class WeaponSwordState : WeaponBaseState
             if ((healthSystem = collider.GetComponent<HealthSystem>()) != null && !hitObjects.Contains(collider.gameObject))
             {
                 healthSystem.Damage(damageAmount, weapon.currentWeaponInstance);
-                healthSystem.onFire(2);
+                hitObjects.Add(collider.gameObject);
+   
+            }
+        }
+    }
+
+     public void SpecialDetectColliders()
+    {
+        foreach (Collider2D collider in Physics2D.OverlapCircleAll(weapon.circleOrigin.position, weapon.radius))
+        {
+            HealthSystem healthSystem;
+            if ((healthSystem = collider.GetComponent<HealthSystem>()) != null && !hitObjects.Contains(collider.gameObject))
+            {
+                healthSystem.Damage(damageAmount, weapon.currentWeaponInstance);
+                healthSystem.onFire(2, weapon.currentWeaponInstance);
                 hitObjects.Add(collider.gameObject);
    
             }
