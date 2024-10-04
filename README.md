@@ -9,6 +9,38 @@ Controls:
 * left click for normal attack
 * right click for special attack
 
+## Fixes and Taks For 1.2 5/10
+
+### Bugs
+
+Weapon Problems:
+ - Redo the player weapons so most of the stats are in the weapon stats Scripts.
+ -  Fix the bow timings.
+ -  Fix the position of the sword when switching from the bow.
+ -  Fix the bow not visually following mouse sometimes.
+ -  When Sword Special attacking into a wall, currently bounces off I want to just stop.
+
+ ## Main Features
+
+Skeleton:
+- Add death sound
+- Add attack sound
+- Add skeleton drop on death
+
+UI:
+ - Can be a lot preitter
+
+
+## Fixes and Tasks for 2.0
+
+Skeleton:
+- A* for Skeleton.
+- States and attacking.
+- Basically completeing rewrtie how sword weilding Skeletons Attack.
+- 
+
+
+## Old Ideas
 
 ## Currently Working On
 Plan for the rest of the week:
