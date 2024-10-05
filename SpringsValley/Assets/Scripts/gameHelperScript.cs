@@ -27,4 +27,14 @@ public class gameHelperScript : MonoBehaviour
         return difference;
     }
 
+    public void WaitForSecondsAndResume(float waitTime)
+    {
+        StartCoroutine(WaitCoroutine(waitTime));
+    }
+
+    private IEnumerator WaitCoroutine(float waitTime)
+    {
+        // Wait for the specified number of seconds
+        yield return new WaitForSeconds(waitTime);
+    }
 }
