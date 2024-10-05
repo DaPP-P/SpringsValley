@@ -27,12 +27,7 @@ public class HealthSystem : MonoBehaviour
 
     public GameObject player;
 
-    // Enemey Audio
-     public AudioSource source;
-    public AudioClip deathSound;
-    public AudioClip damageSound;
-
-
+    
     /** Start Method
      ** Initialize Health System, items to deal with taking damage, rigidbody componet, and skeleton state manager.
      * TODO: Make it so taking damage doesn't need to be initialised like this and creates a new object each time. 
@@ -60,7 +55,6 @@ public class HealthSystem : MonoBehaviour
     {
         // Checks if the object is dead
         if (currentHealth < 1) {
-            source.PlayOneShot(deathSound);
             isAlive = false;
             Destroy(gameObject);
         }
@@ -84,7 +78,6 @@ public class HealthSystem : MonoBehaviour
 
         // Checks if the object is dead
         if (currentHealth < 1) {
-            source.PlayOneShot(deathSound);
             isAlive = false;
             Destroy(gameObject);
         }
@@ -102,9 +95,8 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
-    protected void damageIndication(int damageAmount, bool isKnockback = true)
+    protected virtual void damageIndication(int damageAmount, bool isKnockback = true)
     {
-        source.PlayOneShot(damageSound);
         spriteRenderer.color = Color.red;
         DamagePopup.Create(transform.position, damageAmount);
         if (knockbackSender != null && knockbackSender != testobject && isKnockback) {
@@ -195,7 +187,6 @@ public class HealthSystem : MonoBehaviour
             BasicDamage(2);
             yield return new WaitForSeconds(duration);
             damageCount++;
-            Debug.Log(damageCount);
         }
     }    
 

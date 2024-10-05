@@ -28,6 +28,7 @@ public class PlayerHealth : HealthSystem
         knockbackSender = sender;
 
         if (isAlive) {
+        Debug.Log("FUCK YOU");
         damageIndication(amount);
         }
 
@@ -88,8 +89,9 @@ public class PlayerHealth : HealthSystem
         }
     }
 
-    protected void damageIndication(int damageAmount)
+    protected void damageIndication(int damageAmount, bool isKnockback = true)
     {
+        Debug.Log("playerhealth eee");
         source.PlayOneShot(damageSound);
         spriteRenderer.color = Color.red;
         DamagePopup.Create(transform.position, damageAmount);

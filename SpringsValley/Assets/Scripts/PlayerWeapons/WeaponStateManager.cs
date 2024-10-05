@@ -77,11 +77,9 @@ public class WeaponStateManager : MonoBehaviour
 
         if (rigidbody2D.velocity.y > 0)
         {
-            Debug.Log("Moving Up");
         }
         else if (rigidbody2D.velocity.y < 0)
         {
-            Debug.Log("Moving Down");
         }
 
         return 0;
