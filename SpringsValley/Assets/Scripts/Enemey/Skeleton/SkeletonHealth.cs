@@ -10,12 +10,15 @@ public class SkeletonHealth : HealthSystem
     public AudioClip deathSound;
     public AudioClip damageSound;
 
+    public GameObject coinPrefab;
+    public Transform coinSpawnPoint;
+
     void Start()
     {
         // Rigidbody to set velocity.
         rb = GetComponent<Rigidbody2D>();
-        maxHealth = 200;
-        currentHealth = 200;
+        maxHealth = 50;
+        currentHealth = 50;
     }
 
     public void onDeath() {
@@ -24,9 +27,19 @@ public class SkeletonHealth : HealthSystem
 
     void Update()
    {
-    if (currentHealth < 1) {
+
+    // Checks if the skeleton is dead.
+    if (currentHealth < 1 && isAlive) {
         currentHealth = 0;
-        isAlive = false;    
+        isAlive = false;
+
+        //create a prefab called coin
+        if (coinPrefab != null)
+        {
+            Instantiate(coinPrefab, coinSpawnPoint.position, Quaternion.identity);
+        }
+
+        // Does death things
         source.PlayOneShot(deathSound);
         Destroy(gameObject);
     }
@@ -34,12 +47,6 @@ public class SkeletonHealth : HealthSystem
 
     public void BasicDamage(int amount)
     {
-        // Checks if the object is dead
-        if (currentHealth - amount < 1) {
-            source.PlayOneShot(deathSound);
-            isAlive = false;
-            Destroy(gameObject);
-        }
         currentHealth -= amount;
         Debug.Log("basicDamage");
         damageIndication(amount, false);

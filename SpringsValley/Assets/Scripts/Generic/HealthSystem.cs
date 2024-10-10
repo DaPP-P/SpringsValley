@@ -59,11 +59,6 @@ public class HealthSystem : MonoBehaviour
 
     public void BasicDamage(int amount)
     {
-        // Checks if the object is dead
-        if (currentHealth < 1) {
-            isAlive = false;
-            Destroy(gameObject);
-        }
         currentHealth -= amount;
         damageIndication(amount, false);
     }
@@ -82,13 +77,8 @@ public class HealthSystem : MonoBehaviour
         // sets currentHealth to currentHealth - damageTaken
         currentHealth -= amount;
 
-        // Checks if the object is dead
-        if (currentHealth < 1) {
-            isAlive = false;
-            Destroy(gameObject);
-        }
         // Gives knockback to the hit object. Else kills and destroys the object.
-        else if (currentHealth > 0)
+        if (currentHealth > 0)
         {
             isAlive = true;
 
