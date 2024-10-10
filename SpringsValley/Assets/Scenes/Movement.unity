@@ -1087,7 +1087,7 @@ PrefabInstance:
     - target: {fileID: 1865842046762078907, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: deathSound
       value: 
-      objectReference: {fileID: 8300000, guid: 6693ec5a0b385ac4893c93f7c9ea2f8c, type: 3}
+      objectReference: {fileID: 8300000, guid: d46e81b2e9f695449824df6e840aa0df, type: 3}
     - target: {fileID: 1865842046762078907, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: damageSound
       value: 
@@ -1148,6 +1148,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5865464505602859501, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5865464505602859503, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
       propertyPath: player
       value: 
@@ -1176,7 +1180,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skeleton
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5865464505602859503, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7029940a48edbc746a48558d833f8ed5, type: 3}
 --- !u!1 &561247452
 GameObject:
@@ -18634,9 +18639,6 @@ MonoBehaviour:
   source: {fileID: 0}
   deathSound: {fileID: 0}
   damageSound: {fileID: 0}
-  source: {fileID: 0}
-  deathSound: {fileID: 0}
-  damageSound: {fileID: 0}
 --- !u!66 &1803293495
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -19230,9 +19232,6 @@ MonoBehaviour:
   knockbackSender: {fileID: 0}
   spriteRenderer: {fileID: 248967763437528438}
   player: {fileID: 248967765016426471}
-  source: {fileID: 0}
-  deathSound: {fileID: 0}
-  damageSound: {fileID: 0}
 --- !u!4 &248967765016426494
 Transform:
   m_ObjectHideFlags: 0
@@ -19271,9 +19270,6 @@ MonoBehaviour:
   knockbackSender: {fileID: 0}
   spriteRenderer: {fileID: 0}
   player: {fileID: 0}
-  source: {fileID: 0}
-  deathSound: {fileID: 0}
-  damageSound: {fileID: 0}
 --- !u!61 &2227509450867656338
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -19796,9 +19792,6 @@ MonoBehaviour:
   knockbackSender: {fileID: 0}
   spriteRenderer: {fileID: 3235798092719194695}
   player: {fileID: 0}
-  source: {fileID: 8631681132613109929}
-  deathSound: {fileID: 0}
-  damageSound: {fileID: 8300000, guid: 8b23b175a78d6b5458322e3a6c9905d0, type: 3}
   uiManager: {fileID: 1165836276}
   currentEnergy: 100
   maxEnergy: 100

@@ -36,7 +36,13 @@ public class HealthSystem : MonoBehaviour
     {
         // Rigidbody to set velocity.
         rb = GetComponent<Rigidbody2D>();
+   }
 
+   void Update()
+   {
+    if (currentHealth < 1) {
+        Debug.Log("eee");
+    }
    }
 
     

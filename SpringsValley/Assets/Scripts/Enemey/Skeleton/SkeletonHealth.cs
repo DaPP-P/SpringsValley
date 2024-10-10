@@ -10,14 +10,32 @@ public class SkeletonHealth : HealthSystem
     public AudioClip deathSound;
     public AudioClip damageSound;
 
+    void Start()
+    {
+        // Rigidbody to set velocity.
+        rb = GetComponent<Rigidbody2D>();
+        maxHealth = 200;
+        currentHealth = 200;
+    }
+
     public void onDeath() {
 
     }
 
+    void Update()
+   {
+    if (currentHealth < 1) {
+        currentHealth = 0;
+        isAlive = false;    
+        source.PlayOneShot(deathSound);
+        Destroy(gameObject);
+    }
+   }
+
     public void BasicDamage(int amount)
     {
         // Checks if the object is dead
-        if (currentHealth < 1) {
+        if (currentHealth - amount < 1) {
             source.PlayOneShot(deathSound);
             isAlive = false;
             Destroy(gameObject);
@@ -42,13 +60,7 @@ public class SkeletonHealth : HealthSystem
         damageIndication(amount);
         }
 
-        // Checks if the object is dead
-        if ((currentHealth - amount < 1) && isAlive) {
-            currentHealth = 0;
-            isAlive = false;    
-           source.PlayOneShot(deathSound);
-
-        } else if (currentHealth > 0)
+        if (currentHealth > 0)
         {
             currentHealth -= amount;
             isAlive = true;
@@ -57,7 +69,6 @@ public class SkeletonHealth : HealthSystem
 
     protected override void damageIndication(int damageAmount, bool isKnockback = true)
     {
-        Debug.Log("WTF");
         source.PlayOneShot(damageSound);
         spriteRenderer.color = Color.red;
         DamagePopup.Create(transform.position, damageAmount);
