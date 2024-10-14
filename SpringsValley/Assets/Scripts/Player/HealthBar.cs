@@ -8,7 +8,9 @@ public class HealthBar : MonoBehaviour
 {
 
     public PlayerHealth playerHealth;
-    public TextMeshProUGUI  healthText;
+    public TextMeshProUGUI healthText;
+
+    public TextMeshProUGUI cointText; 
     public Image healthBar;
 
     public Image energyBar;
@@ -36,6 +38,8 @@ public class HealthBar : MonoBehaviour
         
 
         healthText.text = "Health: " + playerHealth.currentHealth;
+        cointText.text = game.coinCount.ToString() + " x ";
+        
         HealthBarFiller();
         EnergyBarFiller();
         ColourChange();
