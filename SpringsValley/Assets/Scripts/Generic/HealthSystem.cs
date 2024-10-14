@@ -13,6 +13,10 @@ public class HealthSystem : MonoBehaviour
     // bool to check if the object is alive
     public bool isAlive = true;
 
+    // Sprite for on fire
+    public Sprite spriteOnFire;
+    public Sprite orignalSprite;
+
     // health stats
     [SerializeField]
     public int currentHealth, maxHealth;
@@ -171,6 +175,11 @@ public class HealthSystem : MonoBehaviour
         // So the sender can't find itself.
         if (sender.layer == gameObject.layer)
             return;
+
+        if (spriteOnFire != null) {
+           this.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = spriteOnFire;
+        }
+        
         StartCoroutine(fireTick(0.5f, amount));
     }
 
@@ -183,6 +192,10 @@ public class HealthSystem : MonoBehaviour
             BasicDamage(2);
             yield return new WaitForSeconds(duration);
             damageCount++;
+        }
+
+        if (orignalSprite != null) {
+           this.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = orignalSprite;
         }
     }    
 
