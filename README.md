@@ -29,6 +29,7 @@ Skeleton:
 
 UI:
  - Can be a lot preitter
+ - Unlink the colours of damage/health/coins
 
 
 ## Fixes and Tasks for 2.0
@@ -37,7 +38,7 @@ Skeleton:
 - A* for Skeleton.
 - States and attacking.
 - Basically completeing rewrtie how sword weilding Skeletons Attack.
-- 
+  
 
 
 ## Old Ideas
