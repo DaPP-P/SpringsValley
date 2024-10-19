@@ -10,15 +10,20 @@ public class SkeletonHealth : HealthSystem
     public AudioClip deathSound;
     public AudioClip damageSound;
 
+    // Coin Spawning
     public GameObject coinPrefab;
     public Transform coinSpawnPoint;
+
+    // Skeleton States
+    private SkeletonStateManager skeletonStateManager;
 
     void Start()
     {
         // Rigidbody to set velocity.
         rb = GetComponent<Rigidbody2D>();
-        maxHealth = 50;
-        currentHealth = 50;
+        maxHealth = 100;
+        currentHealth = maxHealth;
+        skeletonStateManager = GetComponent<SkeletonStateManager>();
     }
 
     public void onDeath() {
@@ -76,16 +81,21 @@ public class SkeletonHealth : HealthSystem
 
     protected override void damageIndication(int damageAmount, bool isKnockback = true)
     {
+
+        skeletonStateManager.SwitchState(skeletonStateManager.nothingState);
+
         source.PlayOneShot(damageSound);
         spriteRenderer.color = Color.red;
         DamagePopup.Create(transform.position, damageAmount);
         if (knockbackSender != null && knockbackSender != testobject && isKnockback) {
             Knockback(knockbackForce, knockbackSender.transform.position);
+            
         }
 
         StartCoroutine(utility.DelayedAction(0.2f, () =>
         {
             spriteRenderer.color = Color.white;
+            skeletonStateManager.SwitchState(skeletonStateManager.pursuingState);
         }));
     }
 
