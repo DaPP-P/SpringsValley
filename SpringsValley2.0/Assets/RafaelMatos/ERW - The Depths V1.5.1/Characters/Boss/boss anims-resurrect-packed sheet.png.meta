@@ -1,0 +1,1443 @@
+fileFormatVersion: 2
+guid: b99f5be0da42cc941bc4e1bd79ebf7c0
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1449
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2834ba576e16a74ab62effd1c3f1df2
+      internalID: -666022485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_1
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 1449
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eec8b727e6b300741a95801d4fdaffd0
+      internalID: 890922513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_2
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 1449
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efa06433e1a1df946a464fe132d93fb3
+      internalID: 1778374661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_3
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 1449
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d3e1b461f92c7e44bd87ead0231f633
+      internalID: -1623362802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_4
+      rect:
+        serializedVersion: 2
+        x: 1404
+        y: 1449
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29f0ab89980c2e24b8342e27ad8f722f
+      internalID: 973360070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_5
+      rect:
+        serializedVersion: 2
+        x: 1755
+        y: 1449
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fd58aea85583ad478d9b4ae5ab1313a
+      internalID: -1861101469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_6
+      rect:
+        serializedVersion: 2
+        x: 2106
+        y: 1449
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 095dc981036c75f4bbadbd339801f87b
+      internalID: -1543985770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_7
+      rect:
+        serializedVersion: 2
+        x: 2457
+        y: 1449
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cf438e57fff0f34eba18190f3020122
+      internalID: 1402689151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1242
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d119bedfe4b75504f92c08f066ea387d
+      internalID: 721769250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_9
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 1242
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf24cc7462fe10d4488f7c2ff9b40b42
+      internalID: 755085650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_10
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 1242
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e00bc33575f8b4449bbec38ede08905b
+      internalID: 1795666857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_11
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 1242
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c412cce797825d9499f0970b3b4f67a9
+      internalID: -40860501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_12
+      rect:
+        serializedVersion: 2
+        x: 1404
+        y: 1242
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f1cf04cd56d6d24c9e8e974f0dff9e7
+      internalID: 2125417135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_13
+      rect:
+        serializedVersion: 2
+        x: 1755
+        y: 1242
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63ae214ca52575d449e3894a98d24383
+      internalID: 2102368137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_14
+      rect:
+        serializedVersion: 2
+        x: 2106
+        y: 1242
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33195cec1fd3e2a4989257d50e8af1a2
+      internalID: -14832485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_15
+      rect:
+        serializedVersion: 2
+        x: 2457
+        y: 1242
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fddfc1d91f15fdd49839baca69589525
+      internalID: -54504831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1035
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c59f119481ee98447b3a670eeee663d9
+      internalID: 1586025497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_17
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 1035
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb169cfdea49ecb47a5572720868c91d
+      internalID: -207565437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_18
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 1035
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acf15bf84ad39b84f9efea8981e372c8
+      internalID: -1893228315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_19
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 1035
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8113f181d3a50bd41b213d3d3b8b5049
+      internalID: 592408067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_20
+      rect:
+        serializedVersion: 2
+        x: 1404
+        y: 1035
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20ef4cb5e4dc2524b93e5154f5d34dbd
+      internalID: -821807220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_21
+      rect:
+        serializedVersion: 2
+        x: 1755
+        y: 1035
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a8c27d733234c84382572ac55f33a1e
+      internalID: 414108864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_22
+      rect:
+        serializedVersion: 2
+        x: 2106
+        y: 1035
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d8ef89bd577d5146a5652f29eccfcdd
+      internalID: -1003194339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_23
+      rect:
+        serializedVersion: 2
+        x: 2457
+        y: 1035
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f873e60f968db2344a937f688e6c00d3
+      internalID: -2108655194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 828
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2767cacdb28f22a4c9861e15d579a3e8
+      internalID: -233124256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_25
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 828
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 294d5e75b54a1e0428c3e25d5b2d5fb9
+      internalID: -1125967034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_26
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 828
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acffdcf217791194c9f0dbe10471a517
+      internalID: -1148439601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_27
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 828
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4896f659d26e7e9428b7b8535471b441
+      internalID: 1242930398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_28
+      rect:
+        serializedVersion: 2
+        x: 1404
+        y: 828
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33087df651bc9e341aa72825eb9b9d1f
+      internalID: 857551681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_29
+      rect:
+        serializedVersion: 2
+        x: 1755
+        y: 828
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9f331e406a15454499864805972ed1e
+      internalID: -1877185817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_30
+      rect:
+        serializedVersion: 2
+        x: 2106
+        y: 828
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23998409bf345e54f9566c96e9e17b23
+      internalID: 774246052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_31
+      rect:
+        serializedVersion: 2
+        x: 2457
+        y: 828
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f23abf4ba8563e047a6efc2b339a4add
+      internalID: -1903262727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 621
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c3d7c83eb946c4408d98325489e3bab
+      internalID: -1402327149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_33
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 621
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b52d0eb44d94a5c4ab6594d3e57b9e7d
+      internalID: 317359151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_34
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 621
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d19f2f0965d3af3418a9eb9767f69ff4
+      internalID: 1860883468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_35
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 621
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca0d2ef7321d3a445817190861a4788a
+      internalID: -1472885752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_36
+      rect:
+        serializedVersion: 2
+        x: 1404
+        y: 621
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e68f90786efdf44db53ea4725cbb393
+      internalID: 111099294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_37
+      rect:
+        serializedVersion: 2
+        x: 1755
+        y: 621
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 568a6f415c2a3554cac4b32e28605c3e
+      internalID: 2057074906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_38
+      rect:
+        serializedVersion: 2
+        x: 2106
+        y: 621
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01ba0a3de43566b4992937c0998adf85
+      internalID: 759057674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_39
+      rect:
+        serializedVersion: 2
+        x: 2457
+        y: 621
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75587fab63ceb2743a278717f563c18a
+      internalID: -634747635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 414
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d033e4286410a3c4b924eb4789d82cc5
+      internalID: 236893376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_41
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 414
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 924cafbc4ca776543a1b515b0d1b6587
+      internalID: 1884731126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_42
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 414
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51940f702beb28f44b576999dfabb3b9
+      internalID: -1952533974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_43
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 414
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be823249033379e4989c47000f42abca
+      internalID: 577645026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_44
+      rect:
+        serializedVersion: 2
+        x: 1404
+        y: 414
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00b33a2953c36f04586547ac86463154
+      internalID: 2050383436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_45
+      rect:
+        serializedVersion: 2
+        x: 1755
+        y: 414
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1012be3ee5d7e41489b07389f2e2ec5e
+      internalID: -1309594036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_46
+      rect:
+        serializedVersion: 2
+        x: 2106
+        y: 414
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fba9a844b4fb43942a19ce4cbb75e62b
+      internalID: -567536183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_47
+      rect:
+        serializedVersion: 2
+        x: 2457
+        y: 414
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 717edf22fc0f4c542b7ec0573f252ca9
+      internalID: -554381923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_48
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 207
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c4db9b409207d549a87c02efc4f91f6
+      internalID: 793210144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_49
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 207
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 196ad2aa7530ac54cb2ff33e6ef3b9ac
+      internalID: 699019328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_50
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 207
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3ecba3c93010ee48984d81ccb403de3
+      internalID: 957925289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_51
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 207
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8eac9cd68dab3e64bb8980e21a05fd1a
+      internalID: -662831026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_52
+      rect:
+        serializedVersion: 2
+        x: 1404
+        y: 207
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f3c908aef2e27146a30f6e5e9057458
+      internalID: 649704816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_53
+      rect:
+        serializedVersion: 2
+        x: 1755
+        y: 207
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e08d44ba1fd765b4ea760d18a8a19e17
+      internalID: 221685563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_54
+      rect:
+        serializedVersion: 2
+        x: 2106
+        y: 207
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9d22b9d58a0a064b9564071c1bb506f
+      internalID: 1167084393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_55
+      rect:
+        serializedVersion: 2
+        x: 2457
+        y: 207
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da2fdbc054ef5c84ebcb1d697959965a
+      internalID: -1041647827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_56
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21b3d962bd010dd4b8601ce55c202415
+      internalID: -452589765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_57
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 0
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46ce5eaeab148004a9e3ac442f247248
+      internalID: 980714542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_58
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 0
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eabeb124650f48942aca86b751b40f21
+      internalID: 2042519983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss anims-resurrect-packed sheet_59
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 0
+        width: 351
+        height: 207
+      alignment: 9
+      pivot: {x: 0.44, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70ae441ae92de1f4bb4e834d0c3bec08
+      internalID: -1558175054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      boss anims-resurrect-packed sheet_0: -666022485
+      boss anims-resurrect-packed sheet_1: 890922513
+      boss anims-resurrect-packed sheet_10: 1795666857
+      boss anims-resurrect-packed sheet_11: -40860501
+      boss anims-resurrect-packed sheet_12: 2125417135
+      boss anims-resurrect-packed sheet_13: 2102368137
+      boss anims-resurrect-packed sheet_14: -14832485
+      boss anims-resurrect-packed sheet_15: -54504831
+      boss anims-resurrect-packed sheet_16: 1586025497
+      boss anims-resurrect-packed sheet_17: -207565437
+      boss anims-resurrect-packed sheet_18: -1893228315
+      boss anims-resurrect-packed sheet_19: 592408067
+      boss anims-resurrect-packed sheet_2: 1778374661
+      boss anims-resurrect-packed sheet_20: -821807220
+      boss anims-resurrect-packed sheet_21: 414108864
+      boss anims-resurrect-packed sheet_22: -1003194339
+      boss anims-resurrect-packed sheet_23: -2108655194
+      boss anims-resurrect-packed sheet_24: -233124256
+      boss anims-resurrect-packed sheet_25: -1125967034
+      boss anims-resurrect-packed sheet_26: -1148439601
+      boss anims-resurrect-packed sheet_27: 1242930398
+      boss anims-resurrect-packed sheet_28: 857551681
+      boss anims-resurrect-packed sheet_29: -1877185817
+      boss anims-resurrect-packed sheet_3: -1623362802
+      boss anims-resurrect-packed sheet_30: 774246052
+      boss anims-resurrect-packed sheet_31: -1903262727
+      boss anims-resurrect-packed sheet_32: -1402327149
+      boss anims-resurrect-packed sheet_33: 317359151
+      boss anims-resurrect-packed sheet_34: 1860883468
+      boss anims-resurrect-packed sheet_35: -1472885752
+      boss anims-resurrect-packed sheet_36: 111099294
+      boss anims-resurrect-packed sheet_37: 2057074906
+      boss anims-resurrect-packed sheet_38: 759057674
+      boss anims-resurrect-packed sheet_39: -634747635
+      boss anims-resurrect-packed sheet_4: 973360070
+      boss anims-resurrect-packed sheet_40: 236893376
+      boss anims-resurrect-packed sheet_41: 1884731126
+      boss anims-resurrect-packed sheet_42: -1952533974
+      boss anims-resurrect-packed sheet_43: 577645026
+      boss anims-resurrect-packed sheet_44: 2050383436
+      boss anims-resurrect-packed sheet_45: -1309594036
+      boss anims-resurrect-packed sheet_46: -567536183
+      boss anims-resurrect-packed sheet_47: -554381923
+      boss anims-resurrect-packed sheet_48: 793210144
+      boss anims-resurrect-packed sheet_49: 699019328
+      boss anims-resurrect-packed sheet_5: -1861101469
+      boss anims-resurrect-packed sheet_50: 957925289
+      boss anims-resurrect-packed sheet_51: -662831026
+      boss anims-resurrect-packed sheet_52: 649704816
+      boss anims-resurrect-packed sheet_53: 221685563
+      boss anims-resurrect-packed sheet_54: 1167084393
+      boss anims-resurrect-packed sheet_55: -1041647827
+      boss anims-resurrect-packed sheet_56: -452589765
+      boss anims-resurrect-packed sheet_57: 980714542
+      boss anims-resurrect-packed sheet_58: 2042519983
+      boss anims-resurrect-packed sheet_59: -1558175054
+      boss anims-resurrect-packed sheet_6: -1543985770
+      boss anims-resurrect-packed sheet_7: 1402689151
+      boss anims-resurrect-packed sheet_8: 721769250
+      boss anims-resurrect-packed sheet_9: 755085650
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

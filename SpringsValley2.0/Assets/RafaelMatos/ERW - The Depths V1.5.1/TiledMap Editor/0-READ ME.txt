@@ -1,0 +1,16 @@
+>In order to make the auto-tile work for walls with 2 tiles or more of hight:
+1 - First you use the terrain brush to draw the top section of the wall
+2 - Once you've finished drawing, press CTRL+M to fulfill the rest of the wall
+
+
+**There are three rules per tileset. 
+>The first rule cleans all the generated tiles supported in the autotile(automapping) and reset the top section of the wall to its initial state. 
+>The second rule, which is the actual autotile that completes the wall, uses the top section of the wall to place the rest of the wall. 
+>The third rule randomly replaces wall tiles with variations.
+
+
+*Don't use 'Automapping while drawing'. It doesn't work for my rules. You have to draw it first and then press CTRL+M and it's done.
+
+>Great offical channels to learn more about Tiled
+-Tiled forum: https://discourse.mapeditor.org/
+-Discord: https://discord.gg/39wbTv7
