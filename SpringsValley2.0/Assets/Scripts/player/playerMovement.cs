@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class playerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
 
     private const float MOVE_SPEED = 3f;     // Player movement speed.
