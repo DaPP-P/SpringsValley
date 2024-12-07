@@ -37059,6 +37059,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5865690466472679962, guid: 11414cde4596b9a4a95b9944ea8ec87a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1333808286}
+    - targetCorrespondingSourceObject: {fileID: 5865690466472679962, guid: 11414cde4596b9a4a95b9944ea8ec87a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1333808288}
   m_SourcePrefab: {fileID: 100100000, guid: 11414cde4596b9a4a95b9944ea8ec87a, type: 3}
 --- !u!1001 &1302655841
 PrefabInstance:
@@ -37224,6 +37227,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sortingOrderBase: 500
   offset: -0.7
+--- !u!114 &1333808288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333808282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 444193b81a866594c8807db8a9cea69e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObject: {fileID: 1409179275}
 --- !u!1001 &1338230619
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37525,6 +37541,8 @@ MonoBehaviour:
   rigidbody2D: {fileID: 1409179277}
   animator: {fileID: 1333808284}
   spriteRenderer: {fileID: 0}
+  isAttacking: 0
+  attackDelay: 0.6
 --- !u!61 &1409179279
 BoxCollider2D:
   m_ObjectHideFlags: 0
