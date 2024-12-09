@@ -87,6 +87,14 @@ public class PlayerMovement : MonoBehaviour
         if (!isAttacking)
         {
             isAttacking = true;
+            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorldPosition.z = 0;
+            Vector3 playerPosition = transform.position;
+            if (mouseWorldPosition.x < playerPosition.x) {
+                spriteRenderer.flipX = true; // Face left.
+            } else if (mouseWorldPosition.x > playerPosition.x) {
+                spriteRenderer.flipX = false; // Face right.
+            }
             ChangeAnimationState(PLAYER_ATTACK1);
             Invoke("AttackComplete", attackDelay); // Reset attack state after delay.
         }
