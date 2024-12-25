@@ -1,9 +1,10 @@
 using UnityEngine;
 
-public class CoinScript : MonoBehaviour
+public class ItemCollection : MonoBehaviour
 {
 
-    public Animator animator;
+    public GameObject collectableItem;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -20,15 +21,14 @@ public class CoinScript : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            animator.SetTrigger("PickUp");
-            PlayerLoot.IncreaseItem("coin", 1);
-            Debug.Log(PlayerLoot.GetItemAmount("coin"));
+            PlayerLoot.IncreaseItem("corn", 1);
+            Debug.Log(PlayerLoot.GetItemAmount("corn"));
             Invoke("pickupComplete", 0.2f); // Reset attack state after delay.
         }
     }
 
     private void pickupComplete()
     {
-        Destroy(gameObject);
+        Destroy(collectableItem);
     }
 }
