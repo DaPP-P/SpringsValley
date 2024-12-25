@@ -21,6 +21,8 @@ public class CoinScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             animator.SetTrigger("PickUp");
+            PlayerLoot.coinIncrease(1);
+            Debug.Log(PlayerLoot.getCoinAmount());
         }
     }
 }
