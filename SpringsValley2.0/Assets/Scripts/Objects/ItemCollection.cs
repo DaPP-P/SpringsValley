@@ -4,6 +4,7 @@ public class ItemCollection : MonoBehaviour
 {
 
     public GameObject collectableItem;
+    public string itemName;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,8 +22,8 @@ public class ItemCollection : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PlayerLoot.IncreaseItem("corn", 1);
-            Debug.Log(PlayerLoot.GetItemAmount("corn"));
+            PlayerLoot.IncreaseItem(itemName, 1);
+            Debug.Log(PlayerLoot.GetItemAmount(itemName));
             Invoke("pickupComplete", 0.2f); // Reset attack state after delay.
         }
     }

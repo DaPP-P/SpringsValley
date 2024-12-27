@@ -4,9 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject uiCanvas; // Reference to your UI canvas
+    public GameObject menuCanvas; // Reference to your UI canvas
     public GameObject gameOverPanel; // Reference to your Game Over panel
 
+    public GameObject inventoryCanvas;
     public bool isAlive;
 
     static public bool isPaused;
@@ -14,8 +15,9 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         // Ensure the UI canvas is initially disabled
-        uiCanvas.SetActive(false);
+        menuCanvas.SetActive(false);
         gameOverPanel.SetActive(false);
+        inventoryCanvas.SetActive(false);
         isAlive = true;
     }
 
@@ -26,6 +28,11 @@ public class UIManager : MonoBehaviour
         {
             // Toggle the visibility of the UI canvas
             TogglePauseMenu();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab) && isAlive)
+        {
+            ToggleInventoryMenu();
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -46,14 +53,25 @@ public class UIManager : MonoBehaviour
     void TogglePauseMenu()
     {
         // Check if the game is paused
-        isPaused = !uiCanvas.activeSelf;
+        isPaused = !menuCanvas.activeSelf;
 
         // Toggle the visibility of the UI canvas
-        uiCanvas.SetActive(isPaused);
+        menuCanvas.SetActive(isPaused);
 
         // Pause or resume the game time
         Time.timeScale = isPaused ? 0 : 1;
     }
+
+    void ToggleInventoryMenu()
+    {
+        // Check if the game is paused
+        isPaused = !inventoryCanvas.activeSelf;
+
+        // Toggle the visibility of the UI canvas
+        inventoryCanvas.SetActive(isPaused);
+
+        // Pause or resume the game time
+        Time.timeScale = isPaused ? 0 : 1;    }
 
     public void ResumeButtonClicked()
     {

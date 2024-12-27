@@ -3,10 +3,12 @@ using UnityEngine;
 
 public class PlayerLoot : MonoBehaviour
 {
-    private static Dictionary<string, int> items = new Dictionary<string, int>
+
+    public static Dictionary<string, int> items = new Dictionary<string, int>
     {
         { "coin", 0 },
-        { "corn", 0 }
+        { "corn", 0 },
+        { "wheat", 0}
     };
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -47,5 +49,18 @@ public class PlayerLoot : MonoBehaviour
     public static int GetItemAmount(string itemName)
     {
         return items.ContainsKey(itemName) ? items[itemName] : 0;
+    }
+
+    // Get all items and their amounts as a list of strings
+    public static List<string> GetAllItems()
+    {
+        List<string> itemList = new List<string>();
+
+        foreach (KeyValuePair<string, int> item in items)
+        {
+            itemList.Add($"{item.Key}: {item.Value}");
+        }
+
+        return itemList;
     }
 }
