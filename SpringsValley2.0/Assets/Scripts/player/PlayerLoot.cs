@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerLoot : MonoBehaviour
 {
 
+    public static int coinAmount;
     public static Dictionary<string, int> items = new Dictionary<string, int>
     {
         { "coin", 0 },
@@ -26,7 +27,12 @@ public class PlayerLoot : MonoBehaviour
     // Increase the amount of an item
     public static void IncreaseItem(string itemName, int amount)
     {
-        if (items.ContainsKey(itemName))
+        if (itemName == "coin")
+        {
+            coinAmount += amount;
+        }
+
+        else if (items.ContainsKey(itemName))
         {
             items[itemName] += amount;
         }
@@ -39,7 +45,11 @@ public class PlayerLoot : MonoBehaviour
     // Decrease the amount of an item
     public static void DecreaseItem(string itemName, int amount)
     {
-        if (items.ContainsKey(itemName))
+        if (itemName == "coin")
+        {
+            coinAmount = Mathf.Max(0, coinAmount - amount); // Ensure no negative values
+        }
+        else if (items.ContainsKey(itemName))
         {
             items[itemName] = Mathf.Max(0, items[itemName] - amount); // Ensure no negative values
         }
@@ -48,19 +58,27 @@ public class PlayerLoot : MonoBehaviour
     // Get the current amount of an item
     public static int GetItemAmount(string itemName)
     {
+        if (itemName == "coin")
+        {
+            return coinAmount;
+        }
+
         return items.ContainsKey(itemName) ? items[itemName] : 0;
     }
 
     // Get all items and their amounts as a list of strings
-    public static List<string> GetAllItems()
+    public static List<string> GetItemList()
     {
-        List<string> itemList = new List<string>();
+        List<string> itemOrder = new List<string>();
 
         foreach (KeyValuePair<string, int> item in items)
         {
-            itemList.Add($"{item.Key}: {item.Value}");
+            if (item.Value > 0) // Only include items with a quantity > 0
+            {
+                itemOrder.Add(item.Key);
+            }
         }
 
-        return itemList;
+        return itemOrder;
     }
 }
