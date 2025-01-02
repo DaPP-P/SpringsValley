@@ -18,23 +18,22 @@ public class ItemCollection : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // Play the pickup sound using AudioManager
+
             if (pickupSound != null)
             {
                 AudioManager.Instance.PlaySound(pickupSound, transform.position);
             }
 
-            // Increase item count and log it
             animator.SetTrigger("PickUp");
 
             bool pickedUp = false;
-            if (!pickedUp) {
+            if (!pickedUp)
+            {
                 pickedUp = true;
                 PlayerLoot.IncreaseItem(itemName, 1);
             }
+            
             Debug.Log(PlayerLoot.GetItemAmount(itemName));
-
-            // Destroy the collectable item after a short delay
             Invoke("PickupComplete", 0.2f);
         }
     }
