@@ -21,6 +21,14 @@ public class CoinScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             animator.SetTrigger("PickUp");
+            PlayerLoot.IncreaseItem("coin", 1);
+            Debug.Log(PlayerLoot.GetItemAmount("coin"));
+            Invoke("pickupComplete", 0.2f); // Reset attack state after delay.
         }
+    }
+
+    private void pickupComplete()
+    {
+        Destroy(gameObject);
     }
 }
