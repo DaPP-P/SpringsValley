@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3552239882493206509}
   - component: {fileID: 32156048201367371}
   - component: {fileID: 8701721178230457587}
+  - component: {fileID: 4198603107095379146}
   m_Layer: 0
   m_Name: CollectableCorn
   m_TagString: Untagged
@@ -100,3 +101,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45792ba7ef8534785bf642e56ca5fbfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectableItem: {fileID: 8887682137766730350}
+  itemName: corn
+  pickupSound: {fileID: 8300000, guid: cc13e21c6697ef44bbedc41c7f36c902, type: 3}
+--- !u!58 &4198603107095379146
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8887682137766730350}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.16

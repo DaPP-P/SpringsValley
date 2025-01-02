@@ -4,6 +4,8 @@ public class CoinScript : MonoBehaviour
 {
 
     public Animator animator;
+    public AudioClip pickupSound;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -20,6 +22,13 @@ public class CoinScript : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+
+            // Play the pickup sound using AudioManager
+            if (pickupSound != null)
+            {
+                AudioManager.Instance.PlaySound(pickupSound, transform.position);
+            }
+
             animator.SetTrigger("PickUp");
             PlayerLoot.IncreaseItem("coin", 1);
             Debug.Log(PlayerLoot.GetItemAmount("coin"));
