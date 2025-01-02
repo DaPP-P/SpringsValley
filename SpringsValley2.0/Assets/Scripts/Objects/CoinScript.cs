@@ -9,7 +9,7 @@ public class CoinScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -32,7 +32,7 @@ public class CoinScript : MonoBehaviour
             animator.SetTrigger("PickUp");
             PlayerLoot.IncreaseItem("coin", 1);
             Debug.Log(PlayerLoot.GetItemAmount("coin"));
-            Invoke("pickupComplete", 0.2f); // Reset attack state after delay.
+            Invoke("pickupComplete", 0.2f);
         }
     }
 

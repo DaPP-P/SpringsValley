@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 32156048201367371}
   - component: {fileID: 8701721178230457587}
   - component: {fileID: 4198603107095379146}
+  - component: {fileID: 5974158934303712418}
   m_Layer: 0
   m_Name: CollectableCorn
   m_TagString: Untagged
@@ -104,6 +105,7 @@ MonoBehaviour:
   collectableItem: {fileID: 8887682137766730350}
   itemName: corn
   pickupSound: {fileID: 8300000, guid: cc13e21c6697ef44bbedc41c7f36c902, type: 3}
+  animator: {fileID: 0}
 --- !u!58 &4198603107095379146
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -140,3 +142,25 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.16
+--- !u!95 &5974158934303712418
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8887682137766730350}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b442942c172bf6241850daf0af851071, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

@@ -7,10 +7,11 @@ public class ItemCollection : MonoBehaviour
 
     // Audio settings
     public AudioClip pickupSound;
+    public Animator animator;
 
     void Start()
     {
-        // Initialization if needed
+        animator = GetComponent<Animator>();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -24,7 +25,13 @@ public class ItemCollection : MonoBehaviour
             }
 
             // Increase item count and log it
-            PlayerLoot.IncreaseItem(itemName, 1);
+            animator.SetTrigger("PickUp");
+
+            bool pickedUp = false;
+            if (!pickedUp) {
+                pickedUp = true;
+                PlayerLoot.IncreaseItem(itemName, 1);
+            }
             Debug.Log(PlayerLoot.GetItemAmount(itemName));
 
             // Destroy the collectable item after a short delay
