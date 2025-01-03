@@ -88,9 +88,9 @@ public class PlayerLoot : MonoBehaviour
             if (rb != null)
             {
                 Vector2 randomDirection = Random.insideUnitCircle.normalized; // Random direction
-                float forceMagnitude = 5f; // Adjust this value for desired speed
+                float forceMagnitude = 3f; // Adjust this value for desired speed
                 rb.AddForce(randomDirection * forceMagnitude, ForceMode2D.Impulse);
-                Instance.StartCoroutine(StopMovementAfterDelay(rb, 0.2f)); 
+                Instance.StartCoroutine(Instance.StopMovementAfterDelay(rb, 0.2f)); 
             }
         }
     }
@@ -103,7 +103,7 @@ public class PlayerLoot : MonoBehaviour
 
     private void StopMovement(Rigidbody2D rb)
     {   
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
     }
 
     // Get the current amount of an item
