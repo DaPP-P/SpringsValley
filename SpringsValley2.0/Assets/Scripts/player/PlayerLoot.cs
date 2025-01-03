@@ -1,10 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class PlayerLoot : MonoBehaviour
 {
 
+    public static PlayerLoot Instance;
     public static int coinAmount;
+
+    // Prefabs for collectable items
+    public GameObject wheat;
+    public GameObject corn;
     public static Dictionary<string, int> items = new Dictionary<string, int>
     {
         { "coin", 0 },
@@ -12,16 +18,16 @@ public class PlayerLoot : MonoBehaviour
         { "corn", 0}
     };
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
     {
-        // Initialize if necessary
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // Any updates related to loot management
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Increase the amount of an item
@@ -54,9 +60,50 @@ public class PlayerLoot : MonoBehaviour
         else if (items.ContainsKey(itemName))
         {
             items[itemName] = Mathf.Max(0, items[itemName] - amount); // Ensure no negative values
+            SpawnItemInWorld(itemName);
         }
 
         MoveZeroCountItemsToEnd();
+    }
+
+    public static void SpawnItemInWorld(string itemName)
+    {
+        GameObject itemPrefab = null;
+
+        switch (itemName)
+        {
+            case "wheat":
+                itemPrefab = Instance.wheat;
+                break;
+            case "corn":
+                itemPrefab = Instance.corn;
+                break;
+        }
+
+        if (itemPrefab != null)
+        {
+            Vector3 spawnPosition = Instance.transform.position;
+            GameObject spawnedItem = Instantiate(itemPrefab, spawnPosition, Quaternion.identity);
+            Rigidbody2D rb = spawnedItem.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                Vector2 randomDirection = Random.insideUnitCircle.normalized; // Random direction
+                float forceMagnitude = 5f; // Adjust this value for desired speed
+                rb.AddForce(randomDirection * forceMagnitude, ForceMode2D.Impulse);
+                Instance.StartCoroutine(StopMovementAfterDelay(rb, 0.2f)); 
+            }
+        }
+    }
+
+    private IEnumerator StopMovementAfterDelay(Rigidbody2D rb, float delay)
+    {
+    yield return new WaitForSeconds(delay);
+    StopMovement(rb);
+    }
+
+    private void StopMovement(Rigidbody2D rb)
+    {   
+        rb.velocity = Vector2.zero;
     }
 
     // Get the current amount of an item
