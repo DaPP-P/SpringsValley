@@ -8,8 +8,8 @@ public class PlayerLoot : MonoBehaviour
     public static Dictionary<string, int> items = new Dictionary<string, int>
     {
         { "coin", 0 },
-        { "corn", 0 },
-        { "wheat", 0}
+        { "wheat", 0 },
+        { "corn", 0}
     };
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -40,6 +40,8 @@ public class PlayerLoot : MonoBehaviour
         {
             items[itemName] = amount; // Add the item if it doesn't exist
         }
+
+        MoveZeroCountItemsToEnd();
     }
 
     // Decrease the amount of an item
@@ -53,6 +55,8 @@ public class PlayerLoot : MonoBehaviour
         {
             items[itemName] = Mathf.Max(0, items[itemName] - amount); // Ensure no negative values
         }
+
+        MoveZeroCountItemsToEnd();
     }
 
     // Get the current amount of an item
@@ -80,5 +84,35 @@ public class PlayerLoot : MonoBehaviour
         }
 
         return itemOrder;
+    }
+
+    // Moves items with count 0 to the end of the dictionary
+    public static void MoveZeroCountItemsToEnd()
+    {
+        var nonZeroItems = new Dictionary<string, int>();
+        var zeroItems = new Dictionary<string, int>();
+
+        foreach (var item in items)
+        {
+            if (item.Value > 0)
+            {
+                nonZeroItems.Add(item.Key, item.Value);
+            }
+            else
+            {
+                zeroItems.Add(item.Key, item.Value);
+            }
+        }
+
+        // Combine non-zero and zero count items
+        items.Clear();
+        foreach (var item in nonZeroItems)
+        {
+            items.Add(item.Key, item.Value);
+        }
+        foreach (var item in zeroItems)
+        {
+            items.Add(item.Key, item.Value);
+        }
     }
 }
