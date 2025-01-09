@@ -120,13 +120,18 @@ public class Inventory : MonoBehaviour
     }
 
     
-    private void HandleRightClick()
+private void HandleRightClick()
+{
+    if (Input.GetMouseButtonDown(1)) // Right-click
     {
-        if (Input.GetMouseButtonDown(1)) // Right-click
-        {
-            Vector3 mousePosition = Input.mousePosition;
+        Vector3 mousePosition = Input.mousePosition;
 
-            for (int i = 0; i < invSlots.Length; i++)
+        for (int i = 0; i < invSlots.Length; i++)
+        {
+            // Get the Image component of the slot
+            Image slotImage = invSlots[i]?.GetComponent<Image>();
+
+            if (slotImage != null && slotImage.sprite != emptySprite)
             {
                 RectTransform slotRect = invSlots[i].GetComponent<RectTransform>();
                 if (RectTransformUtility.RectangleContainsScreenPoint(slotRect, mousePosition))
@@ -137,6 +142,8 @@ public class Inventory : MonoBehaviour
             }
         }
     }
+}
+
 
     private void ShowContextMenu(int slotIndex, Vector3 position)
     {
