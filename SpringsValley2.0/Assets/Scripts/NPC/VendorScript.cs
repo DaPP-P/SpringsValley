@@ -56,7 +56,7 @@ public class VendorScript : MonoBehaviour
     if (interactionCollider.OverlapPoint(playerTransform.position) && !VendorTextOpen)
     {
         Vector3 textBoxPosition = transform.position + new Vector3(0, 0.425f, 0);  
-        currentTextBox = TextBox.Create(textBoxPosition, "Greetings, wanna <color=black> shop </color> or view <color=black> quests </color>?");
+        currentTextBox = TextBox.Create(textBoxPosition, "Greetings, wanna <color=black>shop</color> or view <color=black>quests</color>?");
         VendorTextOpen = true;
         shopIcon.SetActive(false);
         questIcon.SetActive(false);
