@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.U2D.IK;
 public class PlayerMovement : MonoBehaviour
 {
     private const float MOVE_SPEED = 3f;  // Player movement speed.
@@ -8,7 +9,11 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 moveDir;             // Player movement direction.
     public Animator animator;            // Animator for player animations.
     public SpriteRenderer spriteRenderer;
+    
+    // Attacking things
     public bool isAttacking;
+    public bool attackable;
+
 
     private PlayerHealth playerHealth;
 
@@ -37,6 +42,8 @@ public class PlayerMovement : MonoBehaviour
         rigidbody2D = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         playerHealth = GetComponent<PlayerHealth>();
+        trailRenderer.enabled = false;
+        attackable = true;
     }
 
     void Update()
@@ -82,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
             isDashButtonDown = true;
 
         // Attack input.
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && attackable)
         {
             Attack();
         }

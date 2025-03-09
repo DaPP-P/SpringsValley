@@ -7,6 +7,8 @@ public class UIManager : MonoBehaviour
     public GameObject uiCanvas; // Reference to your UI canvas
     public GameObject gameOverPanel; // Reference to your Game Over panel
 
+    public PlayerMovement playerMovement;
+
     public bool isAlive;
 
     static public bool isPaused;
@@ -17,6 +19,7 @@ public class UIManager : MonoBehaviour
         uiCanvas.SetActive(false);
         gameOverPanel.SetActive(false);
         isAlive = true;
+        playerMovement = FindObjectOfType<PlayerMovement>();
     }
 
     void Update()
@@ -26,6 +29,7 @@ public class UIManager : MonoBehaviour
         {
             // Toggle the visibility of the UI canvas
             TogglePauseMenu();
+            playerMovement.attackable = false;
         }
 
         if (Input.GetKeyDown(KeyCode.R))

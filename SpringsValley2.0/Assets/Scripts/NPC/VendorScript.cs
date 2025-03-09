@@ -12,7 +12,7 @@ public class VendorScript : MonoBehaviour
     private BoxCollider2D interactionCollider;
     private Transform playerTransform;
 
-    private TextBox currentTextBox;
+    public TextBox currentTextBox;
 
     private bool VendorTextOpen;
 

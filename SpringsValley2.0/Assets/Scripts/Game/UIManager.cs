@@ -1,11 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
+using System.Collections.Generic;
+
 
 public class UIManager : MonoBehaviour
 {
     public GameObject menuCanvas; // Reference to your UI canvas
     public GameObject gameOverPanel; // Reference to your Game Over panel
+    public PlayerMovement playerMovement;
+
 
     public GameObject inventoryCanvas;
     public bool isAlive;
@@ -18,6 +23,7 @@ public class UIManager : MonoBehaviour
         menuCanvas.SetActive(false);
         gameOverPanel.SetActive(false);
         inventoryCanvas.SetActive(false);
+        playerMovement = FindObjectOfType<PlayerMovement>();
         isAlive = true;
     }
 
@@ -58,6 +64,10 @@ public class UIManager : MonoBehaviour
         // Toggle the visibility of the UI canvas
         menuCanvas.SetActive(isPaused);
 
+        if (isPaused) {
+            playerMovement.attackable = false;
+        }
+
         // Pause or resume the game time
         Time.timeScale = isPaused ? 0 : 1;
     }
@@ -76,6 +86,7 @@ public class UIManager : MonoBehaviour
     public void ResumeButtonClicked()
     {
         TogglePauseMenu();
+        StartCoroutine(ResetAttackableNextFrame());
     }
 
     public void RestartButtonClicked()
@@ -90,4 +101,13 @@ public class UIManager : MonoBehaviour
         // Exit the game
         Application.Quit();
     }
+
+    private IEnumerator ResetAttackableNextFrame()
+    {
+    yield return new WaitForEndOfFrame();
+    if (playerMovement != null)
+    {
+        playerMovement.attackable = true;
+    }
+}
 }

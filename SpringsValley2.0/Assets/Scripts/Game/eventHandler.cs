@@ -12,10 +12,7 @@ public class eventHandler : MonoBehaviour
         {
             targetScript = targetObject.GetComponent<PlayerMovement>();
         }
-        else
-        {
-            Debug.LogError("Target Object is not assigned!");
-        }
+
     }
 
     // This method will be called by the Animation Event
