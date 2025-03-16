@@ -70,6 +70,7 @@ public class UIManager : MonoBehaviour
 
         // Pause or resume the game time
         Time.timeScale = isPaused ? 0 : 1;
+
     }
 
     void ToggleInventoryMenu()
@@ -80,8 +81,18 @@ public class UIManager : MonoBehaviour
         // Toggle the visibility of the UI canvas
         inventoryCanvas.SetActive(isPaused);
 
+        if (isPaused) {
+            playerMovement.attackable = false;
+        }
+
         // Pause or resume the game time
-        Time.timeScale = isPaused ? 0 : 1;    }
+        Time.timeScale = isPaused ? 0 : 1; 
+
+        if (!isPaused)
+        {
+            StartCoroutine(AttackableCoolDown());
+        }
+    }
 
     public void ResumeButtonClicked()
     {
@@ -105,9 +116,19 @@ public class UIManager : MonoBehaviour
     private IEnumerator ResetAttackableNextFrame()
     {
     yield return new WaitForEndOfFrame();
-    if (playerMovement != null)
-    {
+        if (playerMovement != null)
+        {
         playerMovement.attackable = true;
+        }
     }
-}
+
+    private IEnumerator AttackableCoolDown()
+    {
+        playerMovement.attackable = false;
+        yield return new WaitForSeconds(0.2f);
+        {
+            playerMovement.attackable = true;
+
+        }
+    }
 }

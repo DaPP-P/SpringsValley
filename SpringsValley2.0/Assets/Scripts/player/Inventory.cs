@@ -8,7 +8,7 @@ public class Inventory : MonoBehaviour
 {
     // Array of Inv Slots and Inv Images
     public GameObject[] invSlots;
-    private Image[] invImages;
+    protected Image[] invImages;
     public TextMeshProUGUI[] invSlotCounts;
 
     public GameObject[] invCountBackground;
@@ -18,9 +18,9 @@ public class Inventory : MonoBehaviour
     [SerializeField] private Sprite wheatSprite; 
     public TextMeshProUGUI coinText;
 
-    private int selectedSlotIndex = -1; // Tracks the currently selected slot
+    protected int selectedSlotIndex = -1; // Tracks the currently selected slot
     public GameObject contextMenuPrefab;
-    private GameObject activeContextMenu;
+    protected GameObject activeContextMenu;
 
     void Start()
     {
@@ -62,7 +62,7 @@ public class Inventory : MonoBehaviour
         HandleRightClick();
     }
 
-    private void UpdateSlot(Image slotImage, TextMeshProUGUI slotCountText, GameObject slotCountBackground, List<string> itemOrder, int index)
+    protected void UpdateSlot(Image slotImage, TextMeshProUGUI slotCountText, GameObject slotCountBackground, List<string> itemOrder, int index)
     {
         if (slotImage == null || index >= itemOrder.Count || slotCountText == null)
         {
@@ -84,7 +84,7 @@ public class Inventory : MonoBehaviour
         HighlightSlot(index, index == selectedSlotIndex);
     }
 
-    private Sprite GetSpriteForItem(string itemName)
+    protected Sprite GetSpriteForItem(string itemName)
     {
         switch (itemName)
         {
@@ -97,7 +97,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private void OnSlotClicked(int index)
+    protected void OnSlotClicked(int index)
     {
         // Update the selected slot index
         selectedSlotIndex = index;
@@ -106,7 +106,7 @@ public class Inventory : MonoBehaviour
         Debug.Log($"Slot {index} selected");
     }
 
-    private void HighlightSlot(int index, bool isSelected)
+    protected void HighlightSlot(int index, bool isSelected)
     {
         if (invSlots[index] != null)
         {
@@ -120,7 +120,7 @@ public class Inventory : MonoBehaviour
     }
 
     
-private void HandleRightClick()
+protected void HandleRightClick()
 {
     if (Input.GetMouseButtonDown(1)) // Right-click
     {
@@ -144,8 +144,7 @@ private void HandleRightClick()
     }
 }
 
-
-    private void ShowContextMenu(int slotIndex, Vector3 position)
+    protected virtual void ShowContextMenu(int slotIndex, Vector3 position)
     {
         if (activeContextMenu != null)
         {
@@ -153,6 +152,7 @@ private void HandleRightClick()
         }
 
         activeContextMenu = Instantiate(contextMenuPrefab, transform);
+
         activeContextMenu.transform.position = position;
 
         Button[] buttons = activeContextMenu.GetComponentsInChildren<Button>();
@@ -164,19 +164,23 @@ private void HandleRightClick()
                     button.onClick.AddListener(() => UseItem(slotIndex));
                     break;
                 case "DropButton":
+                    button.gameObject.SetActive(true);
                     button.onClick.AddListener(() => DropItem(slotIndex));
+                    break;
+                case "SellButton":
+                    button.gameObject.SetActive(false);
                     break;
             }
         }
     }
 
-    private void UseItem(int slotIndex)
+    protected void UseItem(int slotIndex)
     {
         Debug.Log($"Using item in slot {slotIndex}");
         Destroy(activeContextMenu);
     }
 
-    private void DropItem(int slotIndex)
+    protected void DropItem(int slotIndex)
     {
         Debug.Log($"Dropping item in slot {slotIndex}");
 
@@ -196,6 +200,20 @@ private void HandleRightClick()
             Debug.LogWarning("Invalid slot index or no item to drop!");
         }
         
+        Destroy(activeContextMenu);
+    }
+
+    protected void SellItem(int slotIndex)
+    {
+        Debug.Log($"Selling item in slot {slotIndex}");
+        
+        // Removes the item
+        List<string> itemOrder = PlayerLoot.GetItemList();
+        string itemName = itemOrder[slotIndex]; // Get the item name in the slot
+        PlayerLoot.RemoveItem(itemName, 1);   // Decrease the item count by 1
+        
+        // Gives some money
+        PlayerLoot.coinAmount += 1;
         Destroy(activeContextMenu);
     }
 }

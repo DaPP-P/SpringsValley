@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 public class TextBox : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class TextBox : MonoBehaviour
     private static int sortingOrder;
     private string fullText;
     private string currentText = "";
-    private float typingSpeed = 0.03f; // Time between each character
+    private float typingSpeed = 0.05f; // Time between each character
 
     private List<int> optionStartIndexes = new List<int>(); // Stores option start indexes
     private int selectedOption = 0; // Track which option is selected
@@ -107,10 +108,20 @@ private void UpdateHighlightedText()
         UpdateHighlightedText();
     }
 
-    public void SelectOption()
+    public void SelectedVendorOptions(GameObject Vendorshop, GameObject questShop)
     {
-        if (!textFullyDisplayed) return; // Don't select until text is fully displayed
+        if (!textFullyDisplayed) return;
+        
+        int shopOption = 0;
+        int questOption = 1;
 
-        Debug.Log("Selected option: " + selectedOption);
+        if (selectedOption == shopOption) {
+            Debug.Log("shop option selected");
+            Vendorshop.SetActive(true);
+        } else if (selectedOption == questOption) {
+            Debug.Log("quest option selected");
+            questShop.SetActive(true);
+        }
     }
+
 }

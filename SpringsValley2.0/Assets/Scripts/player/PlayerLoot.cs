@@ -66,6 +66,21 @@ public class PlayerLoot : MonoBehaviour
         MoveZeroCountItemsToEnd();
     }
 
+    // Decrease the amount of an item and destorys the object
+    public static void RemoveItem(string itemName, int amount)
+    {
+        if (itemName == "coin")
+        {
+            coinAmount = Mathf.Max(0, coinAmount - amount); // Ensure no negative values
+        }
+        else if (items.ContainsKey(itemName))
+        {
+            items[itemName] = Mathf.Max(0, items[itemName] - amount); // Ensure no negative values
+        }
+
+        MoveZeroCountItemsToEnd();
+    }
+
     public static void SpawnItemInWorld(string itemName)
     {
         GameObject itemPrefab = null;

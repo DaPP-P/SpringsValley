@@ -1,4 +1,4 @@
-using System.Linq.Expressions;
+  using System.Linq.Expressions;
 using UnityEngine;
 
 public class VendorScript : MonoBehaviour
@@ -15,6 +15,10 @@ public class VendorScript : MonoBehaviour
     public TextBox currentTextBox;
 
     private bool VendorTextOpen;
+
+    public GameObject vendorshopUI;
+    public GameObject vendorquestUI;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -74,12 +78,19 @@ public class VendorScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            currentTextBox.SelectOption();
+            currentTextBox.SelectedVendorOptions(vendorshopUI, vendorquestUI);
         }
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (scroll > 0f) currentTextBox.ScrollOptions(-1); // Scroll up
         if (scroll < 0f) currentTextBox.ScrollOptions(1);  // Scroll down
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            vendorshopUI.SetActive(false);
+            vendorquestUI.SetActive(false);
+   
+        }
     }
 }
 

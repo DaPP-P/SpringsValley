@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
     public TrailRenderer trailRenderer; // The players trail.
     private bool isDashButtonDown; // Checks if dash button has been pressed.
     [SerializeField] private LayerMask dashLayerMask;  // For the players dash.
-    public float dashAmount = 2f;
+    public float dashAmount = 1f;
 
     void Start()
     {
