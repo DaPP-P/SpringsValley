@@ -16,6 +16,8 @@ public class Inventory : MonoBehaviour
     public Sprite emptySprite;
     [SerializeField] private Sprite cornSprite;  
     [SerializeField] private Sprite wheatSprite; 
+
+    [SerializeField] private Sprite healing_potionSprite; 
     public TextMeshProUGUI coinText;
 
     protected int selectedSlotIndex = -1; // Tracks the currently selected slot
@@ -92,6 +94,8 @@ public class Inventory : MonoBehaviour
                 return cornSprite;
             case "wheat":
                 return wheatSprite;
+            case "healing_potion":
+                return healing_potionSprite;
             default:
                 return null; // No sprite for unknown items
         }
@@ -99,13 +103,27 @@ public class Inventory : MonoBehaviour
 
     protected void OnSlotClicked(int index)
     {
-        // Update the selected slot index
-        selectedSlotIndex = index;
+    // If the clicked slot is already selected, unselect it
+    if (selectedSlotIndex == index)
+    {
+        HighlightSlot(index, false);
+        selectedSlotIndex = -1; // Reset selection
+        Debug.Log($"Slot {index} deselected");
+    }
+    else
+    {
+        // Reset all slots to white before highlighting the new one
+        for (int i = 0; i < invSlots.Length; i++)
+        {
+            HighlightSlot(i, false);
+        }
 
-        // Perform any additional actions for the selected slot
+        // Highlight the selected slot
+        selectedSlotIndex = index;
+        HighlightSlot(index, true);
         Debug.Log($"Slot {index} selected");
     }
-
+}
     protected void HighlightSlot(int index, bool isSelected)
     {
         if (invSlots[index] != null)

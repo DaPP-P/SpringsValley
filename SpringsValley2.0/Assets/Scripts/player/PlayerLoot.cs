@@ -11,11 +11,14 @@ public class PlayerLoot : MonoBehaviour
     // Prefabs for collectable items
     public GameObject wheat;
     public GameObject corn;
+
+    public GameObject healing_potion;
     public static Dictionary<string, int> items = new Dictionary<string, int>
     {
         { "coin", 0 },
         { "wheat", 0 },
-        { "corn", 0}
+        { "corn", 0},
+        {"healing_potion", 0}
     };
 
     private void Awake()

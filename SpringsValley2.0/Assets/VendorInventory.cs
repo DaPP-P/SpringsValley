@@ -5,11 +5,20 @@ using TMPro;
 using UnityEngine.EventSystems;
 public class VendorInventory : Inventory
 {
+
+    // Array of Inv Slots and Inv Images
+    public GameObject[] vendorInvSlots;
+    protected Image[] VendorInvImages;
+    public TextMeshProUGUI[] VendorInvSlotCounts;
+
+    public GameObject[] VendorinvCountBackground;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         // Initialize the image array to match the size of invSlots
         invImages = new Image[invSlots.Length];
+        VendorInvImages = new Image[vendorInvSlots.Length];
+
 
         for (int i = 0; i < invSlots.Length; i++)
         {
@@ -28,6 +37,24 @@ public class VendorInventory : Inventory
                 invSlots[i].GetComponent<Button>().onClick.AddListener(() => OnSlotClicked(index));
             }
         }
+
+        for (int i = 0; i < vendorInvSlots.Length; i++)
+        {
+            if (vendorInvSlots[i] != null)
+            {
+                VendorInvImages[i] = vendorInvSlots[i].GetComponent<Image>();
+
+                // Add a Button component if not already present
+                if (vendorInvSlots[i].GetComponent<Button>() == null)
+                {
+                    vendorInvSlots[i].AddComponent<Button>();
+                }
+
+                // Add an OnClick listener to each slot
+                int index = i; // Capture index in a local variable
+                vendorInvSlots[i].GetComponent<Button>().onClick.AddListener(() => OnSlotClicked(index));
+            }
+        }
     }
 
     void Update()
@@ -43,10 +70,19 @@ public class VendorInventory : Inventory
             UpdateSlot(invImages[i], invSlotCounts[i], invCountBackground[i], itemOrder, i);
         }
 
+        // Update inventory slots
+        List<string> vendoritemOrder = VendorLoot.GetItemList();
+
+        for (int i = 0; i < VendorInvImages.Length; i++)
+        {
+            UpdateSlot(VendorInvImages[i], VendorInvSlotCounts[i], VendorinvCountBackground[i], vendoritemOrder, i);
+        }
+
         HandleRightClick();
     }
 
     protected override void ShowContextMenu(int slotIndex, Vector3 position)
+
     {
         if (activeContextMenu != null)
         {
@@ -76,4 +112,6 @@ public class VendorInventory : Inventory
             }
         }
     }
+
+    
 }
