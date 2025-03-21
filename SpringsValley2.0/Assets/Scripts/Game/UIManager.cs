@@ -7,6 +7,12 @@ using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
+
+    public bool UIOpen = false;
+
+    public GameObject openUI;
+
+
     public GameObject menuCanvas; // Reference to your UI canvas
     public GameObject gameOverPanel; // Reference to your Game Over panel
     public PlayerMovement playerMovement;
@@ -32,13 +38,20 @@ public class UIManager : MonoBehaviour
         // Check for Esc key press
         if (Input.GetKeyDown(KeyCode.Escape) && isAlive)
         {
-            // Toggle the visibility of the UI canvas
-            TogglePauseMenu();
+            if (UIOpen) {
+                CloseUI();
+            } else {
+                TogglePauseMenu();  
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Tab) && isAlive)
         {
-            ToggleInventoryMenu();
+            if (UIOpen) {
+                CloseUI();
+            } else {
+                ToggleInventoryMenu();  
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -63,6 +76,8 @@ public class UIManager : MonoBehaviour
 
         // Toggle the visibility of the UI canvas
         menuCanvas.SetActive(isPaused);
+        openUI = menuCanvas;
+        UIOpen = isPaused;
 
         if (isPaused) {
             playerMovement.attackable = false;
@@ -70,13 +85,29 @@ public class UIManager : MonoBehaviour
 
         // Pause or resume the game time
         Time.timeScale = isPaused ? 0 : 1;
+    }
 
+    void CloseUI()
+    {
+        if (openUI != null)
+        {
+            openUI.SetActive(false); // Hide the currently open UI
+            openUI = null; // Clear reference
+        }
+
+        isPaused = false; // Reset pause state
+        UIOpen = false;
+        Time.timeScale = 1; // Resume game time
+
+        StartCoroutine(AttackableCoolDown()); // Reactivate attacks after closing UI
     }
 
     void ToggleInventoryMenu()
     {
         // Check if the game is paused
         isPaused = !inventoryCanvas.activeSelf;
+        UIOpen = isPaused;
+        openUI = inventoryCanvas;
 
         // Toggle the visibility of the UI canvas
         inventoryCanvas.SetActive(isPaused);
