@@ -35,6 +35,12 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
+
+        if (UIOpen)
+        {
+            UIIsOpen();
+        }
+
         // Check for Esc key press
         if (Input.GetKeyDown(KeyCode.Escape) && isAlive)
         {
@@ -98,6 +104,16 @@ public class UIManager : MonoBehaviour
         isPaused = false; // Reset pause state
         UIOpen = false;
         Time.timeScale = 1; // Resume game time
+
+        StartCoroutine(AttackableCoolDown()); // Reactivate attacks after closing UI
+    }
+
+    void UIIsOpen()
+    {
+
+        isPaused = true; // Reset pause state
+        UIOpen = true;
+        Time.timeScale = 0; // Resume game time
 
         StartCoroutine(AttackableCoolDown()); // Reactivate attacks after closing UI
     }
