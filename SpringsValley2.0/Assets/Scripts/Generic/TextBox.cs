@@ -118,9 +118,13 @@ private void UpdateHighlightedText()
         if (selectedOption == shopOption) {
             Debug.Log("shop option selected");
             Vendorshop.SetActive(true);
+            UIManager.openUI = Vendorshop;
+            UIManager.UIOpen = true;
         } else if (selectedOption == questOption) {
             Debug.Log("quest option selected");
             questShop.SetActive(true);
+            UIManager.openUI = questShop;
+            UIManager.UIOpen = true;
         }
     }
 

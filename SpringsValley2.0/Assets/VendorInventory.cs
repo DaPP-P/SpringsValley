@@ -12,6 +12,10 @@ public class VendorInventory : Inventory
     public TextMeshProUGUI[] VendorInvSlotCounts;
 
     public GameObject[] VendorinvCountBackground;
+
+    // To track which inv slot has been selected
+    private int selectedVendorSlotIndex = -1;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -52,7 +56,7 @@ public class VendorInventory : Inventory
 
                 // Add an OnClick listener to each slot
                 int index = i; // Capture index in a local variable
-                vendorInvSlots[i].GetComponent<Button>().onClick.AddListener(() => OnSlotClicked(index));
+                vendorInvSlots[i].GetComponent<Button>().onClick.AddListener(() => VendorOnSlotClicked(index));
             }
         }
     }
@@ -113,5 +117,80 @@ public class VendorInventory : Inventory
         }
     }
 
+    protected override void OnSlotClicked(int index)
+    {
+    // If the clicked slot is already selected, unselect it
+    if (selectedSlotIndex == index)
+    {
+        HighlightSlot(index, false, false);
+        selectedSlotIndex = -1; // Reset selection
+        Debug.Log($"Slot {index} deselected");
+    }
+    else
+    {
+        // Reset all slots to white before highlighting the new one
+        for (int i = 0; i < vendorInvSlots.Length; i++)
+        {
+            HighlightSlot(i, false, false);
+        }
+
+        // Highlight the selected slot
+        selectedSlotIndex = index;
+        HighlightSlot(index, true, false);
+        Debug.Log($"Slot {index} selected");
+        }
+    }
+    
+    protected void VendorOnSlotClicked(int index)
+    {
+    // If the clicked slot is already selected, unselect it
+    if (selectedVendorSlotIndex  == index)
+    {
+        HighlightSlot(index, false, true);
+        selectedVendorSlotIndex  = -1; // Reset selection
+        Debug.Log($"Slot {index} deselected");
+    }
+    else
+    {
+        // Reset all slots to white before highlighting the new one
+        for (int i = 0; i < vendorInvSlots.Length; i++)
+        {
+            HighlightSlot(i, false, true);
+        }
+
+        // Highlight the selected slot
+        selectedVendorSlotIndex = index;
+        HighlightSlot(index, true, true);
+        Debug.Log($"Slot {index} selected");
+        }
+    }
+
+    protected override void HighlightSlot(int index, bool isSelected, bool isVendor)
+    {
+        if (!isVendor) {
+
+            if (invSlots[index] != null)
+            {
+                Image slotImage = invSlots[index].GetComponent<Image>();
+                if (slotImage != null)
+                {
+                    // Change the slot's color to indicate selection
+                    slotImage.color = isSelected ? Color.yellow : Color.white;
+                }
+        }
+    
+        } else {
+
+            if (vendorInvSlots[index] != null)
+            {
+            Image slotImage = vendorInvSlots[index].GetComponent<Image>();
+            if (slotImage != null)
+            {
+                // Change the slot's color to indicate selection
+                slotImage.color = isSelected ? Color.yellow : Color.white;
+            }                
+            }
+        }
+    }
     
 }

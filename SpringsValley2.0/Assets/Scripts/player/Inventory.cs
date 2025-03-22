@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.AI;
 
 public class Inventory : MonoBehaviour
 {
@@ -83,7 +84,7 @@ public class Inventory : MonoBehaviour
         }
 
         // Highlight the selected slot
-        HighlightSlot(index, index == selectedSlotIndex);
+        HighlightSlot(index, index == selectedSlotIndex, false);
     }
 
     protected Sprite GetSpriteForItem(string itemName)
@@ -101,31 +102,33 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    protected void OnSlotClicked(int index)
+    protected virtual void OnSlotClicked(int index)
     {
-    // If the clicked slot is already selected, unselect it
-    if (selectedSlotIndex == index)
-    {
-        HighlightSlot(index, false);
-        selectedSlotIndex = -1; // Reset selection
-        Debug.Log($"Slot {index} deselected");
-    }
-    else
-    {
-        // Reset all slots to white before highlighting the new one
-        for (int i = 0; i < invSlots.Length; i++)
+        // If the clicked slot is already selected, unselect it
+        if (selectedSlotIndex == index)
         {
-            HighlightSlot(i, false);
+            HighlightSlot(index, false, false);
+            selectedSlotIndex = -1; // Reset selection
+            Debug.Log($"Slot {index} deselected");
         }
+        else
+        {
+            // Reset all slots to white before highlighting the new one
+            for (int i = 0; i < invSlots.Length; i++)
+            {
+                HighlightSlot(i, false, false);
+            }
 
-        // Highlight the selected slot
-        selectedSlotIndex = index;
-        HighlightSlot(index, true);
-        Debug.Log($"Slot {index} selected");
+            // Highlight the selected slot
+            selectedSlotIndex = index;
+            HighlightSlot(index, true, false);
+            Debug.Log($"Slot {index} selected");
+        }
     }
-}
-    protected void HighlightSlot(int index, bool isSelected)
+
+    protected virtual void HighlightSlot(int index, bool isSelected, bool isVendor)
     {
+        if (!isVendor) {
         if (invSlots[index] != null)
         {
             Image slotImage = invSlots[index].GetComponent<Image>();
@@ -135,6 +138,7 @@ public class Inventory : MonoBehaviour
                 slotImage.color = isSelected ? Color.yellow : Color.white;
             }
         }
+        } 
     }
 
     

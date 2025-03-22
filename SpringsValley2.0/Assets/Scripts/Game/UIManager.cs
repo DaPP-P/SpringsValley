@@ -8,9 +8,9 @@ using System.Collections.Generic;
 public class UIManager : MonoBehaviour
 {
 
-    public bool UIOpen = false;
+    public static bool UIOpen = false;
 
-    public GameObject openUI;
+    public static GameObject openUI;
 
 
     public GameObject menuCanvas; // Reference to your UI canvas
