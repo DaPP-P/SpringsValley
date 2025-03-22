@@ -238,4 +238,6 @@ protected void HandleRightClick()
         PlayerLoot.coinAmount += 1;
         Destroy(activeContextMenu);
     }
+
+
 }

@@ -213,10 +213,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 795612055}
     m_Modifications:
-    - target: {fileID: 3189533197684445218, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
-      propertyPath: interactionZone
+    - target: {fileID: 251649035187071410, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 887246575284045381, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
+      propertyPath: cornSprite
       value: 
-      objectReference: {fileID: 1375698444}
+      objectReference: {fileID: 21300000, guid: b49cb0e885402234280e164df15f8ccb, type: 3}
+    - target: {fileID: 887246575284045381, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
+      propertyPath: wheatSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8108b01fc37346147a6bce900c84c966, type: 3}
     - target: {fileID: 5862319203450840309, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
       propertyPath: m_Name
       value: Vendor
@@ -261,13 +269,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8217834381808698101, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
+      propertyPath: corn
+      value: 
+      objectReference: {fileID: 8887682137766730350, guid: 0a4034f7eecf24f879707d0b3d203686, type: 3}
+    - target: {fileID: 8217834381808698101, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
+      propertyPath: wheat
+      value: 
+      objectReference: {fileID: 4205882004506393857, guid: e401bb25a6c064e8e945f66ae9f156e4, type: 3}
+    - target: {fileID: 8217834381808698101, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
+      propertyPath: healing_potion
+      value: 
+      objectReference: {fileID: 4560362967699279209, guid: 083b76a0250d60c45bf8be21a220d804, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5862319203450840309, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1098317625}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
 --- !u!1 &86522375
 GameObject:
@@ -38892,6 +38909,7 @@ MonoBehaviour:
   emptySprite: {fileID: 21300000, guid: 44729b6048810f143a41ee46e48305c8, type: 3}
   cornSprite: {fileID: 21300000, guid: b49cb0e885402234280e164df15f8ccb, type: 3}
   wheatSprite: {fileID: 21300000, guid: 8108b01fc37346147a6bce900c84c966, type: 3}
+  healing_potionSprite: {fileID: 21300000, guid: ea996892b7bc35040b7b06ad3bb40230, type: 3}
   coinText: {fileID: 1197686535}
   contextMenuPrefab: {fileID: 8695208527378540413, guid: e84c1dab985501e4abb31c6fd6039900, type: 3}
 --- !u!1001 &968089205
@@ -40108,25 +40126,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5947667455338675006, guid: 24591e6871d5f6b4b85afb4ab07af126, type: 3}
   m_PrefabInstance: {fileID: 1067532853}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1098317619 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5862319203450840309, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
-  m_PrefabInstance: {fileID: 42442650}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1098317625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1098317619}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3a24b7cb78049c4b8dc18368d9b343e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sortingOrderBase: 500
-  offset: -1
 --- !u!4 &1098317626 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5862319203450840311, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
@@ -42163,11 +42162,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5947667455338675006, guid: 24591e6871d5f6b4b85afb4ab07af126, type: 3}
   m_PrefabInstance: {fileID: 1475202500}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1375698444 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5038068802360261557, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
-  m_PrefabInstance: {fileID: 42442650}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1375963865
 GameObject:
   m_ObjectHideFlags: 0
@@ -42793,6 +42787,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheat: {fileID: 4205882004506393857, guid: e401bb25a6c064e8e945f66ae9f156e4, type: 3}
   corn: {fileID: 8887682137766730350, guid: 0a4034f7eecf24f879707d0b3d203686, type: 3}
+  healing_potion: {fileID: 0}
 --- !u!114 &1409179281
 MonoBehaviour:
   m_ObjectHideFlags: 0

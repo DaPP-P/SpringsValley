@@ -13,9 +13,6 @@ public class VendorInventory : Inventory
 
     public GameObject[] VendorinvCountBackground;
 
-    // To track which inv slot has been selected
-    private int selectedVendorSlotIndex = -1;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -128,11 +125,8 @@ public class VendorInventory : Inventory
     }
     else
     {
-        // Reset all slots to white before highlighting the new one
-        for (int i = 0; i < vendorInvSlots.Length; i++)
-        {
-            HighlightSlot(i, false, false);
-        }
+
+        ResetAllSlots();
 
         // Highlight the selected slot
         selectedSlotIndex = index;
@@ -144,22 +138,18 @@ public class VendorInventory : Inventory
     protected void VendorOnSlotClicked(int index)
     {
     // If the clicked slot is already selected, unselect it
-    if (selectedVendorSlotIndex  == index)
+    if (selectedSlotIndex == index)
     {
         HighlightSlot(index, false, true);
-        selectedVendorSlotIndex  = -1; // Reset selection
+        selectedSlotIndex = -1; // Reset selection
         Debug.Log($"Slot {index} deselected");
     }
     else
     {
-        // Reset all slots to white before highlighting the new one
-        for (int i = 0; i < vendorInvSlots.Length; i++)
-        {
-            HighlightSlot(i, false, true);
-        }
+        ResetAllSlots();
 
         // Highlight the selected slot
-        selectedVendorSlotIndex = index;
+        selectedSlotIndex = index;
         HighlightSlot(index, true, true);
         Debug.Log($"Slot {index} selected");
         }
@@ -192,5 +182,22 @@ public class VendorInventory : Inventory
             }
         }
     }
+
+
+    private void ResetAllSlots()
+    {
+        // Reset all player slots
+        for (int i = 0; i < invSlots.Length; i++)
+        {
+            HighlightSlot(i, false, false);
+        }
+
+        // Reset all vendor slots
+        for (int i = 0; i < vendorInvSlots.Length; i++)
+        {
+            HighlightSlot(i, false, true);
+        }
+} 
+
     
 }
