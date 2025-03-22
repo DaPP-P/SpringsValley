@@ -82,15 +82,44 @@ public class VendorInventory : Inventory
         HandleRightClick();
     }
 
-    protected override void ShowContextMenu(int slotIndex, Vector3 position)
-
+    protected override void HandleRightClick()
     {
+        Debug.Log("eee");
+        if (Input.GetMouseButtonDown(1)) // Right-click
+        {
+            Debug.Log("aaa");
+            Vector3 mousePosition = Input.mousePosition;
+
+            for (int i = 0; i < invSlots.Length; i++)
+            {
+                // Get the Image component of the slot
+                Image slotImage = invSlots[i]?.GetComponent<Image>();
+
+                if (slotImage != null && slotImage.sprite != emptySprite)   
+                {
+                    RectTransform slotRect = invSlots[i].GetComponent<RectTransform>();
+                    if (RectTransformUtility.RectangleContainsScreenPoint(slotRect, mousePosition))
+                    {
+                        ShowContextMenu(i, mousePosition);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    protected override void ShowContextMenu(int slotIndex, Vector3 position) {
+
+        Debug.Log($"Showing context menu for slot {slotIndex} at position {position}");
+
         if (activeContextMenu != null)
         {
             Destroy(activeContextMenu);
         }
 
-        activeContextMenu = Instantiate(contextMenuPrefab, transform);
+        Transform playerInventorySlots = GameObject.Find("Player Inventory Slots")?.transform;
+
+        activeContextMenu = Instantiate(contextMenuPrefab, playerInventorySlots);
 
         activeContextMenu.transform.position = position;
 

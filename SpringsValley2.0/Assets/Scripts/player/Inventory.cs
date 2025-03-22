@@ -140,7 +140,7 @@ public class Inventory : MonoBehaviour
     }
 
     
-protected void HandleRightClick()
+protected virtual void HandleRightClick()
 {
     if (Input.GetMouseButtonDown(1)) // Right-click
     {
