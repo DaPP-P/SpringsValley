@@ -157,6 +157,7 @@ public class VendorInventory : Inventory
 
     protected override void HighlightSlot(int index, bool isSelected, bool isVendor)
     {
+
         if (!isVendor) {
 
             if (invSlots[index] != null)

@@ -83,8 +83,6 @@ public class Inventory : MonoBehaviour
             slotCountText.text = itemCount.ToString();
         }
 
-        // Highlight the selected slot
-        HighlightSlot(index, index == selectedSlotIndex, false);
     }
 
     protected Sprite GetSpriteForItem(string itemName)
