@@ -72,7 +72,7 @@ public class Inventory : MonoBehaviour
 
         for (int i = 0; i < invImages.Length; i++)
         {
-            UpdateSlot(invImages[i], invSlotCounts[i], invCountBackground[i], itemOrder, i);
+                UpdateSlot(invImages[i], invSlotCounts[i], invCountBackground[i], itemOrder, i);
         }
 
         HandleRightClick();

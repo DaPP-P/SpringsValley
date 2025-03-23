@@ -17,11 +17,18 @@ public class UIManager : MonoBehaviour
     public GameObject gameOverPanel; // Reference to your Game Over panel
     public PlayerMovement playerMovement;
 
-
+    // Canvases
     public GameObject inventoryCanvas;
+
+    public GameObject questCanvas;
+
     public bool isAlive;
 
     static public bool isPaused;
+
+    // Buttons to control UI displayed
+    public Button inventoryButton;
+    public Button questButton;
 
     void Start()
     {
@@ -67,6 +74,7 @@ public class UIManager : MonoBehaviour
         }
 
     }
+
 
     public void ShowGameOverPanel()
     {
@@ -158,6 +166,18 @@ public class UIManager : MonoBehaviour
     {
         // Exit the game
         Application.Quit();
+    }
+
+    public void InventoryButtonClicked()
+    {
+        questCanvas.SetActive(false);
+        inventoryCanvas.SetActive(true);
+    }
+
+    public void QuestButtonClicked()
+    {
+        inventoryCanvas.SetActive(false);
+        questCanvas.SetActive(true);
     }
 
     private IEnumerator ResetAttackableNextFrame()
