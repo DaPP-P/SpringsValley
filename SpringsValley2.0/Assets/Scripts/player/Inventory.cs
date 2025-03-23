@@ -25,7 +25,7 @@ public class Inventory : MonoBehaviour
     public GameObject contextMenuPrefab;
     protected GameObject activeContextMenu;
 
-    private PlayerHealth playerHealth;
+    protected PlayerHealth playerHealth;
 
     void Start()
     {

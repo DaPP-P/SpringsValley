@@ -16,6 +16,18 @@ public class VendorInventory : Inventory
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
+        GameObject player = GameObject.FindWithTag("Player");
+        playerHealth = player.GetComponent<PlayerHealth>();
+        
+        
+        if(playerHealth == null) {
+            Debug.Log("player health be null");
+        } else {
+            Debug.Log("Player health found");
+        }
+
+
         // Initialize the image array to match the size of invSlots
         invImages = new Image[invSlots.Length];
         VendorInvImages = new Image[vendorInvSlots.Length];
