@@ -190,6 +190,9 @@ protected virtual void HandleRightClick()
                 case "SellButton":
                     button.gameObject.SetActive(false);
                     break;
+                case "BuyButton":
+                    button.gameObject.SetActive(false);
+                    break;
             }
         }
     }

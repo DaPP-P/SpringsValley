@@ -84,10 +84,8 @@ public class VendorInventory : Inventory
 
     protected override void HandleRightClick()
     {
-        Debug.Log("eee");
         if (Input.GetMouseButtonDown(1)) // Right-click
         {
-            Debug.Log("aaa");
             Vector3 mousePosition = Input.mousePosition;
 
             for (int i = 0; i < invSlots.Length; i++)
@@ -101,6 +99,22 @@ public class VendorInventory : Inventory
                     if (RectTransformUtility.RectangleContainsScreenPoint(slotRect, mousePosition))
                     {
                         ShowContextMenu(i, mousePosition);
+                        break;
+                    }
+                }
+            }
+
+            for (int i = 0; i < vendorInvSlots.Length; i++)
+            {
+                // Get the Image component of the slot
+                Image slotImage = vendorInvSlots[i]?.GetComponent<Image>();
+
+                if (slotImage != null && slotImage.sprite != emptySprite)   
+                {
+                    RectTransform slotRect = vendorInvSlots[i].GetComponent<RectTransform>();
+                    if (RectTransformUtility.RectangleContainsScreenPoint(slotRect, mousePosition))
+                    {
+                        VendorShowContextMenu(i, mousePosition);
                         break;
                     }
                 }
@@ -129,6 +143,7 @@ public class VendorInventory : Inventory
             switch (button.name)
             {
                 case "UseButton":
+                    button.gameObject.SetActive(true);
                     button.onClick.AddListener(() => UseItem(slotIndex));
                     break;
                 case "DropButton":
@@ -139,9 +154,70 @@ public class VendorInventory : Inventory
                     button.gameObject.SetActive(true);
                     button.onClick.AddListener(() => SellItem(slotIndex));
                     break;
+                case "BuyButton":
+                    button.gameObject.SetActive(false);
+                    break;
             }
         }
     }
+
+    protected void VendorShowContextMenu(int slotIndex, Vector3 position) {
+
+        Debug.Log($"Showing context menu for slot {slotIndex} at position {position}");
+
+        if (activeContextMenu != null)
+        {
+            Destroy(activeContextMenu);
+        }
+
+        Transform VendorInventorySlots = GameObject.Find("Vendor Inventory Slots")?.transform;
+
+        activeContextMenu = Instantiate(contextMenuPrefab, VendorInventorySlots);
+
+        activeContextMenu.transform.position = position;
+
+        Button[] buttons = activeContextMenu.GetComponentsInChildren<Button>();
+        foreach (Button button in buttons)
+        {
+            switch (button.name)
+            {
+                case "UseButton":
+                    button.gameObject.SetActive(false);
+                    break;
+                 case "DropButton":
+                    button.gameObject.SetActive(false);
+                    button.onClick.AddListener(() => DropItem(slotIndex));
+                    break;
+                case "BuyButton":
+                    button.gameObject.SetActive(true);
+                    button.onClick.AddListener(() => BuyItem(slotIndex));
+                    break;
+                case "SellButton":
+                    button.gameObject.SetActive(false);
+                    button.onClick.AddListener(() => SellItem(slotIndex));
+                    break;
+            }
+        }
+    }
+
+    protected void BuyItem(int slotIndex)
+    {
+        Debug.Log($"Buying item in slot {slotIndex}");
+
+        if (PlayerLoot.coinAmount - 1 >= 0) {
+        
+        // Removes the item
+        List<string> itemOrder = VendorLoot.GetItemList();
+        string itemName = itemOrder[slotIndex]; // Get the item name in the slot
+        VendorLoot.RemoveItem(itemName, 1);
+        PlayerLoot.IncreaseItem(itemName, 1);
+
+        // Removes some money
+        PlayerLoot.coinAmount -= 1;
+        Destroy(activeContextMenu);
+
+        }
+    }   
 
     protected override void OnSlotClicked(int index)
     {
