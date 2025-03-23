@@ -25,8 +25,21 @@ public class Inventory : MonoBehaviour
     public GameObject contextMenuPrefab;
     protected GameObject activeContextMenu;
 
+    private PlayerHealth playerHealth;
+
     void Start()
     {
+
+        GameObject player = GameObject.FindWithTag("Player");
+        playerHealth = player.GetComponent<PlayerHealth>();
+        
+        
+        if(playerHealth == null) {
+            Debug.Log("player health be null");
+        } else {
+            Debug.Log("Player health found");
+        }
+
         // Initialize the image array to match the size of invSlots
         invImages = new Image[invSlots.Length];
 
@@ -200,6 +213,30 @@ protected virtual void HandleRightClick()
     protected void UseItem(int slotIndex)
     {
         Debug.Log($"Using item in slot {slotIndex}");
+
+        // Get the current item list
+        List<string> itemOrder = PlayerLoot.GetItemList();
+
+        string itemName = itemOrder[slotIndex]; // Get the item name in the slot
+
+        // Ensure the slot index is valid
+        if (slotIndex < itemOrder.Count)
+        {
+            // find the corrsponding item in item List
+            if (ItemList.items.TryGetValue(itemName, out Item item))
+            {
+                if (item.UseAbility == "Heal") {
+                    playerHealth.Heal(item.AbilityQuantity);
+                    Debug.Log(PlayerHealth.health);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Invalid slot index or no item to drop!");
+        }
+        
+        PlayerLoot.RemoveItem(itemName, 1);
         Destroy(activeContextMenu);
     }
 

@@ -15,6 +15,8 @@ public class PlayerHealth : HealthSystem
     public float currentEnergy, maxEnergy;
     public float energyIncreaseAmount = 1f;
 
+    public static int health;
+
     /* Audio */
     public AudioSource source;
     public AudioClip lowEnergySound;
@@ -23,6 +25,8 @@ public class PlayerHealth : HealthSystem
     void Start(){
         playerMovement = GetComponent<PlayerMovement>();
         StartCoroutine(IncreaseEnergyOverTime());
+
+        health = 50;
     }
 
 
@@ -36,7 +40,7 @@ public class PlayerHealth : HealthSystem
         }
     }
 
-    void IncreaseEnergy(float amount)
+    public void IncreaseEnergy(float amount)
     {
         currentEnergy = Mathf.Min(currentEnergy + amount, maxEnergy);
     }
