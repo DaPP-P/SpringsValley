@@ -9,8 +9,6 @@ public class VendorQuests : MonoBehaviour
     public Button newQuestBtn;
     public Button completeQuestBtn;
 
-    public bool newQuestCompletable;
-
     void Start()
     {
         newQuest.gameObject.SetActive(true);
@@ -23,11 +21,9 @@ public class VendorQuests : MonoBehaviour
     void Update()
     {
        if (Quest.vendorStarterQuestActive) {
-            if ((PlayerLoot.GetItemAmount("corn") > 1) && PlayerLoot.GetItemAmount("wheat") > 1)
-            {
-                newQuestCompletable = true;
-                completeQuestBtn.gameObject.SetActive(true);
-            }
+            completeQuestBtn.gameObject.SetActive(true);
+        } else {
+            completeQuestBtn.gameObject.SetActive(false);
        } 
     }
 
@@ -41,10 +37,13 @@ public class VendorQuests : MonoBehaviour
 
     public void CompleteQuestBtn()
     {
-        PlayerLoot.RemoveItem("corn", 2);
-        PlayerLoot.RemoveItem("wheat", 2);
-        PlayerLoot.IncreaseItem("healing_potion", 2);
-        Quest.vendorStarterQuestActive = false;
-
+        if ((PlayerLoot.GetItemAmount("corn") > 1) && PlayerLoot.GetItemAmount("wheat") > 1) {
+            PlayerLoot.RemoveItem("corn", 2);
+            PlayerLoot.RemoveItem("wheat", 2);
+            PlayerLoot.IncreaseItem("healing_potion", 2);
+            Quest.vendorStarterQuestActive = false;
+            Quest.vendorStarterQuestCompleted = true;
+            activeQuest.text = "Start Vendor Quest Completed. Reward: 2 speed potions";
+        }
     }
 }
