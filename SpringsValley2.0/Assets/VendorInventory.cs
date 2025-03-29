@@ -88,7 +88,7 @@ public class VendorInventory : Inventory
 
         for (int i = 0; i < VendorInvImages.Length; i++)
         {
-            UpdateSlot(VendorInvImages[i], VendorInvSlotCounts[i], VendorinvCountBackground[i], vendoritemOrder, i);
+            VendorUpdateSlot(VendorInvImages[i], VendorInvSlotCounts[i], VendorinvCountBackground[i], vendoritemOrder, i);
         }
 
         HandleRightClick();
@@ -315,7 +315,27 @@ public class VendorInventory : Inventory
         {
             HighlightSlot(i, false, true);
         }
-} 
+    }
+
+    protected void VendorUpdateSlot(Image slotImage, TextMeshProUGUI slotCountText, GameObject slotCountBackground, List<string> itemOrder, int index)
+    {
+        if (slotImage == null || index >= itemOrder.Count || slotCountText == null)
+        {
+            slotImage.sprite = emptySprite; // Clear slot if no item
+            slotCountText.enabled = false;
+            slotCountBackground.SetActive(false);
+        }
+        else
+        {
+            slotCountText.enabled = true;
+            slotCountBackground.SetActive(true);
+            string itemName = itemOrder[index];
+            int itemCount = VendorLoot.GetItemAmount(itemName);
+            slotImage.sprite = GetSpriteForItem(itemName); // Get corresponding sprite
+            slotCountText.text = itemCount.ToString();
+        }
+
+    } 
 
     
 }

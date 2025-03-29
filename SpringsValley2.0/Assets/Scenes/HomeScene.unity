@@ -215,7 +215,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 750848233532954799, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2644124866252878765, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
       propertyPath: m_text
@@ -226,6 +226,14 @@ PrefabInstance:
       propertyPath: m_text
       value: 'Please collect 2 x wheat & 2 x Hay. Needs to be return back to the
         vendor. Reward : 2 x healing potion.'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3276382908289095820, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531271352086781026, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5862319203450840309, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
       propertyPath: m_Name
@@ -271,6 +279,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8375462690467588794, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
+      propertyPath: completeQuestBtn
+      value: 
+      objectReference: {fileID: 1750229423}
     - target: {fileID: 8636835115242405523, guid: 6307f8559e28b5548b3cbb807159e063, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 60
@@ -39905,7 +39917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -41420,7 +41432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -44989,7 +45001,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -45729,7 +45741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -47380,7 +47392,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1568456142}
         m_TargetAssemblyTypeName: VendorQuests, Assembly-CSharp
-        m_MethodName: AcceptQuestBtn
+        m_MethodName: CompleteQuestBtn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

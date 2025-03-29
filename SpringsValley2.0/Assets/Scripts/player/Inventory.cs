@@ -80,7 +80,7 @@ public class Inventory : MonoBehaviour
         HandleRightClick();
     }
 
-    protected void UpdateSlot(Image slotImage, TextMeshProUGUI slotCountText, GameObject slotCountBackground, List<string> itemOrder, int index)
+    protected virtual void UpdateSlot(Image slotImage, TextMeshProUGUI slotCountText, GameObject slotCountBackground, List<string> itemOrder, int index)
     {
         if (slotImage == null || index >= itemOrder.Count || slotCountText == null)
         {

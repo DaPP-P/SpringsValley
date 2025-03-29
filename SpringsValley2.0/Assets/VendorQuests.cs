@@ -22,7 +22,6 @@ public class VendorQuests : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Quest.vendorStarterQuestActive);
        if (Quest.vendorStarterQuestActive) {
             if ((PlayerLoot.GetItemAmount("corn") > 1) && PlayerLoot.GetItemAmount("wheat") > 1)
             {
@@ -43,7 +42,9 @@ public class VendorQuests : MonoBehaviour
     public void CompleteQuestBtn()
     {
         PlayerLoot.RemoveItem("corn", 2);
-        PlayerLoot.RemoveItemItem("wheat", 2);
+        PlayerLoot.RemoveItem("wheat", 2);
         PlayerLoot.IncreaseItem("healing_potion", 2);
+        Quest.vendorStarterQuestActive = false;
+
     }
 }
