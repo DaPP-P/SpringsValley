@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.AI;
+using System.Data.Common;
 
 public class Inventory : MonoBehaviour
 {
@@ -70,9 +71,10 @@ public class Inventory : MonoBehaviour
         // Update inventory slots
         List<string> itemOrder = PlayerLoot.GetItemList();
 
+
         for (int i = 0; i < invImages.Length; i++)
         {
-                UpdateSlot(invImages[i], invSlotCounts[i], invCountBackground[i], itemOrder, i);
+            UpdateSlot(invImages[i], invSlotCounts[i], invCountBackground[i], itemOrder, i);
         }
 
         HandleRightClick();

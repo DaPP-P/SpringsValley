@@ -26,17 +26,13 @@ public class UIManager : MonoBehaviour
 
     static public bool isPaused;
 
-    // Buttons to control UI displayed
-    public Button inventoryButton;
-    public Button questButton;
-
+  
     void Start()
     {
         // Ensure the UI canvas is initially disabled
         menuCanvas.SetActive(false);
         gameOverPanel.SetActive(false);
         inventoryCanvas.SetActive(false);
-        playerMovement = FindObjectOfType<PlayerMovement>();
         isAlive = true;
     }
 
@@ -172,12 +168,14 @@ public class UIManager : MonoBehaviour
     {
         questCanvas.SetActive(false);
         inventoryCanvas.SetActive(true);
+        openUI = inventoryCanvas;
     }
 
     public void QuestButtonClicked()
     {
         inventoryCanvas.SetActive(false);
         questCanvas.SetActive(true);
+        openUI = questCanvas;
     }
 
     private IEnumerator ResetAttackableNextFrame()
