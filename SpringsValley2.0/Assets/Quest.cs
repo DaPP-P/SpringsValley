@@ -21,8 +21,6 @@ public class Quest : MonoBehaviour
             bodyText.text = "Quest from the Vendor: Please collect 2 x wheat & 2 x Hay. Needs to be return back to the vendor. Reward : 2 x speed potion.";
         }
     
-    Debug.Log(vendorStarterQuestActive);
-
     }
 
 }
