@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.U2D.IK;
 public class PlayerMovement : MonoBehaviour
 {
-    private const float MOVE_SPEED = 3f;  // Player movement speed.
+    private const float MOVE_SPEED = 15f;  // Player movement speed.
     public new Rigidbody2D rigidbody2D;      // Player's Rigidbody2D.
     private Vector3 moveDir;             // Player movement direction.
     public Animator animator;            // Animator for player animations.

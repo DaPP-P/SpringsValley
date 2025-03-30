@@ -28,15 +28,5 @@ public class AudioManager : MonoBehaviour
         AudioSource.PlayClipAtPoint(clip, position, volume);
     }
 
-    [ContextMenu("Play Test Sound")]
-    private void PlayTestSound()
-    {
-        if (Instance != null)
-        {
-            Instance.PlaySound(testClip, Vector3.zero);
-        }
-    }
-
-    public AudioClip testClip; // Assign a test clip in the Inspector
 }
 
