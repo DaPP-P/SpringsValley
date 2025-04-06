@@ -7,6 +7,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip backgroundMusic;
     private AudioSource audioSource;
 
+    public AudioClip acceptSound;
+    public AudioClip declineSound;
+
     private void Awake()
     {
         if (Instance == null)
@@ -39,8 +42,22 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        AudioSource.PlayClipAtPoint(clip, position, volume);
-    }
+        Debug.Log($"Playing {clip.name} at position: {position}");
+
+        // Create a new GameObject to hold the AudioSource
+        GameObject oneshotAudio = new GameObject("OneshotAudio");
+        oneshotAudio.transform.position = position;
+
+        // Add an AudioSource component to this GameObject
+        AudioSource audioSource = oneshotAudio.AddComponent<AudioSource>();
+        audioSource.clip = clip;
+        audioSource.volume = volume;
+        audioSource.Play();
+
+        // Destroy the GameObject after the sound has finished playing
+        Destroy(oneshotAudio, clip.length);
+}
+ 
 
 }
 

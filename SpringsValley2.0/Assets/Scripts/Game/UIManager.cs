@@ -147,12 +147,14 @@ public class UIManager : MonoBehaviour
 
     public void ResumeButtonClicked()
     {
+        AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
         TogglePauseMenu();
         StartCoroutine(ResetAttackableNextFrame());
     }
 
     public void RestartButtonClicked()
     {
+        AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
         // Restart the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Time.timeScale = 1;
@@ -166,6 +168,7 @@ public class UIManager : MonoBehaviour
 
     public void InventoryButtonClicked()
     {
+        AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
         questCanvas.SetActive(false);
         inventoryCanvas.SetActive(true);
         openUI = inventoryCanvas;
@@ -173,6 +176,7 @@ public class UIManager : MonoBehaviour
 
     public void QuestButtonClicked()
     {
+        AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
         inventoryCanvas.SetActive(false);
         questCanvas.SetActive(true);
         openUI = questCanvas;

@@ -25,7 +25,6 @@ public class Inventory : MonoBehaviour
     protected int selectedSlotIndex = -1; // Tracks the currently selected slot
     public GameObject contextMenuPrefab;
     protected GameObject activeContextMenu;
-
     protected PlayerHealth playerHealth;
 
     void Start()
@@ -136,6 +135,8 @@ public class Inventory : MonoBehaviour
             selectedSlotIndex = index;
             HighlightSlot(index, true, false);
             Debug.Log($"Slot {index} selected");
+            AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
+
         }
     }
 
@@ -224,6 +225,10 @@ protected virtual void HandleRightClick()
         // Ensure the slot index is valid
         if (slotIndex < itemOrder.Count)
         {
+
+            AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
+
+
             // find the corrsponding item in item List
             if (ItemList.items.TryGetValue(itemName, out Item item))
             {
@@ -252,6 +257,9 @@ protected virtual void HandleRightClick()
         // Ensure the slot index is valid
         if (slotIndex < itemOrder.Count)
         {
+
+            AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
+
             string itemName = itemOrder[slotIndex]; // Get the item name in the slot
             PlayerLoot.DecreaseItem(itemName, 1);   // Decrease the item count by 1
 
@@ -276,6 +284,8 @@ protected virtual void HandleRightClick()
         // Get the Item object from the dictionary
         if (ItemList.items.TryGetValue(itemName, out Item item))
         {
+            AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
+
             // Remove the item from player's inventory
             PlayerLoot.RemoveItem(itemName, 1);
 

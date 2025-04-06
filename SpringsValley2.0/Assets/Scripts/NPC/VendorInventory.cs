@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine.EventSystems;
 public class VendorInventory : Inventory
 {
-
     // Array of Inv Slots and Inv Images
     public GameObject[] vendorInvSlots;
     protected Image[] VendorInvImages;
@@ -215,8 +214,7 @@ public class VendorInventory : Inventory
     protected void BuyItem(int slotIndex)
     {
         Debug.Log($"Buying item in slot {slotIndex}");
-
-
+        
         List<string> itemOrder = VendorLoot.GetItemList();
         string itemName = itemOrder[slotIndex]; // Get the item name in the slot
 
@@ -225,10 +223,16 @@ public class VendorInventory : Inventory
         {
             if (PlayerLoot.coinAmount >= item.Price)
             {
+                AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
                 VendorLoot.RemoveItem(itemName, 1);
                 PlayerLoot.IncreaseItem(itemName, 1);
                 PlayerLoot.coinAmount -= item.Price;
                 Destroy(activeContextMenu);
+            } 
+            else
+            {
+                AudioManager.Instance.PlaySound(AudioManager.Instance.declineSound, transform.position);
+                Debug.Log($"Cant afford {item}");
             }
         }
         else

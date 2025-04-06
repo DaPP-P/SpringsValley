@@ -33,6 +33,7 @@ public class VendorQuests : MonoBehaviour
         newQuest.gameObject.SetActive(false);
         activeQuest.gameObject.SetActive(true);
         Quest.vendorStarterQuestActive = true;
+        AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
     }
 
     public void CompleteQuestBtn()
@@ -43,7 +44,11 @@ public class VendorQuests : MonoBehaviour
             PlayerLoot.IncreaseItem("healing_potion", 2);
             Quest.vendorStarterQuestActive = false;
             Quest.vendorStarterQuestCompleted = true;
-            activeQuest.text = "Start Vendor Quest Completed. Reward: 2 speed potions";
+            activeQuest.text = "Starter Vendor Quest Completed. Reward: 2 speed potions";
+            AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
+        } else {
+            AudioManager.Instance.PlaySound(AudioManager.Instance.declineSound, transform.position);
+
         }
     }
 }
