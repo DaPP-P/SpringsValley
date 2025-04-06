@@ -24,12 +24,11 @@ public class Inventory : MonoBehaviour
 
     protected int selectedSlotIndex = -1; // Tracks the currently selected slot
     public GameObject contextMenuPrefab;
-    protected GameObject activeContextMenu;
+    protected static GameObject activeContextMenu;
     protected PlayerHealth playerHealth;
 
     void Start()
     {
-
         GameObject player = GameObject.FindWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         
@@ -62,6 +61,14 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    void OnEnable()
+    {
+        if (activeContextMenu != null)
+        {    
+            Destroy(activeContextMenu);
+        }
+    }
+
     void Update()
     {
         // Update coin text
@@ -77,7 +84,8 @@ public class Inventory : MonoBehaviour
         }
 
         HandleRightClick();
-    }
+
+     }
 
     protected virtual void UpdateSlot(Image slotImage, TextMeshProUGUI slotCountText, GameObject slotCountBackground, List<string> itemOrder, int index)
     {
@@ -116,6 +124,9 @@ public class Inventory : MonoBehaviour
 
     protected virtual void OnSlotClicked(int index)
     {
+
+        Destroy(activeContextMenu);
+        
         // If the clicked slot is already selected, unselect it
         if (selectedSlotIndex == index)
         {
@@ -209,8 +220,16 @@ protected virtual void HandleRightClick()
                 case "BuyButton":
                     button.gameObject.SetActive(false);
                     break;
+                case "CloseButton":
+                    button.onClick.AddListener(() => CloseContextMenu());
+                    break;
             }
         }
+    }
+
+    protected void CloseContextMenu()
+    {
+        Destroy(activeContextMenu);
     }
 
     protected void UseItem(int slotIndex)
