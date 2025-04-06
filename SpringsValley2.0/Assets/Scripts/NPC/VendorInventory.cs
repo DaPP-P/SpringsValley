@@ -216,18 +216,24 @@ public class VendorInventory : Inventory
     {
         Debug.Log($"Buying item in slot {slotIndex}");
 
-        if (PlayerLoot.coinAmount - 1 >= 0) {
-        
-        // Removes the item
+
         List<string> itemOrder = VendorLoot.GetItemList();
         string itemName = itemOrder[slotIndex]; // Get the item name in the slot
-        VendorLoot.RemoveItem(itemName, 1);
-        PlayerLoot.IncreaseItem(itemName, 1);
 
-        // Removes some money
-        PlayerLoot.coinAmount -= 1;
-        Destroy(activeContextMenu);
-
+        // Get the Item object from the dictionary
+        if (ItemList.items.TryGetValue(itemName, out Item item))
+        {
+            if (PlayerLoot.coinAmount >= item.Price)
+            {
+                VendorLoot.RemoveItem(itemName, 1);
+                PlayerLoot.IncreaseItem(itemName, 1);
+                PlayerLoot.coinAmount -= item.Price;
+                Destroy(activeContextMenu);
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"Item '{itemName}' not found in ItemList.");
         }
     }   
 

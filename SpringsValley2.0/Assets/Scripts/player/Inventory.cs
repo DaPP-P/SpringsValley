@@ -268,16 +268,29 @@ protected virtual void HandleRightClick()
     protected void SellItem(int slotIndex)
     {
         Debug.Log($"Selling item in slot {slotIndex}");
-        
-        // Removes the item
+    
+        // Get item list and name
         List<string> itemOrder = PlayerLoot.GetItemList();
-        string itemName = itemOrder[slotIndex]; // Get the item name in the slot
-        PlayerLoot.RemoveItem(itemName, 1);   // Decrease the item count by 1
-        
-        // Gives some money
-        PlayerLoot.coinAmount += 1;
-        Destroy(activeContextMenu);
+        string itemName = itemOrder[slotIndex];
+
+        // Get the Item object from the dictionary
+        if (ItemList.items.TryGetValue(itemName, out Item item))
+        {
+            // Remove the item from player's inventory
+            PlayerLoot.RemoveItem(itemName, 1);
+
+            // Add item's price to player's coins
+            PlayerLoot.coinAmount += item.Price;
+
+           // Destroy the context menu
+            Destroy(activeContextMenu);
+        }
+        else
+        {
+            Debug.LogWarning($"Item '{itemName}' not found in ItemList.");
+        }
     }
+
 
 
 }
