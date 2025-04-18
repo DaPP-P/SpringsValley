@@ -168,6 +168,9 @@ public class VendorInventory : Inventory
                 case "BuyButton":
                     button.gameObject.SetActive(false);
                     break;
+                case "CloseButton":
+                    button.onClick.AddListener(() => CloseContextMenu());
+                    break;
             }
         }
     }
@@ -206,6 +209,9 @@ public class VendorInventory : Inventory
                 case "SellButton":
                     button.gameObject.SetActive(false);
                     button.onClick.AddListener(() => SellItem(slotIndex));
+                    break;
+                case "CloseButton":
+                    button.onClick.AddListener(() => CloseContextMenu());
                     break;
             }
         }

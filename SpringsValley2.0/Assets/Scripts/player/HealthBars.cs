@@ -9,7 +9,6 @@ public class HealthBars : MonoBehaviour
     public PlayerHealth playerHealth;
     public TextMeshProUGUI healthText;
 
-    public TextMeshProUGUI cointText; 
     public Image healthBar;
 
     public Image energyBar;
@@ -36,7 +35,7 @@ public class HealthBars : MonoBehaviour
         maxEnergy = (float)playerHealth.maxEnergy;
         
 
-        healthText.text = "Health: " + playerHealth.currentHealth;
+        healthText.text = "" + playerHealth.currentHealth;
         
         HealthBarFiller();
         EnergyBarFiller();
@@ -58,7 +57,6 @@ public class HealthBars : MonoBehaviour
     {
         Color healthColour = Color.Lerp(Color.red, Color.green, (currentHealth / maxHealth));
         healthBar.color = healthColour;
-        healthText.color = healthColour;
 
         Color energyColour = Color.Lerp(Color.white, Color.blue, (currentEnergy / maxEnergy));
         energyBar.color = energyColour;
