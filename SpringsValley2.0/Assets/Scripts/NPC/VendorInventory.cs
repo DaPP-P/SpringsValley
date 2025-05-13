@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 public class VendorInventory : Inventory
 {
     // Array of Inv Slots and Inv Images
@@ -12,13 +13,16 @@ public class VendorInventory : Inventory
 
     public GameObject[] VendorinvCountBackground;
 
+    public GameObject textDescription;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
 
         GameObject player = GameObject.FindWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
-        
+
+        textDescription.SetActive(false);   
         
         if(playerHealth == null) {
             Debug.Log("player health be null");
@@ -270,21 +274,34 @@ public class VendorInventory : Inventory
     
     protected void VendorOnSlotClicked(int index)
     {
-    // If the clicked slot is already selected, unselect it
-    if (selectedSlotIndex == index)
-    {
-        HighlightSlot(index, false, true);
-        selectedSlotIndex = -1; // Reset selection
-        Debug.Log($"Slot {index} deselected");
-    }
-    else
-    {
-        ResetAllSlots();
+        // If the clicked slot is already selected, unselect it
+        if (selectedSlotIndex == index)
+        {
+            HighlightSlot(index, false, true);
+            selectedSlotIndex = -1; // Reset selection
+            Debug.Log($"Slot {index} deselected");
+            textDescription.SetActive(false); // Clear description text
+        }
+        else
+        {
+            ResetAllSlots();
 
-        // Highlight the selected slot
-        selectedSlotIndex = index;
-        HighlightSlot(index, true, true);
-        Debug.Log($"Slot {index} selected");
+            // Highlight the selected slot
+            selectedSlotIndex = index;
+            HighlightSlot(index, true, true);
+            Debug.Log($"Slot {index} selected");
+        
+            List<string> itemOrder = VendorLoot.GetItemList();
+            if (index >= 0 && index < itemOrder.Count)
+            {
+                string itemName = itemOrder[index];
+
+                if (ItemList.items.TryGetValue(itemName, out Item item))
+                {
+                    textDescription.SetActive(true);
+                    textDescription.GetComponent<TextMeshProUGUI>().text = item.Description;
+                }    
+            }
         }
     }
 
@@ -316,7 +333,6 @@ public class VendorInventory : Inventory
             }
         }
     }
-
 
     private void ResetAllSlots()
     {
