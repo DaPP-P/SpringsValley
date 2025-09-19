@@ -4,6 +4,8 @@ public class Quests : MonoBehaviour
 {
     // Make the VendorStarterQuest static so it can be accessed without an instance
     public static bool VendorStarterQuest = true;
+    public static bool MercantStarterQuest = false;
+
 
     void Start()
     {
