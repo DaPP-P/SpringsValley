@@ -1,59 +1,81 @@
-  using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class DamagePopup : MonoBehaviour
 {
-    private TextMeshPro textMesh;
-    private float disapperTimer;
-    private Color textColor;
+    private const float DisappearTimerMax = 1f;
+    private const int SortingOrderBase = 10000;
 
-    private const float DISAPPEAR_TIMER_MAX = 1f;
-    private Vector3 moveVector;
     private static int sortingOrder;
 
-    public static DamagePopup Create(Vector3 position, int damageAmount) {
-        Transform damagePopupTransform = Instantiate(GameAssets.i.pfDamagePopup, position, Quaternion.identity);
-        DamagePopup damagePopup = damagePopupTransform.GetComponent<DamagePopup>();
-        damagePopup.Setup(damageAmount);
-    
-    return damagePopup;
-    }
+    private TextMeshPro textMesh;
+    private float disappearTimer;
+    private Color textColor;
+    private Vector3 moveVector;
 
-    private void Awake() {
-        textMesh = transform.GetComponent<TextMeshPro>();
-    }
-
-    public void Setup(int damageAmount) {
-        textMesh.SetText(damageAmount.ToString());
-        textColor = textMesh.color;
-        disapperTimer = DISAPPEAR_TIMER_MAX;
-        
-        sortingOrder++;
-        textMesh.sortingOrder = sortingOrder;
-        moveVector = new Vector3(.1f, .2f) * 60f;
-    }
-
-    private void Update() {
-        transform.position += moveVector * Time.deltaTime;
-        moveVector -= moveVector * 8f * Time.deltaTime;
-
-        if (disapperTimer > DISAPPEAR_TIMER_MAX * 0.5f) {
-            // First half of the popup lifetime
-            float increaseScaleAmount = 1f;
-            transform.localScale += Vector3.one * increaseScaleAmount * Time.deltaTime;
-        } else {
-            // Second half of the popup lifetime
-            float decreaseScaleAmount = 1f;
-            transform.localScale -= Vector3.one * decreaseScaleAmount * Time.deltaTime;
+    public static DamagePopup Create(Vector3 position, int damageAmount)
+    {
+        if (GameAssets.i == null || GameAssets.i.pfDamagePopup == null)
+        {
+            return null;
         }
-        disapperTimer -= Time.deltaTime;
-        if (disapperTimer < 0) {
-            float disappearSpeed = 1.5f;
-            textColor.a -= disappearSpeed * Time.deltaTime;
+
+        Transform popupTransform = Instantiate(GameAssets.i.pfDamagePopup, position, Quaternion.identity);
+        DamagePopup popup = popupTransform.GetComponent<DamagePopup>();
+        if (popup == null)
+        {
+            Debug.LogError("The configured damage popup prefab has no DamagePopup component.", popupTransform);
+            Destroy(popupTransform.gameObject);
+            return null;
+        }
+
+        popup.Setup(damageAmount);
+        return popup;
+    }
+
+    private void Awake()
+    {
+        textMesh = GetComponent<TextMeshPro>();
+    }
+
+    public void Setup(int damageAmount)
+    {
+        if (textMesh == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        textMesh.SetText(Mathf.Max(0, damageAmount).ToString());
+        textColor = textMesh.color;
+        disappearTimer = DisappearTimerMax;
+
+        sortingOrder = (sortingOrder + 1) % 1000;
+        textMesh.sortingOrder = SortingOrderBase + sortingOrder;
+        moveVector = new Vector3(6f, 12f, 0f);
+    }
+
+    private void Update()
+    {
+        float deltaTime = Time.deltaTime;
+        transform.position += moveVector * deltaTime;
+        moveVector = Vector3.Lerp(moveVector, Vector3.zero, 8f * deltaTime);
+
+        disappearTimer -= deltaTime;
+        if (disappearTimer > DisappearTimerMax * 0.5f)
+        {
+            transform.localScale += Vector3.one * deltaTime;
+        }
+        else if (disappearTimer > 0f)
+        {
+            transform.localScale = Vector3.Max(Vector3.zero, transform.localScale - Vector3.one * deltaTime);
+        }
+        else
+        {
+            textColor.a -= 1.5f * deltaTime;
             textMesh.color = textColor;
-            if (textColor.a < 0) {
+            if (textColor.a <= 0f)
+            {
                 Destroy(gameObject);
             }
         }

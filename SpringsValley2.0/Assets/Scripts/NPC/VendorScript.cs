@@ -1,131 +1,160 @@
-using System.Linq.Expressions;
 using UnityEngine;
 
 public class VendorScript : MonoBehaviour
 {
-    private bool possibleQuests;
-    private bool availableItems;
-
     public GameObject shopIcon;
     public GameObject questIcon;
     public GameObject interactionZone;
-    private BoxCollider2D interactionCollider;
-    private Transform playerTransform;
-
     public TextBox currentTextBox;
-
-    private bool VendorTextOpen;
-
     public GameObject vendorshopUI;
     public GameObject vendorquestUI;
 
+    private BoxCollider2D interactionCollider;
+    private Transform playerTransform;
+    private VendorLoot vendorLoot;
+    private bool vendorTextOpen;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void OnEnable()
     {
-
-        if (Quests.VendorStarterQuest)
-        {
-            possibleQuests = true;
-        }
-        else 
-        {
-            possibleQuests = false;
-        }
-
-        availableItems = true;
-        questIcon.SetActive(false);
-        shopIcon.SetActive(false);
-        VendorTextOpen = false;
-
-        interactionCollider = interactionZone.GetComponent<BoxCollider2D>();
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-        {
-            playerTransform = player.transform;
-            Debug.Log("Found player object");
-        } else
-        {
-            Debug.Log("cant find Player object");
-        }
-        
-    }   
-
-    // Update is called once per frame
-    void Update()
-{
-    if (playerTransform == null) return;
-
-    // Checks if player can interact with the vendor
-    if (interactionCollider.OverlapPoint(playerTransform.position) && !VendorTextOpen)
-    {
-        Vector3 textBoxPosition = transform.position + new Vector3(0, 2.125f, 0);  
-        currentTextBox = TextBox.Create(textBoxPosition, "Greetings, wanna <color=black>shop</color> or view <color=black>quests</color>?");
-        VendorTextOpen = true;
-        shopIcon.SetActive(false);
-        questIcon.SetActive(false);
-    } 
-    else if (!interactionCollider.OverlapPoint(playerTransform.position) && currentTextBox != null)
-    {
-        VendorTextOpen = false;
-        Destroy(currentTextBox.gameObject);
-        shopIcon.SetActive(true);
-        questIcon.SetActive(true);
+        Quest.VendorQuestChanged += RefreshIcons;
     }
 
-    // Handle input for selection
-    if (currentTextBox != null)
+    private void Start()
     {
+        interactionCollider = interactionZone != null ? interactionZone.GetComponent<BoxCollider2D>() : null;
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        playerTransform = player != null ? player.transform : null;
+        vendorLoot = GetComponentInChildren<VendorLoot>(true);
+
+        if (vendorLoot != null)
+        {
+            vendorLoot.StockChanged += RefreshIcons;
+        }
+
+        SetIconVisibility(false);
+
+        if (interactionCollider == null)
+        {
+            Debug.LogWarning("VendorScript needs an interactionZone with a BoxCollider2D.", this);
+        }
+        else if (playerTransform == null)
+        {
+            Debug.LogWarning("VendorScript could not find an object tagged Player.", this);
+        }
+    }
+
+    private void OnDisable()
+    {
+        Quest.VendorQuestChanged -= RefreshIcons;
+        if (vendorLoot != null)
+        {
+            vendorLoot.StockChanged -= RefreshIcons;
+        }
+
+        CloseTextBox();
+        SetIconVisibility(false);
+    }
+
+    private void Update()
+    {
+        if (playerTransform == null || interactionCollider == null)
+        {
+            return;
+        }
+
+        bool playerInRange = interactionCollider.OverlapPoint(playerTransform.position);
+        if (!playerInRange)
+        {
+            CloseTextBox();
+            SetIconVisibility(false);
+            return;
+        }
+
+        if (!vendorTextOpen && !UIManager.UIOpen)
+        {
+            Vector3 textBoxPosition = transform.position + new Vector3(0f, 2.125f, 0f);
+            currentTextBox = TextBox.Create(
+                textBoxPosition,
+                "Greetings, want to <color=black>shop</color> or view <color=black>quests</color>?");
+            vendorTextOpen = currentTextBox != null;
+        }
+
+        SetIconVisibility(!vendorTextOpen && !UIManager.UIOpen);
+
+        if (currentTextBox == null || UIManager.UIOpen)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             currentTextBox.SelectedVendorOptions(vendorshopUI, vendorquestUI);
         }
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        if (scroll > 0f) currentTextBox.ScrollOptions(-1); // Scroll up
-        if (scroll < 0f) currentTextBox.ScrollOptions(1);  // Scroll down
-
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (scroll > 0f)
         {
-            vendorshopUI.SetActive(false);
-            vendorquestUI.SetActive(false);
-   
+            currentTextBox.ScrollOptions(-1);
+        }
+        else if (scroll < 0f)
+        {
+            currentTextBox.ScrollOptions(1);
         }
     }
-}
-
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Check if the collider is the player
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player inside");
-
-            if (availableItems && possibleQuests)
-            {
-                // Adjust shopIcon position and show both icons
-                shopIcon.transform.localPosition = new Vector3(0.1f, shopIcon.transform.localPosition.y, shopIcon.transform.localPosition.z);
-                shopIcon.SetActive(true);  
-                questIcon.SetActive(true);
-            }
-            else if (availableItems && !possibleQuests)
-            {
-                // Adjust shopIcon position and show only the shop icon
-                shopIcon.transform.localPosition = new Vector3(0f, shopIcon.transform.localPosition.y, shopIcon.transform.localPosition.z);
-                shopIcon.SetActive(true);
-            }
+            RefreshIcons();
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        // Check if the collider is the player
-        if (other.CompareTag("Player"))
+        if (!other.CompareTag("Player"))
         {
-            Debug.Log("Player left");
-            shopIcon.SetActive(false);
-            questIcon.SetActive(false);
+            return;
+        }
+
+        CloseTextBox();
+        SetIconVisibility(false);
+    }
+
+    private void RefreshIcons()
+    {
+        bool inRange = playerTransform != null && interactionCollider != null &&
+            interactionCollider.OverlapPoint(playerTransform.position);
+        SetIconVisibility(inRange && !vendorTextOpen && !UIManager.UIOpen);
+    }
+
+    private void SetIconVisibility(bool show)
+    {
+        bool hasItems = vendorLoot == null || vendorLoot.HasStock();
+        bool hasQuest = Quest.VendorState != VendorQuestState.Completed;
+
+        if (shopIcon != null)
+        {
+            shopIcon.SetActive(show && hasItems);
+            Vector3 localPosition = shopIcon.transform.localPosition;
+            localPosition.x = show && hasItems && hasQuest ? 0.1f : 0f;
+            shopIcon.transform.localPosition = localPosition;
+        }
+
+        if (questIcon != null)
+        {
+            questIcon.SetActive(show && hasQuest);
         }
     }
+
+    private void CloseTextBox()
+    {
+        vendorTextOpen = false;
+        if (currentTextBox != null)
+        {
+            Destroy(currentTextBox.gameObject);
+            currentTextBox = null;
+        }
+    }
+
 }

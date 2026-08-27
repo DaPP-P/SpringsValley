@@ -2,58 +2,63 @@ using UnityEngine;
 
 public class CoinScript : MonoBehaviour
 {
-
     public Animator animator;
     public AudioClip pickupSound;
 
+    [SerializeField, Min(0f)] private float collectionDelay = 0.2f;
+    [SerializeField, Min(0f)] private float pickupAnimationDuration = 0.2f;
+
     private bool canBeCollected;
+    private bool pickedUp;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
     {
-        animator = GetComponent<Animator>();
-        Invoke("EnableCollection", 0.2f);
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
-    }
-
-    private void EnableCollection()
-    {
-        canBeCollected = true;
+        Invoke(nameof(EnableCollection), collectionDelay);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-
-        if(!canBeCollected) return;
-
-        if (other.CompareTag("Player"))
+        if (!canBeCollected || pickedUp || !other.CompareTag("Player"))
         {
-
-            if (pickupSound != null)
-            {
-                AudioManager.Instance.PlaySound(pickupSound, transform.position);
-            }
-
-            animator.SetTrigger("PickUp");
-
-            bool pickedUp = false;
-            if(!pickedUp)
-            {
-                pickedUp = true;
-                PlayerLoot.IncreaseItem("coin", 1);
-            }
-
-            Debug.Log(PlayerLoot.GetItemAmount("coin"));
-            Invoke("pickupComplete", 0.2f);
+            return;
         }
+
+        pickedUp = true;
+        canBeCollected = false;
+        PlayerLoot.AddCoins(1);
+
+        foreach (Collider2D coinCollider in GetComponentsInChildren<Collider2D>())
+        {
+            coinCollider.enabled = false;
+        }
+
+        if (AudioManager.Instance != null && pickupSound != null)
+        {
+            AudioManager.Instance.PlaySound(pickupSound, transform.position);
+        }
+
+        if (animator != null)
+        {
+            animator.SetTrigger("PickUp");
+        }
+
+        Invoke(nameof(PickupComplete), pickupAnimationDuration);
     }
 
-    private void pickupComplete()
+    private void EnableCollection()
+    {
+        canBeCollected = !pickedUp;
+    }
+
+    private void PickupComplete()
     {
         Destroy(gameObject);
     }

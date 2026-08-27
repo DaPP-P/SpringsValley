@@ -1,25 +1,40 @@
-using UnityEngine;
-using TMPro;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using TMPro;
+using UnityEngine;
 
 public class TextBox : MonoBehaviour
 {
-    private TextMeshPro textMesh;
-    private static int sortingOrder;
-    private string fullText;
-    private string currentText = "";
-    private float typingSpeed = 0.05f; // Time between each character
+    private const string OptionTag = "<color=black>";
+    private const string SelectedOptionTag = "<color=yellow>";
 
-    private List<int> optionStartIndexes = new List<int>(); // Stores option start indexes
-    private int selectedOption = 0; // Track which option is selected
-    private bool textFullyDisplayed = false;
+    private static int sortingOrder;
+
+    [SerializeField, Min(0f)] private float typingSpeed = 0.05f;
+
+    private readonly List<int> optionStartIndexes = new List<int>();
+    private TextMeshPro textMesh;
+    private string fullText = string.Empty;
+    private int selectedOption;
+    private bool textFullyDisplayed;
 
     public static TextBox Create(Vector3 position, string message)
     {
+        if (GameAssets.i == null || GameAssets.i.pfTextBox == null)
+        {
+            Debug.LogWarning("A TextBox was requested, but GameAssets has no TextBox prefab assigned.");
+            return null;
+        }
+
         Transform textBoxTransform = Instantiate(GameAssets.i.pfTextBox, position, Quaternion.identity);
         TextBox textBox = textBoxTransform.GetComponent<TextBox>();
+        if (textBox == null)
+        {
+            Debug.LogError("The configured TextBox prefab does not contain a TextBox component.", textBoxTransform);
+            Destroy(textBoxTransform.gameObject);
+            return null;
+        }
+
         textBox.Setup(message);
         return textBox;
     }
@@ -31,101 +46,141 @@ public class TextBox : MonoBehaviour
 
     public void Setup(string message)
     {
-        fullText = message;  // Store the full text
+        fullText = message ?? string.Empty;
+        selectedOption = 0;
+        textFullyDisplayed = false;
         sortingOrder++;
+
+        if (textMesh == null)
+        {
+            Debug.LogError("TextBox needs a TextMeshPro component.", this);
+            return;
+        }
+
         textMesh.sortingOrder = sortingOrder;
-        StartCoroutine(DisplayText());  // Start displaying text one character at a time
+        StartCoroutine(DisplayText());
+    }
+
+    public void ScrollOptions(int direction)
+    {
+        if (!textFullyDisplayed || optionStartIndexes.Count == 0 || direction == 0)
+        {
+            return;
+        }
+
+        selectedOption = (selectedOption + direction) % optionStartIndexes.Count;
+        if (selectedOption < 0)
+        {
+            selectedOption += optionStartIndexes.Count;
+        }
+
+        UpdateHighlightedText();
+    }
+
+    public void SelectedVendorOptions(GameObject vendorShop, GameObject questShop)
+    {
+        if (!textFullyDisplayed || optionStartIndexes.Count == 0)
+        {
+            return;
+        }
+
+        GameObject configuredUI = selectedOption == 0 ? vendorShop : selectedOption == 1 ? questShop : null;
+        if (configuredUI != null)
+        {
+            // The prefab references its Canvas, while the inventory/quest controller lives on
+            // a parent that may be inactive. Enable the Canvas locally, then open that parent.
+            configuredUI.SetActive(true);
+            GameObject uiRoot = configuredUI;
+
+            if (selectedOption == 0)
+            {
+                VendorInventory inventory = configuredUI.GetComponentInParent<VendorInventory>(true);
+                if (inventory != null)
+                {
+                    uiRoot = inventory.gameObject;
+                }
+            }
+            else
+            {
+                VendorQuests quests = configuredUI.GetComponentInParent<VendorQuests>(true);
+                if (quests != null)
+                {
+                    uiRoot = quests.gameObject;
+                }
+            }
+
+            if (!UIManager.OpenUI(uiRoot))
+            {
+                configuredUI.SetActive(false);
+            }
+        }
     }
 
     private IEnumerator DisplayText()
     {
-        currentText = "";  // Reset the displayed text
-        int visibleCharCount = 0; // Tracks how many visible characters are displayed
-        bool insideTag = false;  // Track if we're inside a tag
-        
-        for (int i = 0; i < fullText.Length; i++)
+        string currentText = string.Empty;
+        bool insideTag = false;
+
+        for (int index = 0; index < fullText.Length; index++)
         {
-            char c = fullText[i];
+            char character = fullText[index];
+            if (character == '<')
+            {
+                insideTag = true;
+            }
 
-            if (c == '<') insideTag = true;  // Start of a rich text tag
-            if (!insideTag) visibleCharCount++;  // Only count visible characters
-            if (c == '>') insideTag = false;  // End of a rich text tag
+            currentText += character;
 
-            currentText += c;  // Add the character (including tags)
+            if (character == '>')
+            {
+                insideTag = false;
+            }
 
-            if (!insideTag)  // Only update visible text when not inside a tag
+            if (!insideTag)
             {
                 textMesh.SetText(currentText);
                 yield return new WaitForSeconds(typingSpeed);
             }
         }
 
-        textFullyDisplayed = true; // Mark text as fully displayed
-        ExtractOptions(); // Find selectable options
-        UpdateHighlightedText(); // Highlight first option
+        textFullyDisplayed = true;
+        ExtractOptions();
+        UpdateHighlightedText();
     }
 
     private void ExtractOptions()
     {
         optionStartIndexes.Clear();
-        int index = fullText.IndexOf("<color=black>");
-    while (index != -1)
-    {
-        optionStartIndexes.Add(index);
-        index = fullText.IndexOf("<color=black>", index + 1, System.StringComparison.Ordinal);
-        }
-    }
+        int searchStart = 0;
 
-private void UpdateHighlightedText()
-{
-    string modifiedText = fullText;
-    for (int i = 0; i < optionStartIndexes.Count; i++)
-    {
-        if (i == selectedOption)
+        while (searchStart < fullText.Length)
         {
-            modifiedText = modifiedText.Substring(0, optionStartIndexes[i]) + "<color=yellow>" +
-            modifiedText.Substring(optionStartIndexes[i] + "<color=black>".Length);
+            int optionIndex = fullText.IndexOf(OptionTag, searchStart, System.StringComparison.Ordinal);
+            if (optionIndex < 0)
+            {
+                break;
+            }
+
+            optionStartIndexes.Add(optionIndex);
+            searchStart = optionIndex + OptionTag.Length;
         }
-        else
+    }
+
+    private void UpdateHighlightedText()
+    {
+        if (textMesh == null)
         {
-            modifiedText = modifiedText.Substring(0, optionStartIndexes[i]) + "<color=black>" +
-            modifiedText.Substring(optionStartIndexes[i] + "<color=black>".Length);
+            return;
         }
-    }
 
-    textMesh.SetText(modifiedText);
-}
-
-
-    public void ScrollOptions(int direction)
-    {
-        if (!textFullyDisplayed) return; // Don't scroll until text is fully displayed
-
-        selectedOption += direction;
-        if (selectedOption < 0) selectedOption = optionStartIndexes.Count - 1;
-        if (selectedOption >= optionStartIndexes.Count) selectedOption = 0;
-
-        UpdateHighlightedText();
-    }
-
-    public void SelectedVendorOptions(GameObject Vendorshop, GameObject questShop)
-    {
-        if (!textFullyDisplayed) return;
-        
-        int shopOption = 0;
-        int questOption = 1;
-
-        if (selectedOption == shopOption) {
-            Debug.Log("shop option selected");
-            Vendorshop.SetActive(true);
-            UIManager.openUI = Vendorshop;
-            UIManager.UIOpen = true;
-        } else if (selectedOption == questOption) {
-            Debug.Log("quest option selected");
-            questShop.SetActive(true);
-            UIManager.openUI = questShop;
-            UIManager.UIOpen = true;
+        string modifiedText = fullText;
+        for (int index = optionStartIndexes.Count - 1; index >= 0; index--)
+        {
+            int tagIndex = optionStartIndexes[index];
+            string replacement = index == selectedOption ? SelectedOptionTag : OptionTag;
+            modifiedText = modifiedText.Remove(tagIndex, OptionTag.Length).Insert(tagIndex, replacement);
         }
-    }
 
+        textMesh.SetText(modifiedText);
+    }
 }

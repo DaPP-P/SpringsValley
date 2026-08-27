@@ -1,54 +1,95 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
+
 public class VendorQuests : MonoBehaviour
 {
-
     public TextMeshProUGUI activeQuest;
     public TextMeshProUGUI newQuest;
     public Button newQuestBtn;
     public Button completeQuestBtn;
 
-    void Start()
+    private void OnEnable()
     {
-        newQuest.gameObject.SetActive(true);
-        completeQuestBtn.gameObject.SetActive(false);
-        activeQuest.gameObject.SetActive(false);
-
+        Quest.VendorQuestChanged += Refresh;
+        PlayerLoot.InventoryChanged += Refresh;
+        Refresh();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-       if (Quest.vendorStarterQuestActive) {
-            completeQuestBtn.gameObject.SetActive(true);
-        } else {
-            completeQuestBtn.gameObject.SetActive(false);
-       } 
+        Quest.VendorQuestChanged -= Refresh;
+        PlayerLoot.InventoryChanged -= Refresh;
     }
 
     public void AcceptQuestBtn()
     {
-        newQuestBtn.gameObject.SetActive(false);
-        newQuest.gameObject.SetActive(false);
-        activeQuest.gameObject.SetActive(true);
-        Quest.vendorStarterQuestActive = true;
-        AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
+        if (Quest.TryAcceptVendorStarterQuest())
+        {
+            ItemNotificationUI.ShowEffect("Vendor quest accepted");
+            PlaySound(true);
+        }
+        else
+        {
+            PlaySound(false);
+        }
     }
 
     public void CompleteQuestBtn()
     {
-        if ((PlayerLoot.GetItemAmount("corn") > 1) && PlayerLoot.GetItemAmount("wheat") > 1) {
-            PlayerLoot.RemoveItem("corn", 2);
-            PlayerLoot.RemoveItem("wheat", 2);
-            PlayerLoot.IncreaseItem("healing_potion", 2);
-            Quest.vendorStarterQuestActive = false;
-            Quest.vendorStarterQuestCompleted = true;
-            activeQuest.text = "Starter Vendor Quest Completed. Reward: 2 speed potions";
-            AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
-        } else {
-            AudioManager.Instance.PlaySound(AudioManager.Instance.declineSound, transform.position);
-
+        if (Quest.TryCompleteVendorStarterQuest())
+        {
+            ItemNotificationUI.ShowEffect("Vendor quest completed");
+            PlaySound(true);
         }
+        else
+        {
+            PlaySound(false);
+        }
+    }
+
+    private void Refresh()
+    {
+        bool isAvailable = Quest.VendorState == VendorQuestState.Available;
+        bool isActive = Quest.VendorState == VendorQuestState.Active;
+        bool isCompleted = Quest.VendorState == VendorQuestState.Completed;
+
+        if (newQuest != null)
+        {
+            newQuest.gameObject.SetActive(isAvailable);
+            newQuest.text = "Starter Vendor Quest: Bring back 2 corn and 2 wheat. Reward: 2 healing potions.";
+        }
+
+        if (newQuestBtn != null)
+        {
+            newQuestBtn.gameObject.SetActive(isAvailable);
+        }
+
+        if (activeQuest != null)
+        {
+            activeQuest.gameObject.SetActive(isActive || isCompleted);
+            activeQuest.text = isCompleted
+                ? "Starter Vendor Quest completed. Reward: 2 healing potions."
+                : "Collect 2 corn and 2 wheat, then return to the vendor.";
+        }
+
+        if (completeQuestBtn != null)
+        {
+            completeQuestBtn.gameObject.SetActive(isActive);
+            completeQuestBtn.interactable = isActive &&
+                PlayerLoot.GetItemAmount(Quest.RequiredCropOne) >= Quest.RequiredCropAmount &&
+                PlayerLoot.GetItemAmount(Quest.RequiredCropTwo) >= Quest.RequiredCropAmount;
+        }
+    }
+
+    private void PlaySound(bool accepted)
+    {
+        if (AudioManager.Instance == null)
+        {
+            return;
+        }
+
+        AudioClip clip = accepted ? AudioManager.Instance.acceptSound : AudioManager.Instance.declineSound;
+        AudioManager.Instance.PlaySound(clip, transform.position);
     }
 }

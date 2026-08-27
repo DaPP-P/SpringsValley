@@ -1,66 +1,50 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+
 public class HealthBars : MonoBehaviour
 {
-
     public PlayerHealth playerHealth;
     public TextMeshProUGUI healthText;
-
     public Image healthBar;
-
     public Image energyBar;
-    float lerpSpeed;
 
-    private float currentHealth;
-    private float maxHealth;
-
-    private float currentEnergy;
-    private float maxEnergy;
-
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
+        if (playerHealth == null)
+        {
+            playerHealth = FindFirstObjectByType<PlayerHealth>();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        lerpSpeed = 3f * Time.deltaTime;
-        currentHealth = (float)playerHealth.currentHealth;
-        maxHealth = (float)playerHealth.maxHealth;
-        currentEnergy = (float)playerHealth.currentEnergy;
-        maxEnergy = (float)playerHealth.maxEnergy;
-        
+        if (playerHealth == null)
+        {
+            return;
+        }
 
-        healthText.text = "" + playerHealth.currentHealth;
-        
-        HealthBarFiller();
-        EnergyBarFiller();
-        ColourChange();
+        float healthPercentage = playerHealth.GetHealthPercentage();
+        float energyPercentage = playerHealth.maxEnergy > 0f
+            ? Mathf.Clamp01(playerHealth.currentEnergy / playerHealth.maxEnergy)
+            : 0f;
+        float lerpAmount = Mathf.Clamp01(3f * Time.unscaledDeltaTime);
+
+        if (healthText != null)
+        {
+            healthText.text = playerHealth.currentHealth.ToString();
+        }
+
+        if (healthBar != null)
+        {
+            healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, healthPercentage, lerpAmount);
+            healthBar.color = Color.Lerp(Color.red, Color.green, healthPercentage);
+        }
+
+        if (energyBar != null)
+        {
+            energyBar.fillAmount = Mathf.Lerp(energyBar.fillAmount, energyPercentage, lerpAmount);
+            energyBar.color = Color.Lerp(Color.white, Color.blue, energyPercentage);
+        }
     }
-
-    void HealthBarFiller()
-    {
-        healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, currentHealth / maxHealth, lerpSpeed); 
-    }
-
-    void EnergyBarFiller()
-    {
-        energyBar.fillAmount = Mathf.Lerp(energyBar.fillAmount, currentEnergy / maxEnergy, lerpSpeed); 
-
-    }
-
-    void ColourChange()
-    {
-        Color healthColour = Color.Lerp(Color.red, Color.green, (currentHealth / maxHealth));
-        healthBar.color = healthColour;
-
-        Color energyColour = Color.Lerp(Color.white, Color.blue, (currentEnergy / maxEnergy));
-        energyBar.color = energyColour;
-    }
-
 }
-

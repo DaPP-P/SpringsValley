@@ -1,202 +1,214 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using TMPro;
 
 public class HealthSystem : MonoBehaviour
 {
-
-    //todo DELETE AT SOME POINT THIS IS JUST FOR TESTING
+    // Retained for scene/prefab compatibility. Prefer sender/root checks for real damage filtering.
     public GameObject testobject;
 
-    // bool to check if the object is alive
-    public bool isAlive = true;   
-
-    // Sprite for on fire
+    public bool isAlive = true;
     public Sprite spriteOnFire;
     public Sprite orignalSprite;
 
-    // health stats
-    [SerializeField]
-    public int currentHealth, maxHealth;
+    [SerializeField] public int currentHealth;
+    [SerializeField] public int maxHealth;
 
-    // TODO: Make KnockbackForce something that comes from the sender objects weapon.
     public float knockbackForce;
     public Rigidbody2D rb;
-
     public Animator animator;
     public GameObject knockbackSender;
     public SpriteRenderer spriteRenderer;
-
     public GameObject player;
 
-    
-    /** Start Method
-     ** Initialize Health System, items to deal with taking damage, rigidbody componet, and skeleton state manager.
-     * TODO: Make it so taking damage doesn't need to be initialised like this and creates a new object each time. 
-     **/
-    void Start()
+    public event Action<int, int> HealthChanged;
+    public event Action Died;
+
+    private Color originalColour = Color.white;
+    private Coroutine fireRoutine;
+
+    protected virtual void Awake()
     {
-        // Rigidbody to set velocity.
-        rb = GetComponent<Rigidbody2D>();
-   }
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
 
-   void Update()
-   {
-    if (currentHealth < 1) {
-        Debug.Log("eee");
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        }
+
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
+
+        if (spriteRenderer != null)
+        {
+            originalColour = spriteRenderer.color;
+            if (orignalSprite == null)
+            {
+                orignalSprite = spriteRenderer.sprite;
+            }
+        }
+
+        maxHealth = Mathf.Max(1, maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        isAlive = currentHealth > 0;
     }
-   }
 
-    
-    /**
-     ** Initialize Healthsystem Method
-     * @param `initalise health of the object` 
-     */
     public void InitializeHealthSystem(int healthValue)
     {
-        currentHealth = healthValue;
-        maxHealth = healthValue;
+        maxHealth = Mathf.Max(1, healthValue);
+        currentHealth = maxHealth;
         isAlive = true;
+        HealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
     public void BasicDamage(int amount)
     {
-        currentHealth -= amount;
-        damageIndication(amount, false);
+        ApplyDamage(amount, null, false);
     }
 
-
-    /**
-     ** Take Damage Method
-     * @param `Damage Amount` and `which object hit the object`
-     */
-    public virtual void Damage (int amount, GameObject sender) 
+    public virtual void Damage(int amount, GameObject sender)
     {
-        // So the sender can't find itself.
-        if (sender.layer == gameObject.layer)
-            return;
+        ApplyDamage(amount, sender, true);
+    }
 
-        // sets currentHealth to currentHealth - damageTaken
-        currentHealth -= amount;
-
-        // Gives knockback to the hit object. Else kills and destroys the object.
-        if (currentHealth > 0)
+    protected bool ApplyDamage(int amount, GameObject sender, bool applyKnockback)
+    {
+        if (!isAlive || amount <= 0 || IsSelfOrSameActor(sender))
         {
-            isAlive = true;
-
-            if (sender != null){
-            knockbackSender = sender;
-            }
-            
-            damageIndication(amount);
-
+            return false;
         }
+
+        knockbackSender = sender;
+        currentHealth = Mathf.Max(0, currentHealth - amount);
+        damageIndication(amount, applyKnockback);
+        HealthChanged?.Invoke(currentHealth, maxHealth);
+
+        if (currentHealth == 0)
+        {
+            isAlive = false;
+            Die(sender);
+        }
+
+        return true;
     }
 
     protected virtual void damageIndication(int damageAmount, bool isKnockback = true)
     {
-        spriteRenderer.color = Color.red;
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = Color.red;
+        }
+
         DamagePopup.Create(transform.position, damageAmount);
-        if (knockbackSender != null && knockbackSender != testobject && isKnockback) {
+
+        if (isKnockback && knockbackSender != null && knockbackSender != testobject)
+        {
             Knockback(knockbackForce, knockbackSender.transform.position);
         }
 
-        StartCoroutine(utility.DelayedAction(0.2f, () =>
-        {
-            spriteRenderer.color = Color.white;
-        }));
+        StartCoroutine(RestoreDamageColour());
     }
 
-
-    /**
-     ** Knockback method used to apply knockback to an object.
-     * TODO: Get KnockbackForce from the senders weapon stats
-     * @param `The amount of knockbackForce` and `the position of the sender`
-     */
-    public void Knockback(float knockbackForce, Vector3 senderPosition) {
-            
-            // Calculate knockback direction
-            Vector3 knockbackDirection = transform.position - senderPosition;
-            knockbackDirection.Normalize();
-
-            // Apply knockback force to the Rigidbody
-            rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
-            // TODO: Get Knockback duration from the sender objects weapoon
-            StartCoroutine(StopKnockbackAfterDuration(0.3f));
-    }
-
-
-    /**
-     ** Method to stop knockback after a curtain duration
-     * TODO: Get Knockback duration from the sender objects weapoon
-     * @param `the duration of knockback`
-     */
-    private IEnumerator StopKnockbackAfterDuration(float duration) {
-        // Wait for the specified duration
-        yield return new WaitForSeconds(duration);
-
-        // Stop the knockback force and resumes pursuing the player
-        rb.linearVelocity = Vector2.zero;
-    }
-
-
-    /** 
-     ** Method for healing the player
-     * TODO: Once again fix the DamageInication Coroutine
-     * @param `the amount to heal`
-     */
-    public void Heal (int amount)
+    protected virtual void Die(GameObject sender)
     {
-        // heal object
-        currentHealth += amount;
-        
-        // if health is maxed leave it maxed.
-        if (currentHealth > maxHealth)
-        {
-            currentHealth = maxHealth;
-        }
+        NotifyDied();
+        Destroy(gameObject, 0.2f);
     }
 
-    /** 
-     ** Method to get health percentage
-     */
+    protected void NotifyDied()
+    {
+        Died?.Invoke();
+    }
+
+    public void Knockback(float force, Vector3 senderPosition)
+    {
+        if (rb == null || force <= 0f)
+        {
+            return;
+        }
+
+        Vector2 knockbackDirection = ((Vector2)transform.position - (Vector2)senderPosition).normalized;
+        rb.AddForce(knockbackDirection * force, ForceMode2D.Impulse);
+        StartCoroutine(StopKnockbackAfterDuration(0.3f));
+    }
+
+    public void Heal(int amount)
+    {
+        if (!isAlive || amount <= 0)
+        {
+            return;
+        }
+
+        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+        HealthChanged?.Invoke(currentHealth, maxHealth);
+    }
+
     public float GetHealthPercentage()
     {
-        return (float)currentHealth / maxHealth;
+        return maxHealth > 0 ? (float)currentHealth / maxHealth : 0f;
     }
 
-    /**
-     ** Method to set on fire
-     */
-    public void onFire(int amount, GameObject sender) 
+    public void onFire(int amount, GameObject sender)
     {
-        // So the sender can't find itself.
-        if (sender.layer == gameObject.layer)
+        if (!isAlive || amount <= 0 || IsSelfOrSameActor(sender))
+        {
             return;
-
-        if (spriteOnFire != null) {
-           this.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = spriteOnFire;
         }
-        
-        StartCoroutine(fireTick(0.5f, amount));
+
+        if (fireRoutine != null)
+        {
+            StopCoroutine(fireRoutine);
+        }
+
+        fireRoutine = StartCoroutine(FireTick(0.5f, amount, sender));
     }
 
-    private IEnumerator fireTick (float duration, int amount) {
-        
+    private bool IsSelfOrSameActor(GameObject sender)
+    {
+        return sender != null && (sender == gameObject || sender.transform.root == transform.root);
+    }
+
+    private IEnumerator RestoreDamageColour()
+    {
+        yield return new WaitForSeconds(0.2f);
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = originalColour;
+        }
+    }
+
+    private IEnumerator StopKnockbackAfterDuration(float duration)
+    {
         yield return new WaitForSeconds(duration);
-        
-        int damageCount = 0;
-        while (damageCount < 5){
-            BasicDamage(2);
-            yield return new WaitForSeconds(duration);
-            damageCount++;
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
+    }
+
+    private IEnumerator FireTick(float interval, int amount, GameObject sender)
+    {
+        if (spriteRenderer != null && spriteOnFire != null)
+        {
+            spriteRenderer.sprite = spriteOnFire;
         }
 
-        if (orignalSprite != null) {
-           this.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = orignalSprite;
+        for (int damageCount = 0; damageCount < 5 && isAlive; damageCount++)
+        {
+            yield return new WaitForSeconds(interval);
+            ApplyDamage(amount, sender, false);
         }
-    }    
 
+        if (spriteRenderer != null && orignalSprite != null)
+        {
+            spriteRenderer.sprite = orignalSprite;
+        }
+
+        fireRoutine = null;
+    }
 }

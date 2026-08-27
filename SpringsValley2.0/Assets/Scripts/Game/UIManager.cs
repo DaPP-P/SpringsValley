@@ -1,203 +1,250 @@
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using System.Collections;
-using System.Collections.Generic;
-
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance { get; private set; }
+    public static bool UIOpen { get; private set; }
+    public static GameObject openUI { get; private set; }
+    public static bool isPaused { get; private set; }
 
-    public static bool UIOpen = false;
-
-    public static GameObject openUI;
-
-
-    public GameObject menuCanvas; // Reference to your UI canvas
-    public GameObject gameOverPanel; // Reference to your Game Over panel
+    public GameObject menuCanvas;
+    public GameObject gameOverPanel;
     public PlayerMovement playerMovement;
-
-    // Canvases
     public GameObject inventoryCanvas;
-
     public GameObject questCanvas;
+    public bool isAlive = true;
 
-    public bool isAlive;
+    private bool gameOver;
+    private Coroutine controlsCooldown;
 
-    static public bool isPaused;
-
-  
-    void Start()
+    private void Awake()
     {
-        // Ensure the UI canvas is initially disabled
-        menuCanvas.SetActive(false);
-        gameOverPanel.SetActive(false);
-        inventoryCanvas.SetActive(false);
-        isAlive = true;
+        Instance = this;
+        ResetStaticState();
+
+        if (playerMovement == null)
+        {
+            playerMovement = FindFirstObjectByType<PlayerMovement>();
+        }
     }
 
-    void Update()
+    private void Start()
     {
+        SetActive(menuCanvas, false);
+        SetActive(gameOverPanel, false);
+        SetActive(inventoryCanvas, false);
+        SetActive(questCanvas, false);
+        isAlive = true;
+        gameOver = false;
+        SetPaused(false);
+    }
 
-        if (UIOpen)
+    private void OnDestroy()
+    {
+        if (Instance == this)
         {
-            UIIsOpen();
+            Instance = null;
+            ResetStaticState();
+            Time.timeScale = 1f;
         }
+    }
 
-        // Check for Esc key press
-        if (Input.GetKeyDown(KeyCode.Escape) && isAlive)
-        {
-            if (UIOpen) {
-                CloseUI();
-            } else {
-                TogglePauseMenu();  
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Tab) && isAlive)
-        {
-            if (UIOpen) {
-                CloseUI();
-            } else {
-                ToggleInventoryMenu();  
-            }
-        }
-
+    private void Update()
+    {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            // Restart the current scene
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            RestartButtonClicked();
+            return;
         }
 
+        if (gameOver || !isAlive)
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (UIOpen)
+            {
+                CloseUI();
+            }
+            else
+            {
+                OpenInternal(menuCanvas);
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (UIOpen)
+            {
+                CloseUI();
+            }
+            else
+            {
+                OpenInternal(inventoryCanvas);
+            }
+        }
     }
 
+    public static bool OpenUI(GameObject uiRoot)
+    {
+        if (Instance == null || uiRoot == null || Instance.gameOver)
+        {
+            return false;
+        }
+
+        Instance.OpenInternal(uiRoot);
+        return true;
+    }
+
+    public static void CloseCurrentUI()
+    {
+        if (Instance != null)
+        {
+            Instance.CloseUI();
+        }
+    }
 
     public void ShowGameOverPanel()
     {
-        // Show the Game Over panel
-        Time.timeScale = 0;
-        gameOverPanel.SetActive(true);
-    }
+        gameOver = true;
+        isAlive = false;
 
-    void TogglePauseMenu()
-    {
-        // Check if the game is paused
-        isPaused = !menuCanvas.activeSelf;
-
-        // Toggle the visibility of the UI canvas
-        menuCanvas.SetActive(isPaused);
-        openUI = menuCanvas;
-        UIOpen = isPaused;
-
-        if (isPaused) {
-            playerMovement.attackable = false;
-        }
-
-        // Pause or resume the game time
-        Time.timeScale = isPaused ? 0 : 1;
-    }
-
-    void CloseUI()
-    {
-        if (openUI != null)
+        if (openUI != null && openUI != gameOverPanel)
         {
-            openUI.SetActive(false); // Hide the currently open UI
-            openUI = null; // Clear reference
+            openUI.SetActive(false);
         }
 
-        isPaused = false; // Reset pause state
-        UIOpen = false;
-        Time.timeScale = 1; // Resume game time
-
-        StartCoroutine(AttackableCoolDown()); // Reactivate attacks after closing UI
-    }
-
-    void UIIsOpen()
-    {
-
-        isPaused = true; // Reset pause state
-        UIOpen = true;
-        Time.timeScale = 0; // Resume game time
-
-        StartCoroutine(AttackableCoolDown()); // Reactivate attacks after closing UI
-    }
-
-    void ToggleInventoryMenu()
-    {
-        // Check if the game is paused
-        isPaused = !inventoryCanvas.activeSelf;
-        UIOpen = isPaused;
-        openUI = inventoryCanvas;
-
-        // Toggle the visibility of the UI canvas
-        inventoryCanvas.SetActive(isPaused);
-
-        if (isPaused) {
-            playerMovement.attackable = false;
-        }
-
-        // Pause or resume the game time
-        Time.timeScale = isPaused ? 0 : 1; 
-
-        if (!isPaused)
-        {
-            StartCoroutine(AttackableCoolDown());
-        }
+        SetActive(gameOverPanel, true);
+        openUI = gameOverPanel;
+        UIOpen = gameOverPanel != null;
+        SetPaused(true);
+        SetPlayerControls(false);
     }
 
     public void ResumeButtonClicked()
     {
-        AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
-        TogglePauseMenu();
-        StartCoroutine(ResetAttackableNextFrame());
+        PlayAcceptSound();
+        CloseUI();
     }
 
     public void RestartButtonClicked()
     {
-        AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
-        // Restart the current scene
+        PlayAcceptSound();
+        PlayerLoot.ResetInventory();
+        Quest.ResetAllQuests();
+        ResetStaticState();
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        Time.timeScale = 1;
     }
 
     public void ExitButtonClicked()
     {
-        // Exit the game
         Application.Quit();
     }
 
     public void InventoryButtonClicked()
     {
-        AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
-        questCanvas.SetActive(false);
-        inventoryCanvas.SetActive(true);
-        openUI = inventoryCanvas;
+        PlayAcceptSound();
+        OpenInternal(inventoryCanvas);
     }
 
     public void QuestButtonClicked()
     {
-        AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
-        inventoryCanvas.SetActive(false);
-        questCanvas.SetActive(true);
-        openUI = questCanvas;
+        PlayAcceptSound();
+        OpenInternal(questCanvas);
     }
 
-    private IEnumerator ResetAttackableNextFrame()
+    public void CloseUI()
     {
-    yield return new WaitForEndOfFrame();
+        if (gameOver)
+        {
+            return;
+        }
+
+        if (openUI != null)
+        {
+            openUI.SetActive(false);
+        }
+
+        openUI = null;
+        UIOpen = false;
+        SetPaused(false);
+
+        if (controlsCooldown != null)
+        {
+            StopCoroutine(controlsCooldown);
+        }
+
+        controlsCooldown = StartCoroutine(EnableControlsAfterClick());
+    }
+
+    private void OpenInternal(GameObject uiRoot)
+    {
+        if (uiRoot == null || gameOver)
+        {
+            return;
+        }
+
+        if (openUI != null && openUI != uiRoot)
+        {
+            openUI.SetActive(false);
+        }
+
+        openUI = uiRoot;
+        openUI.SetActive(true);
+        UIOpen = true;
+        SetPaused(true);
+        SetPlayerControls(false);
+    }
+
+    private void SetPaused(bool paused)
+    {
+        isPaused = paused;
+        Time.timeScale = paused ? 0f : 1f;
+    }
+
+    private void SetPlayerControls(bool enabled)
+    {
         if (playerMovement != null)
         {
-        playerMovement.attackable = true;
+            playerMovement.SetControlsEnabled(enabled);
         }
     }
 
-    private IEnumerator AttackableCoolDown()
+    private IEnumerator EnableControlsAfterClick()
     {
-        playerMovement.attackable = false;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSecondsRealtime(0.15f);
+        if (!gameOver && !UIOpen)
         {
-            playerMovement.attackable = true;
-
+            SetPlayerControls(true);
         }
+
+        controlsCooldown = null;
+    }
+
+    private void PlayAcceptSound()
+    {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
+        }
+    }
+
+    private static void SetActive(GameObject target, bool active)
+    {
+        if (target != null)
+        {
+            target.SetActive(active);
+        }
+    }
+
+    private static void ResetStaticState()
+    {
+        UIOpen = false;
+        openUI = null;
+        isPaused = false;
     }
 }

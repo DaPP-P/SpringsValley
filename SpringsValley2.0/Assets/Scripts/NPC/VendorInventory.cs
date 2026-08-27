@@ -1,159 +1,117 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using UnityEngine.EventSystems;
-using Unity.VisualScripting;
+
 public class VendorInventory : Inventory
 {
-    // Array of Inv Slots and Inv Images
     public GameObject[] vendorInvSlots;
     protected Image[] VendorInvImages;
     public TextMeshProUGUI[] VendorInvSlotCounts;
-
     public GameObject[] VendorinvCountBackground;
-
     public GameObject textDescription;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private VendorLoot vendorLoot;
+
+    private int selectedVendorSlotIndex = -1;
+    private TextMeshProUGUI[] playerPriceTexts;
+    private TextMeshProUGUI[] vendorPriceTexts;
+
+    protected override void Start()
     {
-
-        GameObject player = GameObject.FindWithTag("Player");
-        playerHealth = player.GetComponent<PlayerHealth>();
-
-        textDescription.SetActive(false);   
-        
-        if(playerHealth == null) {
-            Debug.Log("player health be null");
-        } else {
-            Debug.Log("Player health found");
-        }
-
-
-        // Initialize the image array to match the size of invSlots
-        invImages = new Image[invSlots.Length];
-        VendorInvImages = new Image[vendorInvSlots.Length];
-
-
-        for (int i = 0; i < invSlots.Length; i++)
-        {
-            if (invSlots[i] != null)
-            {
-                invImages[i] = invSlots[i].GetComponent<Image>();
-
-                // Add a Button component if not already present
-                if (invSlots[i].GetComponent<Button>() == null)
-                {
-                    invSlots[i].AddComponent<Button>();
-                }
-
-                // Add an OnClick listener to each slot
-                int index = i; // Capture index in a local variable
-                invSlots[i].GetComponent<Button>().onClick.AddListener(() => OnSlotClicked(index));
-            }
-        }
-
-        for (int i = 0; i < vendorInvSlots.Length; i++)
-        {
-            if (vendorInvSlots[i] != null)
-            {
-                VendorInvImages[i] = vendorInvSlots[i].GetComponent<Image>();
-
-                // Add a Button component if not already present
-                if (vendorInvSlots[i].GetComponent<Button>() == null)
-                {
-                    vendorInvSlots[i].AddComponent<Button>();
-                }
-
-                // Add an OnClick listener to each slot
-                int index = i; // Capture index in a local variable
-                vendorInvSlots[i].GetComponent<Button>().onClick.AddListener(() => VendorOnSlotClicked(index));
-            }
-        }
+        base.Start();
+        ResolveVendorLoot();
+        InitialiseVendorSlots();
+        InitialisePriceLabels();
+        SetDescription(null);
+        SubscribeToVendorStock();
+        RefreshInventory();
     }
 
-    void Update()
+    protected override void OnEnable()
     {
-        // Update coin text
-        coinText.text = "Coins: " + PlayerLoot.GetItemAmount("coin").ToString();
+        base.OnEnable();
+        ResolveVendorLoot();
+        SubscribeToVendorStock();
+        RefreshInventory();
+    }
 
-        // Update inventory slots
-        List<string> itemOrder = PlayerLoot.GetItemList();
-
-        for (int i = 0; i < invImages.Length; i++)
+    protected override void OnDisable()
+    {
+        if (vendorLoot != null)
         {
-            UpdateSlot(invImages[i], invSlotCounts[i], invCountBackground[i], itemOrder, i);
+            vendorLoot.StockChanged -= RefreshInventory;
         }
 
-        // Update inventory slots
-        List<string> vendoritemOrder = VendorLoot.GetItemList();
+        base.OnDisable();
+    }
 
-        for (int i = 0; i < VendorInvImages.Length; i++)
+    protected override void RefreshInventory()
+    {
+        base.RefreshInventory();
+
+        List<string> playerItems = PlayerLoot.GetItemList();
+        UpdatePriceLabels(playerPriceTexts, playerItems, false);
+
+        if (VendorInvImages == null || vendorLoot == null)
         {
-            VendorUpdateSlot(VendorInvImages[i], VendorInvSlotCounts[i], VendorinvCountBackground[i], vendoritemOrder, i);
+            UpdatePriceLabels(vendorPriceTexts, null, true);
+            return;
         }
 
-        HandleRightClick();
+        List<string> vendorItems = vendorLoot.GetItemList();
+        for (int index = 0; index < VendorInvImages.Length; index++)
+        {
+            VendorUpdateSlot(
+                VendorInvImages[index],
+                GetArrayValue(VendorInvSlotCounts, index),
+                GetArrayValue(VendorinvCountBackground, index),
+                vendorItems,
+                index);
+        }
+
+        UpdatePriceLabels(vendorPriceTexts, vendorItems, true);
+
+        if (selectedVendorSlotIndex >= vendorItems.Count)
+        {
+            selectedVendorSlotIndex = -1;
+            SetDescription(null);
+            ResetAllSlots();
+        }
     }
 
     protected override void HandleRightClick()
     {
-        if (Input.GetMouseButtonDown(1)) // Right-click
+        if (!Input.GetMouseButtonDown(1))
         {
-            Vector3 mousePosition = Input.mousePosition;
-
-            for (int i = 0; i < invSlots.Length; i++)
-            {
-                // Get the Image component of the slot
-                Image slotImage = invSlots[i]?.GetComponent<Image>();
-
-                if (slotImage != null && slotImage.sprite != emptySprite)   
-                {
-                    RectTransform slotRect = invSlots[i].GetComponent<RectTransform>();
-                    if (RectTransformUtility.RectangleContainsScreenPoint(slotRect, mousePosition))
-                    {
-                        ShowContextMenu(i, mousePosition);
-                        break;
-                    }
-                }
-            }
-
-            for (int i = 0; i < vendorInvSlots.Length; i++)
-            {
-                // Get the Image component of the slot
-                Image slotImage = vendorInvSlots[i]?.GetComponent<Image>();
-
-                if (slotImage != null && slotImage.sprite != emptySprite)   
-                {
-                    RectTransform slotRect = vendorInvSlots[i].GetComponent<RectTransform>();
-                    if (RectTransformUtility.RectangleContainsScreenPoint(slotRect, mousePosition))
-                    {
-                        VendorShowContextMenu(i, mousePosition);
-                        break;
-                    }
-                }
-            }
+            return;
         }
+
+        Vector3 mousePosition = Input.mousePosition;
+        List<string> playerItems = PlayerLoot.GetItemList();
+        if (TryOpenMenuAtPoint(invSlots, playerItems.Count, mousePosition, ShowContextMenu))
+        {
+            return;
+        }
+
+        int vendorItemCount = vendorLoot != null ? vendorLoot.GetItemList().Count : 0;
+        TryOpenMenuAtPoint(vendorInvSlots, vendorItemCount, mousePosition, VendorShowContextMenu);
     }
 
-    protected override void ShowContextMenu(int slotIndex, Vector3 position) {
-
-        Debug.Log($"Showing context menu for slot {slotIndex} at position {position}");
-
-        if (activeContextMenu != null)
+    protected override void ShowContextMenu(int slotIndex, Vector3 position)
+    {
+        List<string> playerItems = PlayerLoot.GetItemList();
+        if (slotIndex < 0 || slotIndex >= playerItems.Count || contextMenuPrefab == null ||
+            !ItemList.items.TryGetValue(playerItems[slotIndex], out Item item))
         {
-            Destroy(activeContextMenu);
+            return;
         }
 
-        Transform playerInventorySlots = GameObject.Find("Player Inventory Slots")?.transform;
-
-        activeContextMenu = Instantiate(contextMenuPrefab, playerInventorySlots);
-
+        CloseContextMenu();
+        activeContextMenu = Instantiate(contextMenuPrefab, transform);
         activeContextMenu.transform.position = position;
 
-        Button[] buttons = activeContextMenu.GetComponentsInChildren<Button>();
-        foreach (Button button in buttons)
+        foreach (Button button in activeContextMenu.GetComponentsInChildren<Button>(true))
         {
             switch (button.name)
             {
@@ -163,211 +121,445 @@ public class VendorInventory : Inventory
                     break;
                 case "DropButton":
                     button.gameObject.SetActive(false);
-                    button.onClick.AddListener(() => DropItem(slotIndex));
                     break;
                 case "SellButton":
                     button.gameObject.SetActive(true);
+                    SetButtonText(button, $"Sell (+{item.SellPrice} coins)");
                     button.onClick.AddListener(() => SellItem(slotIndex));
                     break;
                 case "BuyButton":
                     button.gameObject.SetActive(false);
                     break;
                 case "CloseButton":
-                    button.onClick.AddListener(() => CloseContextMenu());
+                    button.onClick.AddListener(CloseContextMenu);
                     break;
             }
         }
     }
-
-    protected void VendorShowContextMenu(int slotIndex, Vector3 position) {
-
-        Debug.Log($"Showing context menu for slot {slotIndex} at position {position}");
-
-        if (activeContextMenu != null)
-        {
-            Destroy(activeContextMenu);
-        }
-
-        Transform VendorInventorySlots = GameObject.Find("Vendor Inventory Slots")?.transform;
-
-        activeContextMenu = Instantiate(contextMenuPrefab, VendorInventorySlots);
-
-        activeContextMenu.transform.position = position;
-
-        Button[] buttons = activeContextMenu.GetComponentsInChildren<Button>();
-        foreach (Button button in buttons)
-        {
-            switch (button.name)
-            {
-                case "UseButton":
-                    button.gameObject.SetActive(false);
-                    break;
-                 case "DropButton":
-                    button.gameObject.SetActive(false);
-                    button.onClick.AddListener(() => DropItem(slotIndex));
-                    break;
-                case "BuyButton":
-                    button.gameObject.SetActive(true);
-                    button.onClick.AddListener(() => BuyItem(slotIndex));
-                    break;
-                case "SellButton":
-                    button.gameObject.SetActive(false);
-                    button.onClick.AddListener(() => SellItem(slotIndex));
-                    break;
-                case "CloseButton":
-                    button.onClick.AddListener(() => CloseContextMenu());
-                    break;
-            }
-        }
-    }
-
-    protected void BuyItem(int slotIndex)
-    {
-        Debug.Log($"Buying item in slot {slotIndex}");
-        
-        List<string> itemOrder = VendorLoot.GetItemList();
-        string itemName = itemOrder[slotIndex]; // Get the item name in the slot
-
-        // Get the Item object from the dictionary
-        if (ItemList.items.TryGetValue(itemName, out Item item))
-        {
-            if (PlayerLoot.coinAmount >= item.Price)
-            {
-                AudioManager.Instance.PlaySound(AudioManager.Instance.acceptSound, transform.position);
-                VendorLoot.RemoveItem(itemName, 1);
-                PlayerLoot.IncreaseItem(itemName, 1);
-                PlayerLoot.coinAmount -= item.Price;
-                Destroy(activeContextMenu);
-            } 
-            else
-            {
-                AudioManager.Instance.PlaySound(AudioManager.Instance.declineSound, transform.position);
-                Debug.Log($"Cant afford {item}");
-            }
-        }
-        else
-        {
-            Debug.LogWarning($"Item '{itemName}' not found in ItemList.");
-        }
-    }   
 
     protected override void OnSlotClicked(int index)
     {
-    // If the clicked slot is already selected, unselect it
-    if (selectedSlotIndex == index)
-    {
-        HighlightSlot(index, false, false);
-        selectedSlotIndex = -1; // Reset selection
-        Debug.Log($"Slot {index} deselected");
-    }
-    else
-    {
-
-        ResetAllSlots();
-
-        // Highlight the selected slot
-        selectedSlotIndex = index;
-        HighlightSlot(index, true, false);
-        Debug.Log($"Slot {index} selected");
-        }
-    }
-    
-    protected void VendorOnSlotClicked(int index)
-    {
-        // If the clicked slot is already selected, unselect it
-        if (selectedSlotIndex == index)
+        List<string> playerItems = PlayerLoot.GetItemList();
+        if (index < 0 || index >= playerItems.Count)
         {
-            HighlightSlot(index, false, true);
-            selectedSlotIndex = -1; // Reset selection
-            Debug.Log($"Slot {index} deselected");
-            textDescription.SetActive(false); // Clear description text
-        }
-        else
-        {
+            selectedSlotIndex = -1;
             ResetAllSlots();
-
-            // Highlight the selected slot
-            selectedSlotIndex = index;
-            HighlightSlot(index, true, true);
-            Debug.Log($"Slot {index} selected");
-        
-            List<string> itemOrder = VendorLoot.GetItemList();
-            if (index >= 0 && index < itemOrder.Count)
-            {
-                string itemName = itemOrder[index];
-
-                if (ItemList.items.TryGetValue(itemName, out Item item))
-                {
-                    textDescription.SetActive(true);
-                    textDescription.GetComponent<TextMeshProUGUI>().text = item.Description;
-                }    
-            }
+            return;
         }
+
+        bool wasSelected = selectedSlotIndex == index && selectedVendorSlotIndex < 0;
+        ResetAllSlots();
+        selectedVendorSlotIndex = -1;
+        selectedSlotIndex = wasSelected ? -1 : index;
+
+        if (!wasSelected)
+        {
+            HighlightSlot(index, true, false);
+            PlayAcceptSound();
+        }
+
+        SetDescription(null);
     }
 
     protected override void HighlightSlot(int index, bool isSelected, bool isVendor)
     {
-
-        if (!isVendor) {
-
-            if (invSlots[index] != null)
-            {
-                Image slotImage = invSlots[index].GetComponent<Image>();
-                if (slotImage != null)
-                {
-                    // Change the slot's color to indicate selection
-                    slotImage.color = isSelected ? Color.yellow : Color.white;
-                }
+        if (!isVendor)
+        {
+            base.HighlightSlot(index, isSelected, false);
+            return;
         }
-    
-        } else {
 
-            if (vendorInvSlots[index] != null)
+        if (vendorInvSlots == null || index < 0 || index >= vendorInvSlots.Length || vendorInvSlots[index] == null)
+        {
+            return;
+        }
+
+        Image slotImage = vendorInvSlots[index].GetComponent<Image>();
+        if (slotImage != null)
+        {
+            slotImage.color = isSelected ? Color.yellow : Color.white;
+        }
+    }
+
+    protected override void SellItem(int slotIndex)
+    {
+        List<string> playerItems = PlayerLoot.GetItemList();
+        if (vendorLoot == null || slotIndex < 0 || slotIndex >= playerItems.Count)
+        {
+            PlayDeclineSound();
+            CloseContextMenu();
+            return;
+        }
+
+        string itemName = playerItems[slotIndex];
+        if (!ItemList.items.TryGetValue(itemName, out Item item) || !PlayerLoot.RemoveItem(itemName, 1))
+        {
+            PlayDeclineSound();
+            CloseContextMenu();
+            return;
+        }
+
+        vendorLoot.IncreaseItem(itemName, 1);
+        PlayerLoot.AddCoins(item.SellPrice);
+        PlayAcceptSound();
+        CloseContextMenu();
+    }
+
+    private void InitialiseVendorSlots()
+    {
+        int slotCount = vendorInvSlots != null ? vendorInvSlots.Length : 0;
+        VendorInvImages = new Image[slotCount];
+
+        for (int index = 0; index < slotCount; index++)
+        {
+            GameObject slot = vendorInvSlots[index];
+            if (slot == null)
             {
-            Image slotImage = vendorInvSlots[index].GetComponent<Image>();
-            if (slotImage != null)
+                continue;
+            }
+
+            VendorInvImages[index] = slot.GetComponent<Image>();
+            Button slotButton = slot.GetComponent<Button>();
+            if (slotButton == null)
             {
-                // Change the slot's color to indicate selection
-                slotImage.color = isSelected ? Color.yellow : Color.white;
-            }                
+                slotButton = slot.AddComponent<Button>();
+            }
+
+            int capturedIndex = index;
+            slotButton.onClick.AddListener(() => VendorOnSlotClicked(capturedIndex));
+        }
+    }
+
+    private void VendorOnSlotClicked(int index)
+    {
+        List<string> vendorItems = vendorLoot != null ? vendorLoot.GetItemList() : new List<string>();
+        if (index < 0 || index >= vendorItems.Count)
+        {
+            selectedVendorSlotIndex = -1;
+            ResetAllSlots();
+            SetDescription(null);
+            return;
+        }
+
+        bool wasSelected = selectedVendorSlotIndex == index && selectedSlotIndex < 0;
+        ResetAllSlots();
+        selectedSlotIndex = -1;
+        selectedVendorSlotIndex = wasSelected ? -1 : index;
+
+        if (wasSelected)
+        {
+            SetDescription(null);
+            return;
+        }
+
+        HighlightSlot(index, true, true);
+        string itemName = vendorItems[index];
+        SetDescription(ItemList.items.TryGetValue(itemName, out Item item) ? item.Description : null);
+        PlayAcceptSound();
+    }
+
+    private void VendorShowContextMenu(int slotIndex, Vector3 position)
+    {
+        List<string> vendorItems = vendorLoot != null ? vendorLoot.GetItemList() : new List<string>();
+        if (slotIndex < 0 || slotIndex >= vendorItems.Count || contextMenuPrefab == null ||
+            !ItemList.items.TryGetValue(vendorItems[slotIndex], out Item item))
+        {
+            return;
+        }
+
+        CloseContextMenu();
+        activeContextMenu = Instantiate(contextMenuPrefab, transform);
+        activeContextMenu.transform.position = position;
+
+        foreach (Button button in activeContextMenu.GetComponentsInChildren<Button>(true))
+        {
+            switch (button.name)
+            {
+                case "UseButton":
+                case "DropButton":
+                case "SellButton":
+                    button.gameObject.SetActive(false);
+                    break;
+                case "BuyButton":
+                    button.gameObject.SetActive(true);
+                    SetButtonText(button, $"Buy ({item.BuyPrice} coins)");
+                    button.onClick.AddListener(() => BuyItem(slotIndex));
+                    break;
+                case "CloseButton":
+                    button.onClick.AddListener(CloseContextMenu);
+                    break;
             }
         }
     }
 
-    private void ResetAllSlots()
+    private void BuyItem(int slotIndex)
     {
-        // Reset all player slots
-        for (int i = 0; i < invSlots.Length; i++)
+        List<string> vendorItems = vendorLoot != null ? vendorLoot.GetItemList() : new List<string>();
+        if (slotIndex < 0 || slotIndex >= vendorItems.Count)
         {
-            HighlightSlot(i, false, false);
+            PlayDeclineSound();
+            CloseContextMenu();
+            return;
         }
 
-        // Reset all vendor slots
-        for (int i = 0; i < vendorInvSlots.Length; i++)
+        string itemName = vendorItems[slotIndex];
+        if (!ItemList.items.TryGetValue(itemName, out Item item) ||
+            vendorLoot.GetItemAmount(itemName) < 1 ||
+            !PlayerLoot.TrySpendCoins(item.BuyPrice))
         {
-            HighlightSlot(i, false, true);
+            PlayDeclineSound();
+            CloseContextMenu();
+            return;
+        }
+
+        if (!vendorLoot.RemoveItem(itemName, 1))
+        {
+            PlayerLoot.AddCoins(item.BuyPrice);
+            PlayDeclineSound();
+            CloseContextMenu();
+            return;
+        }
+
+        PlayerLoot.IncreaseItem(itemName, 1);
+        PlayAcceptSound();
+        CloseContextMenu();
+    }
+
+    private void VendorUpdateSlot(
+        Image slotImage,
+        TextMeshProUGUI slotCountText,
+        GameObject slotCountBackground,
+        List<string> itemOrder,
+        int index)
+    {
+        if (slotImage == null)
+        {
+            return;
+        }
+
+        bool hasItem = itemOrder != null && index >= 0 && index < itemOrder.Count;
+        slotImage.sprite = hasItem ? GetSpriteForItem(itemOrder[index]) : emptySprite;
+
+        if (slotCountText != null)
+        {
+            slotCountText.enabled = hasItem;
+            slotCountText.text = hasItem ? vendorLoot.GetItemAmount(itemOrder[index]).ToString() : string.Empty;
+        }
+
+        if (slotCountBackground != null)
+        {
+            slotCountBackground.SetActive(hasItem);
         }
     }
 
-    protected void VendorUpdateSlot(Image slotImage, TextMeshProUGUI slotCountText, GameObject slotCountBackground, List<string> itemOrder, int index)
+    private bool TryOpenMenuAtPoint(
+        GameObject[] slots,
+        int populatedSlotCount,
+        Vector3 mousePosition,
+        System.Action<int, Vector3> showMenu)
     {
-        if (slotImage == null || index >= itemOrder.Count || slotCountText == null)
+        if (slots == null)
         {
-            slotImage.sprite = emptySprite; // Clear slot if no item
-            slotCountText.enabled = false;
-            slotCountBackground.SetActive(false);
-        }
-        else
-        {
-            slotCountText.enabled = true;
-            slotCountBackground.SetActive(true);
-            string itemName = itemOrder[index];
-            int itemCount = VendorLoot.GetItemAmount(itemName);
-            slotImage.sprite = GetSpriteForItem(itemName); // Get corresponding sprite
-            slotCountText.text = itemCount.ToString();
+            return false;
         }
 
-    } 
+        for (int index = 0; index < slots.Length && index < populatedSlotCount; index++)
+        {
+            RectTransform slotRect = slots[index] != null ? slots[index].GetComponent<RectTransform>() : null;
+            if (slotRect != null && RectTransformUtility.RectangleContainsScreenPoint(slotRect, mousePosition))
+            {
+                showMenu(index, mousePosition);
+                return true;
+            }
+        }
 
-    
+        return false;
+    }
+
+    private void ResetAllSlots()
+    {
+        ResetPlayerSlotHighlights();
+        if (vendorInvSlots == null)
+        {
+            return;
+        }
+
+        for (int index = 0; index < vendorInvSlots.Length; index++)
+        {
+            HighlightSlot(index, false, true);
+        }
+    }
+
+    private void InitialisePriceLabels()
+    {
+        playerPriceTexts = CreatePriceLabels(invSlots, invSlotCounts, "Sell Price");
+        vendorPriceTexts = CreatePriceLabels(vendorInvSlots, VendorInvSlotCounts, "Buy Price");
+    }
+
+    private static TextMeshProUGUI[] CreatePriceLabels(
+        GameObject[] slots,
+        TextMeshProUGUI[] countTexts,
+        string labelName)
+    {
+        int slotCount = slots != null ? slots.Length : 0;
+        TextMeshProUGUI[] labels = new TextMeshProUGUI[slotCount];
+
+        for (int index = 0; index < slotCount; index++)
+        {
+            GameObject slot = slots[index];
+            if (slot == null)
+            {
+                continue;
+            }
+
+            Transform existingLabel = slot.transform.Find(labelName);
+            TextMeshProUGUI priceText = existingLabel != null
+                ? existingLabel.GetComponent<TextMeshProUGUI>()
+                : null;
+
+            if (priceText == null)
+            {
+                GameObject labelObject = new GameObject(labelName, typeof(RectTransform));
+                labelObject.transform.SetParent(slot.transform, false);
+
+                RectTransform labelRect = labelObject.GetComponent<RectTransform>();
+                labelRect.anchorMin = new Vector2(0f, 1f);
+                labelRect.anchorMax = new Vector2(1f, 1f);
+                labelRect.pivot = new Vector2(0.5f, 1f);
+                labelRect.anchoredPosition = new Vector2(0f, -2f);
+                labelRect.sizeDelta = new Vector2(0f, 18f);
+
+                priceText = labelObject.AddComponent<TextMeshProUGUI>();
+            }
+
+            TextMeshProUGUI countTemplate = GetArrayValue(countTexts, index);
+            if (countTemplate != null)
+            {
+                priceText.font = countTemplate.font;
+            }
+            else if (TMP_Settings.defaultFontAsset != null)
+            {
+                priceText.font = TMP_Settings.defaultFontAsset;
+            }
+
+            priceText.text = string.Empty;
+            priceText.fontSize = 16f;
+            priceText.enableAutoSizing = true;
+            priceText.fontSizeMin = 10f;
+            priceText.fontSizeMax = 18f;
+            priceText.fontStyle = FontStyles.Bold;
+            priceText.alignment = TextAlignmentOptions.Top;
+            priceText.color = Color.white;
+            priceText.outlineColor = Color.black;
+            priceText.outlineWidth = 0.2f;
+            priceText.textWrappingMode = TextWrappingModes.NoWrap;
+            priceText.overflowMode = TextOverflowModes.Overflow;
+            priceText.raycastTarget = false;
+            labels[index] = priceText;
+        }
+
+        return labels;
+    }
+
+    private static void UpdatePriceLabels(TextMeshProUGUI[] labels, List<string> itemOrder, bool isBuyPrice)
+    {
+        if (labels == null)
+        {
+            return;
+        }
+
+        int playerCoins = PlayerLoot.GetItemAmount("coin");
+        for (int index = 0; index < labels.Length; index++)
+        {
+            TextMeshProUGUI priceText = labels[index];
+            if (priceText == null)
+            {
+                continue;
+            }
+
+            Item item = null;
+            bool hasItem = itemOrder != null && index < itemOrder.Count &&
+                ItemList.items.TryGetValue(itemOrder[index], out item);
+            if (!hasItem)
+            {
+                priceText.text = string.Empty;
+                priceText.enabled = false;
+                continue;
+            }
+
+            int price = isBuyPrice ? item.BuyPrice : item.SellPrice;
+            priceText.text = isBuyPrice ? $"Buy {price}" : $"Sell {price}";
+            priceText.color = isBuyPrice && playerCoins < price
+                ? new Color(1f, 0.35f, 0.3f)
+                : new Color(1f, 0.9f, 0.35f);
+            priceText.enabled = true;
+        }
+    }
+
+    private static void SetButtonText(Button button, string label)
+    {
+        TextMeshProUGUI buttonText = button != null
+            ? button.GetComponentInChildren<TextMeshProUGUI>(true)
+            : null;
+        if (buttonText != null)
+        {
+            buttonText.text = label;
+        }
+    }
+
+    private void SetDescription(string description)
+    {
+        if (textDescription == null)
+        {
+            return;
+        }
+
+        bool hasDescription = !string.IsNullOrEmpty(description);
+        textDescription.SetActive(hasDescription);
+        TextMeshProUGUI descriptionText = textDescription.GetComponent<TextMeshProUGUI>();
+        if (descriptionText == null)
+        {
+            descriptionText = textDescription.GetComponentInChildren<TextMeshProUGUI>(true);
+        }
+
+        if (descriptionText != null)
+        {
+            descriptionText.text = description ?? string.Empty;
+        }
+    }
+
+    private void ResolveVendorLoot()
+    {
+        if (vendorLoot != null)
+        {
+            return;
+        }
+
+        vendorLoot = GetComponent<VendorLoot>();
+        if (vendorLoot == null)
+        {
+            vendorLoot = GetComponentInParent<VendorLoot>(true);
+        }
+
+        if (vendorLoot == null)
+        {
+            vendorLoot = GetComponentInChildren<VendorLoot>(true);
+        }
+
+        if (vendorLoot == null)
+        {
+            Debug.LogWarning("VendorInventory needs a VendorLoot component for this vendor's stock.", this);
+        }
+    }
+
+    private void SubscribeToVendorStock()
+    {
+        if (vendorLoot == null)
+        {
+            return;
+        }
+
+        vendorLoot.StockChanged -= RefreshInventory;
+        vendorLoot.StockChanged += RefreshInventory;
+    }
 }

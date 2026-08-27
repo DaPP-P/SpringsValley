@@ -1,76 +1,84 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
+
 public class VendorLoot : MonoBehaviour
 {
-
-     // Prefabs for collectable items
+    // Retained so existing prefab references are not lost.
     public GameObject wheat;
     public GameObject corn;
-
     public GameObject healing_potion;
-    
-    public static VendorLoot Instance;
+    public GameObject speed_potion;
 
-    public static Dictionary<string, int> items = new Dictionary<string, int>
-    {
-        { "wheat", 0 },
-        { "corn", 0},
-        {"healing_potion", 1}
-    };
+    [Header("Starting stock for this vendor")]
+    [SerializeField, Min(0)] private int startingWheat = 0;
+    [SerializeField, Min(0)] private int startingCorn = 0;
+    [SerializeField, Min(0)] private int startingHealingPotions = 1;
+    [SerializeField, Min(0)] private int startingSpeedPotions = 0;
+
+    private readonly Dictionary<string, int> items = new Dictionary<string, int>();
+    private bool stockInitialised;
+
+    public event Action StockChanged;
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        InitialiseStock();
     }
 
-        // Decrease the amount of an item and destorys the object
-    public static void RemoveItem(string itemName, int amount)
+    public bool RemoveItem(string itemName, int amount)
     {
-        if (items.ContainsKey(itemName))
+        InitialiseStock();
+        if (string.IsNullOrWhiteSpace(itemName) || amount <= 0 || GetItemAmount(itemName) < amount)
         {
-            items[itemName] = Mathf.Max(0, items[itemName] - amount); // Ensure no negative values
+            return false;
         }
 
-        MoveZeroCountItemsToEnd();
+        items[itemName] -= amount;
+        StockChanged?.Invoke();
+        return true;
     }
 
-    // Increase the amount of an item
-    public static void IncreaseItem(string itemName, int amount)
+    public bool IncreaseItem(string itemName, int amount)
     {
-        if (items.ContainsKey(itemName))
+        InitialiseStock();
+        if (string.IsNullOrWhiteSpace(itemName) || amount <= 0)
         {
-            items[itemName] += amount;
-        }
-        else
-        {
-            items[itemName] = amount; // Add the item if it doesn't exist
+            return false;
         }
 
-        MoveZeroCountItemsToEnd();
+        if (!items.ContainsKey(itemName))
+        {
+            items[itemName] = 0;
+        }
+
+        items[itemName] += amount;
+        StockChanged?.Invoke();
+        return true;
     }
 
-    // Get the current amount of an item
-    public static int GetItemAmount(string itemName)
+    public int GetItemAmount(string itemName)
     {
-        return items.ContainsKey(itemName) ? items[itemName] : 0;
+        InitialiseStock();
+        return !string.IsNullOrEmpty(itemName) && items.TryGetValue(itemName, out int amount) ? amount : 0;
     }
 
-    // Get all items and their amounts as a list of strings
-    public static List<string> GetItemList()
+    public List<string> GetItemList()
     {
+        InitialiseStock();
         List<string> itemOrder = new List<string>();
+
+        foreach (string itemName in ItemList.items.Keys)
+        {
+            if (GetItemAmount(itemName) > 0)
+            {
+                itemOrder.Add(itemName);
+            }
+        }
 
         foreach (KeyValuePair<string, int> item in items)
         {
-            if (item.Value > 0) // Only include items with a quantity > 0
+            if (item.Value > 0 && !itemOrder.Contains(item.Key))
             {
                 itemOrder.Add(item.Key);
             }
@@ -79,34 +87,22 @@ public class VendorLoot : MonoBehaviour
         return itemOrder;
     }
 
-    // Moves items with count 0 to the end of the dictionary
-    public static void MoveZeroCountItemsToEnd()
+    public bool HasStock()
     {
-        var nonZeroItems = new Dictionary<string, int>();
-        var zeroItems = new Dictionary<string, int>();
-
-        foreach (var item in items)
-        {
-            if (item.Value > 0)
-            {
-                nonZeroItems.Add(item.Key, item.Value);
-            }
-            else
-            {
-                zeroItems.Add(item.Key, item.Value);
-            }
-        }
-
-        // Combine non-zero and zero count items
-        items.Clear();
-        foreach (var item in nonZeroItems)
-        {
-            items.Add(item.Key, item.Value);
-        }
-        foreach (var item in zeroItems)
-        {
-            items.Add(item.Key, item.Value);
-        }
+        return GetItemList().Count > 0;
     }
 
+    private void InitialiseStock()
+    {
+        if (stockInitialised)
+        {
+            return;
+        }
+
+        items["wheat"] = Mathf.Max(0, startingWheat);
+        items["corn"] = Mathf.Max(0, startingCorn);
+        items["healing_potion"] = Mathf.Max(0, startingHealingPotions);
+        items["speed_potion"] = Mathf.Max(0, startingSpeedPotions);
+        stockInitialised = true;
+    }
 }

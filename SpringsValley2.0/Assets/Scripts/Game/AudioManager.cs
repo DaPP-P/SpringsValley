@@ -2,62 +2,65 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager Instance;
+    public static AudioManager Instance { get; private set; }
 
     public AudioClip backgroundMusic;
-    private AudioSource audioSource;
-
     public AudioClip acceptSound;
     public AudioClip declineSound;
 
+    [SerializeField, Range(0f, 1f)] private float musicVolume = 0.5f;
+    [SerializeField, Range(0f, 1f)] private float soundVolume = 1f;
+
+    private AudioSource musicSource;
+    private AudioSource soundSource;
+
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-
-            audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.loop = true;
-            audioSource.playOnAwake = false;
-            audioSource.volume = 0.5f; // Adjust as needed
-
-            if (backgroundMusic != null)
-            {
-                audioSource.clip = backgroundMusic;
-                audioSource.Play(); // Play the background music
-            }
+            Debug.LogWarning("A duplicate AudioManager component was removed.", this);
+            Destroy(this);
+            return;
         }
-        else
+
+        Instance = this;
+
+        AudioSource[] existingSources = GetComponents<AudioSource>();
+        musicSource = existingSources.Length > 0 ? existingSources[0] : gameObject.AddComponent<AudioSource>();
+        soundSource = existingSources.Length > 1 ? existingSources[1] : gameObject.AddComponent<AudioSource>();
+
+        musicSource.loop = true;
+        musicSource.playOnAwake = false;
+        musicSource.volume = musicVolume;
+        musicSource.spatialBlend = 0f;
+
+        soundSource.loop = false;
+        soundSource.playOnAwake = false;
+        soundSource.volume = soundVolume;
+        soundSource.spatialBlend = 0f;
+
+        if (backgroundMusic != null)
         {
-            Destroy(gameObject);
+            musicSource.clip = backgroundMusic;
+            musicSource.Play();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
         }
     }
 
     public void PlaySound(AudioClip clip, Vector3 position, float volume = 1f)
     {
-        if (clip == null)
+        if (clip == null || soundSource == null)
         {
-            Debug.LogWarning("PlaySound called with a null AudioClip!");
             return;
         }
 
-        Debug.Log($"Playing {clip.name} at position: {position}");
-
-        // Create a new GameObject to hold the AudioSource
-        GameObject oneshotAudio = new GameObject("OneshotAudio");
-        oneshotAudio.transform.position = position;
-
-        // Add an AudioSource component to this GameObject
-        AudioSource audioSource = oneshotAudio.AddComponent<AudioSource>();
-        audioSource.clip = clip;
-        audioSource.volume = volume;
-        audioSource.Play();
-
-        // Destroy the GameObject after the sound has finished playing
-        Destroy(oneshotAudio, clip.length);
+        soundSource.PlayOneShot(clip, Mathf.Clamp01(volume));
+    }
 }
- 
-
-}
-

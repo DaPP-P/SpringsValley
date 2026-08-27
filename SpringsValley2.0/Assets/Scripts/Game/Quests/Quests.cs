@@ -1,21 +1,6 @@
-using UnityEngine;
-
-public class Quests : MonoBehaviour
+// Compatibility facade for older scripts and Inspector references.
+public static class Quests
 {
-    // Make the VendorStarterQuest static so it can be accessed without an instance
-    public static bool VendorStarterQuest = true;
-    public static bool MercantStarterQuest = false;
-
-
-    void Start()
-    {
-        // Initialize any quest-related logic here if needed
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // You can update the VendorStarterQuest flag dynamically if needed
-    }
+    public static bool VendorStarterQuest => Quest.VendorState != VendorQuestState.Completed;
+    public static bool MercantStarterQuest => false;
 }
-

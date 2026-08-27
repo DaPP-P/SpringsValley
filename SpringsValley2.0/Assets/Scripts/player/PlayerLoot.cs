@@ -1,130 +1,159 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
 
 public class PlayerLoot : MonoBehaviour
 {
-
-    public static PlayerLoot Instance;
+    public static PlayerLoot Instance { get; private set; }
     public static int coinAmount;
 
-    // Prefabs for collectable items
+    [Header("Dropped item prefabs")]
     public GameObject wheat;
     public GameObject corn;
-
     public GameObject healing_potion;
-    public static Dictionary<string, int> items = new Dictionary<string, int>
+    public GameObject speed_potion;
+
+    public static readonly Dictionary<string, int> items = new Dictionary<string, int>
     {
-        { "coin", 0 },
         { "wheat", 0 },
-        { "corn", 0},
-        {"healing_potion", 0}
+        { "corn", 0 },
+        { "healing_potion", 0 },
+        { "speed_potion", 0 }
     };
+
+    public static event Action InventoryChanged;
 
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance == null || Instance == this)
         {
             Instance = this;
+            return;
         }
-        else
+
+        Debug.LogWarning("A duplicate PlayerLoot component was removed.", this);
+        Destroy(this);
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
         {
-            Destroy(gameObject);
+            Instance = null;
         }
     }
 
-    // Increase the amount of an item
-    public static void IncreaseItem(string itemName, int amount)
+    public static bool IncreaseItem(string itemName, int amount)
     {
+        if (string.IsNullOrWhiteSpace(itemName) || amount <= 0)
+        {
+            return false;
+        }
+
+        if (itemName != "coin" && !ItemList.items.ContainsKey(itemName))
+        {
+            Debug.LogWarning($"Cannot add unknown inventory item '{itemName}'.");
+            return false;
+        }
+
         if (itemName == "coin")
         {
             coinAmount += amount;
         }
-
-        else if (items.ContainsKey(itemName))
+        else
         {
+            if (!items.ContainsKey(itemName))
+            {
+                items[itemName] = 0;
+            }
+
             items[itemName] += amount;
+        }
+
+        InventoryChanged?.Invoke();
+        ItemNotificationUI.ShowItemAdded(itemName, amount);
+        return true;
+    }
+
+    // Kept for existing callers: decreasing an item means dropping it in the world.
+    public static bool DecreaseItem(string itemName, int amount)
+    {
+        return TryDropItem(itemName, amount);
+    }
+
+    public static bool RemoveItem(string itemName, int amount)
+    {
+        if (string.IsNullOrWhiteSpace(itemName) || amount <= 0 || GetItemAmount(itemName) < amount)
+        {
+            return false;
+        }
+
+        if (itemName == "coin")
+        {
+            coinAmount -= amount;
         }
         else
         {
-            items[itemName] = amount; // Add the item if it doesn't exist
+            items[itemName] -= amount;
         }
 
-        MoveZeroCountItemsToEnd();
+        InventoryChanged?.Invoke();
+        return true;
     }
 
-    // Decrease the amount of an item
-    public static void DecreaseItem(string itemName, int amount)
+    public static bool TrySpendCoins(int amount)
     {
-        if (itemName == "coin")
-        {
-            coinAmount = Mathf.Max(0, coinAmount - amount); // Ensure no negative values
-        }
-        else if (items.ContainsKey(itemName))
-        {
-            items[itemName] = Mathf.Max(0, items[itemName] - amount); // Ensure no negative values
-            SpawnItemInWorld(itemName);
-        }
-
-        MoveZeroCountItemsToEnd();
+        return amount >= 0 && (amount == 0 || RemoveItem("coin", amount));
     }
 
-    // Decrease the amount of an item and destorys the object
-    public static void RemoveItem(string itemName, int amount)
+    public static void AddCoins(int amount)
     {
-        if (itemName == "coin")
-        {
-            coinAmount = Mathf.Max(0, coinAmount - amount); // Ensure no negative values
-        }
-        else if (items.ContainsKey(itemName))
-        {
-            items[itemName] = Mathf.Max(0, items[itemName] - amount); // Ensure no negative values
-        }
-
-        MoveZeroCountItemsToEnd();
+        IncreaseItem("coin", amount);
     }
 
+    public static bool TryDropItem(string itemName, int amount = 1)
+    {
+        if (amount <= 0 || GetItemAmount(itemName) < amount || Instance == null)
+        {
+            return false;
+        }
+
+        GameObject itemPrefab = Instance.GetDropPrefab(itemName);
+        if (itemPrefab == null)
+        {
+            Debug.LogWarning($"No dropped-item prefab is assigned for '{itemName}'. The item was kept.", Instance);
+            return false;
+        }
+
+        if (!RemoveItem(itemName, amount))
+        {
+            return false;
+        }
+
+        for (int index = 0; index < amount; index++)
+        {
+            Instance.SpawnItemInWorld(itemPrefab);
+        }
+
+        return true;
+    }
+
+    // Compatibility entry point for any Inspector events that already reference this method.
     public static void SpawnItemInWorld(string itemName)
     {
-        GameObject itemPrefab = null;
-
-        switch (itemName)
+        if (Instance == null)
         {
-            case "wheat":
-                itemPrefab = Instance.wheat;
-                break;
-            case "corn":
-                itemPrefab = Instance.corn;
-                break;
+            return;
         }
 
+        GameObject itemPrefab = Instance.GetDropPrefab(itemName);
         if (itemPrefab != null)
         {
-            Vector3 spawnPosition = Instance.transform.position;
-            GameObject spawnedItem = Instantiate(itemPrefab, spawnPosition, Quaternion.identity);
-            Rigidbody2D rb = spawnedItem.GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                Vector2 randomDirection = Random.insideUnitCircle.normalized; // Random direction
-                float forceMagnitude = 3f; // Adjust this value for desired speed
-                rb.AddForce(randomDirection * forceMagnitude, ForceMode2D.Impulse);
-                Instance.StartCoroutine(Instance.StopMovementAfterDelay(rb, 0.2f)); 
-            }
+            Instance.SpawnItemInWorld(itemPrefab);
         }
     }
 
-    private IEnumerator StopMovementAfterDelay(Rigidbody2D rb, float delay)
-    {
-    yield return new WaitForSeconds(delay);
-    StopMovement(rb);
-    }
-
-    private void StopMovement(Rigidbody2D rb)
-    {   
-        rb.linearVelocity = Vector2.zero;
-    }
-
-    // Get the current amount of an item
     public static int GetItemAmount(string itemName)
     {
         if (itemName == "coin")
@@ -132,17 +161,24 @@ public class PlayerLoot : MonoBehaviour
             return coinAmount;
         }
 
-        return items.ContainsKey(itemName) ? items[itemName] : 0;
+        return !string.IsNullOrEmpty(itemName) && items.TryGetValue(itemName, out int amount) ? amount : 0;
     }
 
-    // Get all items and their amounts as a list of strings
     public static List<string> GetItemList()
     {
         List<string> itemOrder = new List<string>();
 
+        foreach (string itemName in ItemList.items.Keys)
+        {
+            if (GetItemAmount(itemName) > 0)
+            {
+                itemOrder.Add(itemName);
+            }
+        }
+
         foreach (KeyValuePair<string, int> item in items)
         {
-            if (item.Value > 0) // Only include items with a quantity > 0
+            if (item.Value > 0 && !itemOrder.Contains(item.Key))
             {
                 itemOrder.Add(item.Key);
             }
@@ -151,33 +187,99 @@ public class PlayerLoot : MonoBehaviour
         return itemOrder;
     }
 
-    // Moves items with count 0 to the end of the dictionary
+    public static void ResetInventory()
+    {
+        coinAmount = 0;
+
+        List<string> keys = new List<string>(items.Keys);
+        foreach (string key in keys)
+        {
+            items[key] = 0;
+        }
+
+        foreach (string key in ItemList.items.Keys)
+        {
+            if (!items.ContainsKey(key))
+            {
+                items[key] = 0;
+            }
+        }
+
+        InventoryChanged?.Invoke();
+    }
+
+    // Dictionary order is no longer used by the UI, but this remains to avoid breaking old events.
     public static void MoveZeroCountItemsToEnd()
     {
-        var nonZeroItems = new Dictionary<string, int>();
-        var zeroItems = new Dictionary<string, int>();
+    }
 
-        foreach (var item in items)
+    private GameObject GetDropPrefab(string itemName)
+    {
+        GameObject itemPrefab;
+        switch (itemName)
         {
-            if (item.Value > 0)
+            case "wheat":
+                itemPrefab = wheat;
+                break;
+            case "corn":
+                itemPrefab = corn;
+                break;
+            case "healing_potion":
+                itemPrefab = healing_potion;
+                break;
+            case "speed_potion":
+                itemPrefab = speed_potion;
+                break;
+            default:
+                return null;
+        }
+
+        if (itemPrefab != null)
+        {
+            return itemPrefab;
+        }
+
+        // Existing scenes already assign crop/potion prefabs on each VendorLoot. Reuse
+        // one of those references when the player's equivalent Inspector slot is empty.
+        VendorLoot[] vendors = FindObjectsByType<VendorLoot>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (VendorLoot vendor in vendors)
+        {
+            switch (itemName)
             {
-                nonZeroItems.Add(item.Key, item.Value);
-            }
-            else
-            {
-                zeroItems.Add(item.Key, item.Value);
+                case "wheat" when vendor.wheat != null:
+                    return vendor.wheat;
+                case "corn" when vendor.corn != null:
+                    return vendor.corn;
+                case "healing_potion" when vendor.healing_potion != null:
+                    return vendor.healing_potion;
+                case "speed_potion" when vendor.speed_potion != null:
+                    return vendor.speed_potion;
             }
         }
 
-        // Combine non-zero and zero count items
-        items.Clear();
-        foreach (var item in nonZeroItems)
+        return null;
+    }
+
+    private void SpawnItemInWorld(GameObject itemPrefab)
+    {
+        GameObject spawnedItem = Instantiate(itemPrefab, transform.position, Quaternion.identity);
+        Rigidbody2D spawnedBody = spawnedItem.GetComponent<Rigidbody2D>();
+        if (spawnedBody == null)
         {
-            items.Add(item.Key, item.Value);
+            return;
         }
-        foreach (var item in zeroItems)
+
+        Vector2 randomDirection = UnityEngine.Random.insideUnitCircle.normalized;
+        spawnedBody.AddForce(randomDirection * 3f, ForceMode2D.Impulse);
+        StartCoroutine(StopMovementAfterDelay(spawnedBody, 0.2f));
+    }
+
+    private IEnumerator StopMovementAfterDelay(Rigidbody2D spawnedBody, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (spawnedBody != null)
         {
-            items.Add(item.Key, item.Value);
+            spawnedBody.linearVelocity = Vector2.zero;
         }
     }
 }

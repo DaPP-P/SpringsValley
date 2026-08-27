@@ -2,30 +2,28 @@ using UnityEngine;
 
 public class eventHandler : MonoBehaviour
 {
-    public GameObject targetObject; // Assign the target GameObject in the Inspector
+    public GameObject targetObject;
     private PlayerMovement targetScript;
 
-    void Start()
+    private void Awake()
     {
-        // Ensure the target object has the correct script
         if (targetObject != null)
         {
             targetScript = targetObject.GetComponent<PlayerMovement>();
         }
 
+        if (targetScript == null)
+        {
+            targetScript = GetComponentInParent<PlayerMovement>();
+        }
     }
 
-    // This method will be called by the Animation Event
+    // Called by the attack animation event when one is configured.
     public void OnAnimationEnd()
     {
         if (targetScript != null)
         {
-            targetScript.isAttacking = false; // Update the bool
-            Debug.Log("Animation ended, updated target bool!");
-        }
-        else
-        {
-            Debug.LogError("Target Script is not found!");
+            targetScript.OnAttackAnimationComplete();
         }
     }
 }

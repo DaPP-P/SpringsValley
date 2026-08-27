@@ -4,53 +4,73 @@ public class ItemCollection : MonoBehaviour
 {
     public GameObject collectableItem;
     public string itemName;
-    private bool canBeCollected;
-
-    // Audio settings
     public AudioClip pickupSound;
     public Animator animator;
 
-    void Start()
+    [SerializeField, Min(0f)] private float collectionDelay = 0.5f;
+    [SerializeField, Min(0f)] private float pickupAnimationDuration = 0.2f;
+
+    private bool canBeCollected;
+    private bool pickedUp;
+
+    private void Awake()
     {
-        canBeCollected = false;
-        animator = GetComponent<Animator>();
-        Invoke("EnableCollection", 0.5f);
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
     }
 
-    private void EnableCollection()
+    private void Start()
     {
-        canBeCollected = true;
-        Debug.Log("can be colelceted");
+        Invoke(nameof(EnableCollection), collectionDelay);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(!canBeCollected) return;
-
-        if (other.CompareTag("Player"))
+        if (!canBeCollected || pickedUp || !other.CompareTag("Player"))
         {
+            return;
+        }
 
-            if (pickupSound != null)
-            {
-                AudioManager.Instance.PlaySound(pickupSound, transform.position);
-            }
+        if (!PlayerLoot.IncreaseItem(itemName, 1))
+        {
+            Debug.LogWarning($"Could not collect item with invalid name '{itemName}'.", this);
+            return;
+        }
 
+        pickedUp = true;
+        canBeCollected = false;
+        DisableColliders();
+
+        if (AudioManager.Instance != null && pickupSound != null)
+        {
+            AudioManager.Instance.PlaySound(pickupSound, transform.position);
+        }
+
+        if (animator != null)
+        {
             animator.SetTrigger("PickUp");
+        }
 
-            bool pickedUp = false;
-            if (!pickedUp)
-            {
-                pickedUp = true;
-                PlayerLoot.IncreaseItem(itemName, 1);
-            }
-            
-            Debug.Log(PlayerLoot.GetItemAmount(itemName));
-            Invoke("PickupComplete", 0.2f);
+        Invoke(nameof(PickupComplete), pickupAnimationDuration);
+    }
+
+    private void EnableCollection()
+    {
+        canBeCollected = !pickedUp;
+    }
+
+    private void DisableColliders()
+    {
+        foreach (Collider2D itemCollider in GetComponentsInChildren<Collider2D>())
+        {
+            itemCollider.enabled = false;
         }
     }
 
     private void PickupComplete()
     {
-        Destroy(collectableItem);
+        Destroy(collectableItem != null ? collectableItem : gameObject);
     }
 }
